@@ -1,0 +1,99 @@
+<html>
+<head>
+<base href="http://www.umr.edu/helpdesk/index.html">
+
+<TITLE>CGIWrap - Setting up your Account</TITLE>
+</head>
+<body>
+<center>
+<H1>CGIWrap - Setting up your Account</H1>
+<img src="images/greenline.gif" alt="===============================">
+</center>
+<p>
+The following are instructions for setting up your
+directories and scripts for execution on UMR's test web
+server.
+<P>
+The instructions are intended for use with AFS. It is
+assumed that you are familiar with writing CGI scripts and
+writing HTML documents for the WWW. If not, see one of the
+URL's listed on the <a href="internet/web_design.html">Web Page Design 
+page</a>.
+ <P>
+<b>Note:</b> All scrips that are precompiled before use have to be
+compiled on a HP-UX machine (saucer/rocket). This is because the WWW 
+servers are being run on HP-UX machines.
+<p>
+For this example, the script is "<B>email.pl</B>". The user id is
+"<B>joeminer</B>".
+<P>
+<UL>
+<LI>Create the directories needed to hold html documents and scripts
+<OL>
+<LI>cd
+<LI>mkdir public_html
+<LI>mkdir public_html/cgi-bin
+</OL>
+<P>
+<LI>Set <B>minimal required</B> permissions on directories
+<OL>
+<LI>fs setacl . system:anyuser l
+<LI>fs setacl public_html system:anyuser rl
+<LI>fs setacl public_html/cgi-bin system:anyuser rl
+</OL>
+<P>
+<LI>Install the script into the cgi-bin directory
+<P>
+<LI>Set the proper execution permissions on the file
+<OL>
+<LI>chmod u+rx <B>email.pl</B>
+</OL>
+</UL>
+</UL>
+<P>
+The script is executed using the following URL:
+<BR>
+http://wwwcgi.umr.edu/cgi-bin/cgiwrap/<b>joeminer</B>/<B>email.pl</B>
+<P>
+If you wish to see debugging output for your CGI, specify <B>cgiwrapd</B>
+instead of <B>cgiwrap</B>.
+<P>
+When using cgiwrap with AFS based accounts, you need to keep
+in mind that scripts are run un-authenticated. This means
+that any files that are accessed in AFS directories are
+accessed as "system:anyuser". This is important when
+considering how your script will return data to you.
+<P>
+Currently, the easiest way to return data to the user is to
+email the results of the script. Obviously, this only
+applies to scripts that are supposed to be used for
+submitting data - scripts that simply return information to
+the web client are not affected by this.
+<P>
+CGIwrap can be used in forms, just use the above URL's as the ACTION of 
+the form.
+<P>
+<!--**FOOTER-BEGIN-->
+<hr>
+
+
+<a href=http://www.umr.edu><img align=left 
+src="/~webteam/testlogos/umrbutto.gif"></a> <align=right>
+
+This Document is maintained by <a href="mailto:helpdesk@umr.edu">
+<i>helpdesk@umr.edu</i></a>
+<br>
+Last Modified:<i>  Monday, 01-Jul-96 12:53:01 CDT</i>
+<br>
+URL:  <A HREF="http://www.umr.edu">
+http://www.umr.edu</A>
+/helpdesk/web/cgiwrap/setup.html
+
+
+<br>
+This page has been hit <IMG SRC="/cgi-bin/count?type=tiny" ALT=""> 
+times since Monday, 01-Jul-96 12:50:43 CDT.
+<!--**FOOTER-END-->
+</body>
+</html>
+

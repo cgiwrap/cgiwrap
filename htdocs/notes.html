@@ -1,15 +1,18 @@
+<TITLE>CGIWrap - Compilation Notes</TITLE>
+<CENTER><H2>CGIWrap - Compilation Notes</H2></CENTER>
+<HR><P>
 
+<DL>
 
-CDC 4680 EP/IX 2.1.1ad:
------------------------
-CC=cc
-CCOPT=-systype sysv -I/usr/include/bsd -lbsd
+<DT><H3>CDC 4680 EP/IX 2.1.1ad</H3>
+	<DD>CC=cc
+	<DD>CCOPT=-systype sysv -I/usr/include/bsd -lbsd
+	<P>
+	<DD>Don't include "strings.h"
 
-Don't include "strings.h"
+<DT><H3>HP-UX 9.0.x</H3>
+	<DD>Don't enable the setrlimit checking, it is not completely supported 
+by HPUX.
 
-
-HPUX:
------
-Don't enable the setrlimit checking, it is not completely supported by HPUX.
 
 

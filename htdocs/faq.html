@@ -1,0 +1,66 @@
+<TITLE>CGIWrap - Frequently Asked Questions</TITLE>
+<CENTER><H2>CGIWrap - Frequently Asked Questions</H2></CENTER>
+<HR><P>
+
+<H3><A NAME="general">General Questions</H3>
+<DL>
+<P><DT>How do I subscribe/unsubscribe from the CGIWrap mailing list?
+	<DD>To subscribe, send a note containing "<TT>subscribe cgiwrap 
+FirstName LastName</TT>" to 
+<I><A HREF="listserv@rollanet.org">listserv@rollanet.org</A></I>. 
+	<P>
+	<DD>To unsubscribe, send a note containing "<TT>unsubscribe 
+cgiwrap</TT>" to 
+<I><A HREF="listserv@rollanet.org">listserv@rollanet.org</A></I> from the 
+account that is subscribed to the list.
+	<P>
+	<DD>If you are unable to subscribe or unsubscribe, send a note to 
+me at <A HREF="mailto:nneul@umr.edu">nneul@umr.edu</A>. <B>Please</B> do 
+not send subscribe/unsubscribe messages to the list.
+	<P>
+	<DD>More information on the mailing list is available <A 
+HREF="maillist.html">here</A>.
+
+<P><DT>How do I send a message to the mailing list?
+	<DD>Any mail sent to 
+		<A HREF="mailto:cgiwrap@rollanet.org">cgiwrap@rollanet.org</A> 
+		will be send to the mailing list, even if you are not a subscriber.
+
+<P><DT>What is on topic for the mailing list?
+	<DD>anything cgiwrap related
+	<DD>use of cgiwrap with ssi/cgi/verious servers/tricks/etc
+	<DD>Discussion of any cgiwrap incompatibilities with other 
+		scripts, etc.
+	<DD>cgi security questions and issues related or not related to cgiwrap.
+	<DD>Anything else that comes up that is of interest to a large 
+		number of cgiwrap users.
+</DL>
+
+<H3><A NAME="admin">Administrative Questions</H3>
+<DL>
+<P><DT>I am getting the error "<TT>Can't ... </TT>". How can I fix this?
+	<DD>CGIwrap needs to be installed set-uid to root. Log in as 
+		root, change to the server's cgi-bin directory, and issue the commands:
+<PRE>
+	chown root cgiwrap
+	chmod 4755 cgiwrap
+</PRE>
+
+<P><DT>I am getting the error "<TT>setgroups() failed!</TT>". What is wrong?
+	<DD>This occurs when CGIwrap is unable to set auxilliary groups. 
+Auxillliary groups are groups that a user in a member of (in /etc/group), 
+that are not the user's primary group (in /etc/passwd). Two things you 
+can do here are to make sure CGIwrap is installed correctly (has to be 
+setid root to be able to set auxilliary groups.), or disable setting 
+auxilliary groups (answer no to the question when running Configure.).
+
+</DL>
+
+<H3><A NAME="user">User Questions</H3>
+<DL>
+<P><DT>I am getting a 500 Server Error, how can I debug my script?
+	<DD>CGIwrap supports a debugging mode which can help to debug 
+		scripts. To use it, call CGIwrap via the URL <TT>http://.../cgiwrapd/...</TT> 
+		instead of <TT>http://.../cgiwrap/...</TT>.
+
+</DL>

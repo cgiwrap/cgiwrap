@@ -1,14 +1,14 @@
 README
 htdocs/index.html
 htdocs/changes.html
-doc/AFS
-doc/INSTALL
-doc/NOTES
-doc/THANKS
-doc/URLHELP
-doc/cgiwrap.1
-doc/MIRRORS
-doc/COMMENTS
+htdocs/afs.html
+htdocs/cgiwrap-man.html
+htdocs/comments.html
+htdocs/install.html
+htdocs/mirrors.html
+htdocs/notes.html
+htdocs/thanks.html
+htdocs/urlhelp.html
 unsup/README
 unsup/loganalyze.doc
 unsup/loganalyze.pl.SH
@@ -26,3 +26,4 @@ stdutil.h
 Makefile.SH
 Configure                    Portability tool
 config_h.SH                  Produces config.h
+CVS
