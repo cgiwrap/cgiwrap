@@ -99,9 +99,9 @@ tardist: dist
 	rm -f ../cgiwrap-$(VERSION).tar ../cgiwrap-$(VERSION).tar.gz
 	gtar -C .. -cvf ../cgiwrap-$(VERSION).tar cgiwrap-$(VERSION)
 	gzip -9v ../cgiwrap-$(VERSION).tar
-	#pgp -sba ../cgiwrap-$(VERSION).tar.gz
+	pgp -sba ../cgiwrap-$(VERSION).tar.gz
 	rm -f ../cgiwrap-$(VERSION).tar.gz.sig
-	#mv ../cgiwrap-$(VERSION).tar.gz.asc ../cgiwrap-$(VERSION).tar.gz.sig
+	mv ../cgiwrap-$(VERSION).tar.gz.asc ../cgiwrap-$(VERSION).tar.gz.sig
 	
 commit: configure config.h.in docs
 	cvs commit -m "" .

@@ -77,7 +77,7 @@
        
   New in version 3.4:
   
-     * Fixed typo "& instead of "&& in setgroups stuff
+     * Fixed typo "&" instead of "&&" in setgroups stuff
      * Added cgiwrap.aliases option to rewrite home dirs of users.
      * Moved entire cgiwrap source build tree to CVS, will make tracking
        changes easier.
