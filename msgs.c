@@ -124,7 +124,7 @@ void MSG_RequestInfo(void)
  * Error Messages 
  */
 
-void MSG_Error_ServerUserWrong(void)
+void MSG_Error_ServerUserMismatch(void)
 {
 	MSG_Header("CGIWrap Error", "Server UserID Mismatch");
 
@@ -140,12 +140,46 @@ void MSG_Error_ServerUserWrong(void)
 }
 
 
+void MSG_Error_ServerUserNotFound(void)
+{
+	MSG_Header("CGIWrap Error", "Server UserID Not Found");
+
+	printf(
+"CGIWrap was configured with a server userid that does not exist\n"
+"on this server.\n"
+
+"This is a configuration/setup problem with cgiwrap on this server.\n"
+"Please contact the server administrator.\n"
+	);
+
+	MSG_Footer();
+	exit(1);
+}
+
+
 void MSG_Error_ExecutionNotPermitted(char *reason)
 {
 	MSG_Header("CGIWrap Error", "Execution of this script not permitted");
 
 	printf("Execution of this script is not permitted for the following\n");
 	printf("reason:\n\n%s\n", reason);
+
+	MSG_Footer();
+	exit(1);
+}
+
+void MSG_Error_AccessControl(char *why)
+{
+	MSG_Header("CGIWrap Error", "Access Control");
+	
+	printf("CGIWrap access control mechanism denied execution of this\n");
+	printf("script for the following reason:\n\n");
+
+	if ( MSG_HTMLMessages )
+	{
+		printf("<P>\n");
+	}
+	printf("%s\n", why);	
 
 	MSG_Footer();
 	exit(1);
@@ -239,7 +273,7 @@ void MSG_Error_NoSuchUser(char *user)
 	printf("password file on this server.\n\n");
 	if ( MSG_HTMLMessages )
 	{
-		printf("<BR>\n");
+		printf("<P>\n");
 	}
 	printf("Check the URL and try again.\n");
 
