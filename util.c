@@ -300,6 +300,19 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 	}
 #endif
 
+#if defined(CONF_CHECK_SCRGWRITE)
+	if (fileStat.st_mode & S_IWGRP)
+	{
+		DoError("Script is group writable - Will not Execute!");
+	}
+#endif
+
+#if defined(CONF_CHECK_SCRGWRITE)
+	if (fileStat.st_mode & S_IWOTH)
+	{
+		DoError("Script is world writable - Will not Execute!");
+	}
+#endif
 }
 
 
