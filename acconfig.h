@@ -4,6 +4,16 @@
 #undef CONF_CHECK_HTTPD_USER
 #undef CONF_HTTPD_USER 
 
+/*
+ * Informational definitions
+ */
+#undef CONF_LOCAL_SITE_URL
+#undef CONF_LOCAL_DOC_URL
+#undef CONF_LOCAL_CONTACT_NAME
+#undef CONF_LOCAL_CONTACT_EMAIL
+#undef CONF_LOCAL_CONTACT_PHONE
+#undef CONF_LOCAL_CONTACT_URL
+
 /* 
  * Environment variable setting
  */

@@ -19,6 +19,7 @@ int CheckPath(char *path);
 void ChangeToCgiDir(struct passwd *user);
 void OutputEnvironment(void);
 void CheckUser(struct passwd *user);
+char *CondenseSlashes(char *path);
 void CheckScriptFile(void); 
 void VerifyExecutingUser(void);
 char *BuildScriptPath(char *basedir, char *scrStr);
@@ -39,3 +40,4 @@ char *GetBaseDirectory(struct passwd *user);
 
 int FileExists(char *path);
 int DirExists(char *path);
+void LogInit (void);

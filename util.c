@@ -132,7 +132,8 @@ char *CondenseSlashes(char *path)
 
 	for (i=0, j=0; i<strlen(path); i++)
 	{
-		if ( !(path[i] == '/' & (path[i+1] == '/' | path[i+1] == '\0') ))
+		if ( !((path[i] == '/') & 
+			((path[i+1] == '/') | (path[i+1] == '\0')) ))
 		{
 			tmp[j++] = path[i];
 		}
@@ -287,7 +288,6 @@ void CheckScriptFile(void)
 {
 	struct stat fileStat; /* For checking file status */
 	struct stat fileLStat; /* For checking symlink status */
-	char tempErrString[255];
 
 	if ( CheckPath(Context.scriptFullPath) )
 	{

@@ -40,6 +40,11 @@ Chow <j8g1@ugrad.cs.ubc.ca>) for pointing this out and for testing the fix.
 trailing slashes
 	<LI>Added SafeMalloc routine to eliminate the need to check 
 malloc result throughout the code.
+	<LI>Changed tardist target to touch all files and directories
+so that a consistent time stamp is reached. This should eliminate spurious
+calls to autoheader when building cgiwrap.
+	<LI>Added in code to configure.in for the various information options
+such as local-site-url, local-contact-phone, etc.
 </UL>
 
 <P><H3>New in version 3.5:</H3><UL>

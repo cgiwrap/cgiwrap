@@ -63,7 +63,7 @@ msgs.o: config.h cgiwrap.h msgs.c
 #
 # Dependencies for developing cgiwrap
 #
-VERSION=3.6beta3
+VERSION=3.6beta4
 
 allconf: configure config.h.in Makefile config.h
 
@@ -87,6 +87,7 @@ docs: Makefile
 dist:
 	rm -rf ../cgiwrap-$(VERSION)
 	mkdir ../cgiwrap-$(VERSION)
+	touch * */*
 	cp -r * ../cgiwrap-$(VERSION)
 	cd ../cgiwrap-$(VERSION) && make distclean
 	cd ../cgiwrap-$(VERSION) && rm -rf CVS */CVS */*/CVS

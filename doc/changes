@@ -43,6 +43,9 @@
        slashes
      * Added SafeMalloc routine to eliminate the need to check malloc
        result throughout the code.
+     * Changed tardist target to touch all files and directories so that
+       a consistent time stamp is reached. This should eliminate spurious
+       calls to autoheader when building cgiwrap.
        
   New in version 3.5:
   

@@ -71,7 +71,7 @@ void main (int argc, char *argv[])
 	
 	/* Get the user name from the given data */
 	userStr = FetchUserString();
-	DEBUG_Str("Retrieved User Name", userStr);
+	DEBUG_Str("Retrieved User Name: ", userStr);
 
 	/* Now, get whatever information that is available about that */
 	/* user - fetch this information from the passwd file or NIS */
@@ -81,10 +81,10 @@ void main (int argc, char *argv[])
 	}
 	memcpy(&Context.user, user, sizeof(struct passwd));
 
-	DEBUG_Msg("User Data Retrieved:");
-	DEBUG_Str("   UserID:", user->pw_name);
-	DEBUG_Int("   UID:", user->pw_uid);
-	DEBUG_Int("   GID:", user->pw_gid);
+	DEBUG_Msg("\nUser Data Retrieved:");
+	DEBUG_Str("     UserID:", user->pw_name);
+	DEBUG_Int("        UID:", user->pw_uid);
+	DEBUG_Int("        GID:", user->pw_gid);
 	DEBUG_Str("   Home Dir:", user->pw_dir);
 
 	/* Perform checks to make sure this user is allow to use CGI scripts */
@@ -94,7 +94,7 @@ void main (int argc, char *argv[])
 		are to be stored */
 	DEBUG_Msg("");
 	cgiBaseDir = GetBaseDirectory(user);	
-	DEBUG_Str("Script Base Directory", cgiBaseDir);
+	DEBUG_Str("Script Base Directory: ", cgiBaseDir);
 	if ( !DirExists(cgiBaseDir) )
 	{
 		MSG_Error_NoScriptDir();
@@ -106,8 +106,8 @@ void main (int argc, char *argv[])
 	Context.scriptFullPath = CondenseSlashes(scriptPath);
 	Context.scriptRelativePath = CondenseSlashes(scrStr);
 
-	DEBUG_Str("\tScript Relative Path", scrStr);
-	DEBUG_Str("\tScript Absolute Path", scriptPath);
+	DEBUG_Str("\tScript Relative Path: ", scrStr);
+	DEBUG_Str("\tScript Absolute Path: ", scriptPath);
 
 	/* Set the Correct Values of environment variables */
 	DEBUG_Msg("\nFixing Environment Variables.");

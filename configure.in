@@ -8,7 +8,131 @@ AC_PROG_CC
 AC_PROG_MAKE_SET
 
 dnl
-dnl Path to perl unsup stuff
+dnl Information options
+dnl
+AC_MSG_CHECKING(for local contact name)
+AC_ARG_WITH( local-contact-name, 
+	[  --with-local-contact-name=NAME]
+	[  define name of local contact], 
+	[ 
+		if test x"$withval" = xyes; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test x"$withval" = xno; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test x"$withval" = x; then
+			AC_MSG_RESULT([disabled, must specify value])
+		else
+			AC_MSG_RESULT([${withval}])
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_NAME,"${withval}")
+		fi
+	],
+	[ 
+		AC_MSG_RESULT([disabled])
+	])
+
+AC_MSG_CHECKING(for local contact email)
+AC_ARG_WITH( local-contact-email, 
+	[  --with-local-contact-email=ADDRESS]
+	[  define email address of local contact], 
+	[ 
+		if test x"$withval" = xyes; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test x"$withval" = xno; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test x"$withval" = x; then
+			AC_MSG_RESULT([disabled, must specify value])
+		else
+			AC_MSG_RESULT([${withval}])
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_EMAIL,"${withval}")
+		fi
+	],
+	[ 
+		AC_MSG_RESULT([disabled])
+	])
+
+AC_MSG_CHECKING(for local contact phone)
+AC_ARG_WITH( local-contact-phone, 
+	[  --with-local-contact-phone=PHONE]
+	[  define phone number of local contact], 
+	[ 
+		if test x"$withval" = xyes; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test x"$withval" = xno; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test x"$withval" = x; then
+			AC_MSG_RESULT([disabled, must specify value])
+		else
+			AC_MSG_RESULT([${withval}])
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_PHONE,"${withval}")
+		fi
+	],
+	[ 
+		AC_MSG_RESULT([disabled])
+	])
+
+AC_MSG_CHECKING(for local contact url)
+AC_ARG_WITH( local-contact-url, 
+	[  --with-local-contact-url=URL]
+	[  define url of local contact], 
+	[ 
+		if test x"$withval" = xyes; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test x"$withval" = xno; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test x"$withval" = x; then
+			AC_MSG_RESULT([disabled, must specify value])
+		else
+			AC_MSG_RESULT([${withval}])
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_URL,"${withval}")
+		fi
+	],
+	[ 
+		AC_MSG_RESULT([disabled])
+	])
+
+AC_MSG_CHECKING(for local site url)
+AC_ARG_WITH( local-site-url, 
+	[  --with-local-site-url=URL]
+	[  define url of local site], 
+	[ 
+		if test x"$withval" = xyes; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test x"$withval" = xno; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test x"$withval" = x; then
+			AC_MSG_RESULT([disabled, must specify value])
+		else
+			AC_MSG_RESULT([${withval}])
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_SITE_URL,"${withval}")
+		fi
+	],
+	[ 
+		AC_MSG_RESULT([disabled])
+	])
+
+AC_MSG_CHECKING(for local cgiwrap docs)
+AC_ARG_WITH( local-doc-url, 
+	[  --with-local-doc-url=URL]
+	[  define url of local cgiwrap documentation], 
+	[ 
+		if test x"$withval" = xyes; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test x"$withval" = xno; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test x"$withval" = x; then
+			AC_MSG_RESULT([disabled, must specify value])
+		else
+			AC_MSG_RESULT([${withval}])
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_DOC_URL,"${withval}")
+		fi
+	],
+	[ 
+		AC_MSG_RESULT([disabled])
+	])
+
+
+dnl
+dnl Path to perl for unsupported stuff
 dnl
 AC_ARG_WITH( perl, 
 	[  --with-perl=PATH]
@@ -145,8 +269,8 @@ AC_MSG_RESULT([server running as "${withval}"])
 
 AC_MSG_CHECKING(for check-httpd-user)
 AC_ARG_WITH( check-httpd-user, 
-	[  --with-check-httpd-user]
-	[  dont't check to make sure cgiwrap is being run by server userid], 
+	[  --without-check-httpd-user]
+	[  don't check to make sure cgiwrap is being run by server userid], 
 	[
 		AC_MSG_RESULT([disabled, server userid will be checked])
 		INSTALLMODE=4750
