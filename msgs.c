@@ -11,6 +11,7 @@ RCSID("$Id$");
  */
 int MSG_HTMLMessages = 1;   
 int MSG_Need_NPH_Header = 0;
+int MSG_QuietErrors = 0;
 
 /*
  * Print out a content-type message, but only if one hasn't been
@@ -463,11 +464,11 @@ void MSG_Error_AccessControl(char *why, char *allowfile, char *denyfile)
 		}
 		if ( allowfile )
 		{
-			printf("\tAccess Control Allow File: %s\n", allowfile);
+			printf("\tAccess Control Allow File: %s\n", HTMLEncode(allowfile));
 		}
 		if ( denyfile )
 		{
-			printf("\tAccess Control Deny File: %s\n", denyfile);
+			printf("\tAccess Control Deny File: %s\n", HTMLEncode(denyfile));
 		}
 	}
 #endif
@@ -484,7 +485,7 @@ void MSG_Error_SystemError(char *when)
 	if ( MSG_HTMLMessages )
 	{
 		printf("<DL>\n");
-		printf("<DT>When: %s\n", when);
+		printf("<DT>When: %s\n", HTMLEncode(when));
 #if defined(HAS_STRERROR)
 		printf("<DT>Error Message: %s\n", strerror(errno));
 #elif defined(HAS_PERROR)

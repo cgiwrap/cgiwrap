@@ -6,6 +6,7 @@
  **/ 
 
 extern int MSG_HTMLMessages;
+extern int MSG_QuietErrors;
 extern int MSG_Need_NPH_Header;
 
 void MSG_ContentType(char *typestring);
