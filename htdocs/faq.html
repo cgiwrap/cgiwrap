@@ -98,6 +98,22 @@ their resident size is small.
 	first line of the script will cause the error to go away, sometimes
 	not. 
 
+<P><DT>How do I use cgiwrapd on a Cobalt RaQ?
+<DD>
+cgiwrapd is still there, it just isn't directly obvious how to use it.
+If you normally call your script as
+<P>
+	http://www.site1.com/test.cgi
+<P>
+you can call it as
+<P>
+http://www.site1.com/cgiwrapDir/cgiwrapd/test.cgi
+<P>
+to run it under cgiwrapd.  Basically they ScriptAlias "cgiwrapDir" to
+the directory where cgiwrap is installed.
+<P>
+Chris Adams <cmadams@hiwaay.net>
+
 </DL>
 
 
