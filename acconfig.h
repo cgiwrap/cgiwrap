@@ -5,6 +5,11 @@
 #undef CONF_HTTPD_USER 
 
 /*
+ * Chroot prefix, requires significant infrastructure to use
+ */
+#undef CONF_CHROOT_PREFIX
+
+/*
  * Informational definitions
  */
 #undef CONF_LOCAL_SITE_URL

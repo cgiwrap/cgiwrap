@@ -2,7 +2,7 @@
                          CGIWrap - Tips and Tricks
      _________________________________________________________________
    
-Ok, here's a few examples on how you can use mod_rewrite to rewrite your 
+Ok, here's a few examples on how you can use mod_rewrite to rewrite your
 CGIwrap URL's in a way that is totally transparent to the end user.
 
 Example #1 - Basic Rewriting of CGIwrap URL's
@@ -35,7 +35,7 @@ RewriteRule ^(.+) ${lowercase:%{HTTP_HOST}}$1 [C]
 # do the magic
 RewriteRule ^([a-z-][-0-9]+)\.domain\.com/cgi/(.*) /cgi-bin/cgiwrap/$1/$2 [PT]
 RewriteRule ^([a-z-][-0-9]+)\.domain\.com/cgi-d/(.*) /cgi-bin/cgiwrapd/$1/$2 [P
-T] 
+T]
 RewriteRule ^([a-z-][-0-9]+)\.domain\.com/nph-cgi/(.*) /cgi-bin/nph-cgiwrap/$1/
 $2 [PT]
 RewriteRule ^([a-z-][-0-9]+)\.domain\.com/nph-cgi-d/(.*) /cgi-bin/nph-cgiwrapd/
@@ -67,7 +67,7 @@ RewriteMap lowercase int:tolower
 # www.domain.com /s101/home/user
 RewriteMap vhost dbm:/etc/apache/hostmap
 # map file which contains key/value information for path info for customers
-# cgi 
+# cgi
 # format:
 # username.server101.com /cgi-bin/cgiwrap/
 # ...
@@ -113,7 +113,7 @@ comments/corrections roady@linux-solutions.org
 Ben O'Shea
      _________________________________________________________________
    
-From: Shane DeRidder 
+From: Shane DeRidder
 
 Actually, if you use Apache 1.1 (recently released), you can use their
 built-in handlers like:
@@ -144,13 +144,13 @@ NameTrans fn="pfx2dir" from="/cgi" dir="path_to_cgiwrap" name="cgi"
 NameTrans fn="pfx2dir" from="/cgid" dir="path_to_cgiwrapd" name="cgi"
 
 -----
-Joe Hourcle 
+Joe Hourcle
 Web Development Staff
 Computer and Information Resource Center
 The George Washington University
      _________________________________________________________________
    
-From: Seth Chaiklin 
+From: Seth Chaiklin
 
 cgiwrapd and nph-cgiwrapd provide information about the installation of
 your web-server that you might not want to make generally available.
@@ -170,7 +170,7 @@ Allow from <your ip number here>
 Order deny,allow
 Deny from all
 Allow from >your ip number here>
-</Location>    
+</Location>
 
 Depending on what value you place for allow from, you can control how
 widely these debugging versions
@@ -179,7 +179,7 @@ are available.
    
 
 Date: Sun, 7 Dec 1997 23:20:28 -0500 (EST)
-From: Yuji Shinozaki 
+From: Yuji Shinozaki
 
 Look at the Rewrite rules.  You will need to activate mod_rewrite
 and recompile (see the Apache documentation and Configuration file:
@@ -190,19 +190,19 @@ Module rewrite_module      mod_rewrite.o
 )
 
 For an example of the runtime configuration, in the srm.conf you could
-have: 
+have:
 
 RewriteEngine on
-RewriteRule  ^/~([^/]+)/cgi-bin/(.*)    /cgi-bin/cgiwrap/$1/$2 [PT] 
-RewriteRule  ^/~([^/]+)/cgi-bin-d/(.*)  /cgi-bin/cgiwrapd/$1/$2 [PT] 
-RewriteRule  ^/~([^/]+)/nph-bin-d/(.*)  /cgi-bin/nph-cgiwrapd/$1/$2 [PT] 
-RewriteRule  ^/~([^/]+)/nph-bin/(.*)    /cgi-bin/nph-cgiwrap/$1/$2 [PT] 
+RewriteRule  ^/~([^/]+)/cgi-bin/(.*)    /cgi-bin/cgiwrap/$1/$2 [PT]
+RewriteRule  ^/~([^/]+)/cgi-bin-d/(.*)  /cgi-bin/cgiwrapd/$1/$2 [PT]
+RewriteRule  ^/~([^/]+)/nph-bin-d/(.*)  /cgi-bin/nph-cgiwrapd/$1/$2 [PT]
+RewriteRule  ^/~([^/]+)/nph-bin/(.*)    /cgi-bin/nph-cgiwrap/$1/$2 [PT]
 
 Which translates http://server.addr/~user/cgi-bin/program to
-http://server.addr/cgi-bin/cgiwrap/user/program. Also (in this example) 
+http://server.addr/cgi-bin/cgiwrap/user/program. Also (in this example)
 http:/server.addr/~user/cgi-bin-d/program is translated to
 http://server.addr/cgi-bin/cgiwrapd/user/program, to provide debugging
-support.  And so on... 
+support.  And so on...
 
 The setup of cgi-wrap will determine where the scripts actually reside.
 (and I would actually put the script in a directory NOT in the

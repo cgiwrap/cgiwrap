@@ -56,6 +56,30 @@ AC_CHECK_FUNC(setrlimit, [AC_DEFINE(HAS_SETRLIMIT)])
 AC_CHECK_FUNC(putenv, [AC_DEFINE(HAS_PUTENV)])
 AC_CHECK_FUNC(wait3, [AC_DEFINE(HAS_WAIT3)])
 
+dnl
+dnl Information options
+dnl
+AC_MSG_CHECKING(for chroot prefix)
+AC_ARG_WITH( chroot,
+        [  --with-chroot=PATH]
+        [  define prefix to chroot to before execution ]
+        [  DO NOT USE THIS unless you have read the cgiwrap chroot ]
+	[  documentation and have set up the requisite structure ],
+        [
+                if test "x$withval" = xyes; then
+                        AC_MSG_RESULT([disabled, must specify value])
+                elif test "x$withval" = xno; then
+                        AC_MSG_RESULT([disabled, must specify value])
+                elif test "x$withval" = x; then
+                        AC_MSG_RESULT([disabled, must specify value])
+                else
+                        AC_MSG_RESULT($withval)
+                        AC_DEFINE_UNQUOTED(CONF_CHROOT_PREFIX,"$withval")
+                fi
+        ],
+        [
+                AC_MSG_RESULT([disabled])
+        ])
 
 dnl
 dnl Information options

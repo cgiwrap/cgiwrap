@@ -135,6 +135,19 @@ int main (int argc, char *argv[])
 	Log(userStr, scrStr, "ok");
 #endif
 
+	/* Once log is initialized, we can chroot */
+#if defined(CONF_CHROOT_PREFIX)
+	DEBUG_Str("Attempting to chroot: ", CONF_CHROOT_PREFIX);
+	if ( chdir(CONF_CHROOT_PREFIX) == -1 )
+	{
+		MSG_Error_SystemError("Failed to chdir for chrooting!");
+	}
+	if ( chroot(CONF_CHROOT_PREFIX) == -1 )
+	{
+		MSG_Error_SystemError("Failed to chroot!");
+	}
+#endif
+
 	/* Change auxilliary groups to match this user */
 	ChangeAuxGroups(user);
 	

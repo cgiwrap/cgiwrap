@@ -122,6 +122,11 @@
    --with-check-shell
           enable check for a valid user shell
           
+   --with-chroot=PATH
+          chroots script to PATH prior to script execution, requires
+          specific environment to be set up. See chroot docs for more
+          details.
+          
    --with-minimum-uid=UID set the minimum uid of user that can use
           cgiwrap
           

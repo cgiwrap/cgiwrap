@@ -8,6 +8,7 @@
   New in version 3.6.5:
   
      * Fixed small problem with glibc2.1 and errno.h vs. sys/errno.h
+     * Added simple chroot support for expert installations.
        
   New in version 3.6.4:
   
