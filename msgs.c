@@ -218,7 +218,7 @@ void MSG_Info(void)
 	      printf("%sServer Name%s: %s\n", 
 		      prefix, suffix, HTMLEncode(getenv("SERVER_NAME")));
 	}
-	if ( getenv("SERVER_HOST") )
+	if ( ! MSG_QuietErrors && getenv("SERVER_HOST") )
 	{
 	      printf("%sServer Host%s: %s\n", 
 		      prefix, suffix, HTMLEncode(getenv("SERVER_HOST")));
@@ -232,6 +232,11 @@ void MSG_Info(void)
 	{
 	      printf("%sServer Protocol%s: %s\n", 
 		      prefix, suffix, HTMLEncode(getenv("SERVER_PROTOCOL")));
+	}
+	if ( getenv("HTTP_HOST") )
+	{
+	      printf("%sVirtual Host%s: %s\n", 
+		      prefix, suffix, HTMLEncode(getenv("HTTP_HOST")));
 	}
 	
 	if ( MSG_HTMLMessages )
