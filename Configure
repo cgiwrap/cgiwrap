@@ -20,7 +20,7 @@
 
 # $Id$
 #
-# Generated on Tue Apr  9 11:05:04 CDT 1996 [metaconfig 3.0 PL60]
+# Generated on Wed Apr 10 16:19:21 CDT 1996 [metaconfig 3.0 PL60]
 
 cat >/tmp/c1$$ <<EOF
 ARGGGHHHH!!!!!
@@ -238,6 +238,8 @@ d_conf_useset=''
 d_conf_use_rlimit_cpu=''
 d_conf_use_rlimit_vmem=''
 d_conf_use_system=''
+d_conf_userdirfile=''
+userdirfile=''
 contains=''
 cpplast=''
 cppminus=''
@@ -3118,7 +3120,7 @@ EOM
 
 	case "$conf_log_label" in
 	'')	dflt="" ;;
-	*)	dflt="$conf_log_logfile" ;;
+	*)	dflt="$conf_log_label" ;;
 	esac
 
 	rp="What label should be assigned?"
@@ -3365,6 +3367,72 @@ eval $setvar
 d_conf_system='' ;;
 
 esac
+
+
+$cat <<'EOM'
+
+To allow for sites that don't run CGI scripts out of user directories, 
+or have special needs, such as hosts performing virtual-server type
+services, CGIwrap can read a configuration file that allows the path
+to directories to be rewritten.
+
+This way, the user's home directory can be located in one place, and the
+cgi-bin directory can be located in a completely different location. 
+
+Unless you absolutely need this, I would suggest NOT enabling this option, 
+as it will slow cgiwrap down considerably.
+
+EOM
+
+case "$d_conf_userdirfile" in
+define)   dflt='y' ;;
+*)        dflt='n'
+esac
+
+rp="Process User Directory Rewrite File?"
+. ./myread
+
+case "$ans" in
+y|Y) val="$define" ;;
+*) val="$undef" ;;
+esac
+
+set d_conf_userdirfile
+eval $setvar
+
+
+
+case "$d_conf_userdirfile" in
+define) 
+
+$cat <<'EOM'
+
+Now I need to know the path to the file that contains the list
+of user directories. Note, you only need to include userids in this
+file that need to be rewritten. Otherwise, CGIwrap will just use the
+directory that is listed in the passwd file.
+
+The file format is line based, with each line having the format:
+
+userid:directory
+
+EOM
+
+	case "$userdirfile" in
+	'')	dflt="/usr/adm/cgiwrap.userdir" ;;
+	*)	dflt="$userdirfile" ;;
+	esac
+
+	rp="What file contains the list of user dirs?"
+	. ./myread
+
+	userdirfile="$ans"
+
+;;
+
+*) ;;
+esac
+
 : see if seteuid exists
 set seteuid d_seteuid
 eval $inlibc
@@ -4056,6 +4124,8 @@ d_conf_useset='$d_conf_useset'
 d_conf_use_rlimit_cpu='$d_conf_use_rlimit_cpu'
 d_conf_use_rlimit_vmem='$d_conf_use_rlimit_vmem'
 d_conf_use_system='$d_conf_use_system'
+d_conf_userdirfile='$d_conf_userdirfile'
+userdirfile='$userdirfile'
 contains='$contains'
 cpplast='$cpplast'
 cppminus='$cppminus'

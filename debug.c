@@ -1,5 +1,3 @@
-static char *rcsid="$Id$";
-
 /**
  **  File: debug.c
  **  Purpose: Debugging output routines

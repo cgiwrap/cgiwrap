@@ -1,5 +1,3 @@
-static char *rcsid="$Id$";
-
 /**
  **  File: stdutil.c
  **  Purpose: Home grown alternatives for routines not in standard library

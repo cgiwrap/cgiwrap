@@ -86,7 +86,7 @@ EOM
 
 	case "$conf_log_label" in
 	'')	dflt="" ;;
-	*)	dflt="$conf_log_logfile" ;;
+	*)	dflt="$conf_log_label" ;;
 	esac
 
 	rp="What label should be assigned?"

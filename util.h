@@ -1,5 +1,3 @@
-/* rcsid: $Id$ */
-
 /**
  **  File: util.h
  **  Purpose: Prototypes and defines for routines in util.c

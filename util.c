@@ -1,5 +1,3 @@
-static char *rcsid="$Id$";
-
 /**
  **  File: util.c
  **  Purpose: Various utility routines used by cgiwrap
@@ -510,12 +508,12 @@ void ChangeID ( struct passwd *user)
  */
 void ChangeAuxGroups(struct passwd *user)
 {
-#if defined(HAS_SETGROUPS) & defined(CONF_SETGROUPS)
+#if defined(HAS_SETGROUPS) && defined(CONF_SETGROUPS)
 	if ( setgroups(0, NULL) == -1 )
 		DoPError("setgroups() failed!");
 #endif
 
-#if defined(HAS_INITGROUPS) & defined(CONF_INITGROUPS)
+#if defined(HAS_INITGROUPS) && defined(CONF_INITGROUPS)
 	if ( initgroups( user->pw_name, user->pw_gid ) == -1 )
 		DoPError("initgroups() failed!");
 #endif
@@ -741,4 +739,46 @@ void Create_AFS_PAG(void)
 	DEBUG_Msg("Setting AFS Process Authentication Group (PAG)");
 	setpag();
 #endif
+}
+
+/*
+ * Rewrite user dir from configuration file if option is enabled
+ */
+char *RewriteUserDir(char *user, char *userdir)
+{
+	FILE *file;
+	static char temp[200];
+	int i, j;
+
+#if defined(CONF_USERDIRFILE)
+	if ( (file=fopen(CONF_USERDIRFILE,"r")) == NULL )
+	{
+		DoPError("Couldn't Open User Directory Rewrite File");
+	}
+
+	temp[0]=0;
+	while ( !feof(file) )
+	{
+		fgets(temp, 199, file);
+
+		i = strlen(user);
+
+		if ( !strncmp(user, temp, i) && temp[i+1] == ':' )
+		{
+			for ( j=0; j<strlen(temp); j++)
+			{
+				if ( !isprint(temp[j]) )
+				{
+					temp[j] = 0;
+				} 
+			}	
+		
+			fclose(file);
+			return &temp[i+2];
+		}
+	}
+	fclose(file);
+#endif
+
+	return userdir;
 }

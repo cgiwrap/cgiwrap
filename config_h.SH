@@ -295,6 +295,12 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
  */
 #$d_conf_use_system CONF_USE_SYSTEM		/**/
 
+/* CONF_USERDIRFILE:
+ *	Defined to be the filename that cgiwrap processes to rewrite user 
+ *	directory paths.
+ */
+#$d_conf_userdirfile CONF_USERDIRFILE "$userdirfile"		/**/
+
 /* HAS_INITGROUPS:
  *	If defined, this indicates that the system has the initgroups call.
  */

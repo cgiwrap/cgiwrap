@@ -1,5 +1,9 @@
 Log of Changes to CGIwrap:
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+Changes since 3.3:
+   Fixed typo "&" instead of "&&" in setgroups stuff
+   Added cgiwrap.aliases option to rewrite home dirs of users.
+
 Changes since 3.24:
    Added support for attaching a label to syslog log messages.
    Added code to rewrite the PATH_TRANSLATED environment variable.

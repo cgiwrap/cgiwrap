@@ -17,6 +17,7 @@
 >CONF_REDIR_STDERR
 >CONF_SETGROUPS
 >CONF_SUBDIRS
+>CONF_USERDIRFILE
 >CONF_USESET
 >CONF_USE_RLIMIT_CPU
 >CONF_USE_RLIMIT_VMEM
@@ -73,6 +74,7 @@ d_conf_subdirs
 d_conf_use_rlimit_cpu
 d_conf_use_rlimit_vmem
 d_conf_use_system
+d_conf_userdirfile
 d_conf_useset
 d_initgroups
 d_setegid
@@ -107,4 +109,5 @@ libs
 optimize
 perl
 spitshell
+userdirfile
 voidflags

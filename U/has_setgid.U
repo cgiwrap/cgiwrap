@@ -9,8 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log$
-?RCS: Revision 1.4  1996/05/31 15:45:37  nneul
-?RCS: Committing cgiwrap-3.3 source tree
+?RCS: Revision 1.5  1996/05/31 16:31:21  nneul
+?RCS: added cron info file and new userid configure file as well as changes
+?RCS: for 3.31 source
 ?RCS:
 ?RCS: Revision 3.0  1993/08/18  12:07:14  ram
 ?RCS: Baseline for dist 3.0 netwide release.
