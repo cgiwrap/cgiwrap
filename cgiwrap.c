@@ -1,3 +1,5 @@
+static char *rcsid="$Id$";
+
 /**
  **  File: cgiwrap.c
  **  Purpose: Main program for cgiwrap

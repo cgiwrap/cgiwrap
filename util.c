@@ -1,3 +1,5 @@
+static char *rcsid="$Id$";
+
 /**
  **  File: util.c
  **  Purpose: Various utility routines used by cgiwrap

@@ -1,3 +1,5 @@
+/* rcsid: $Id$ */
+
 /**
  **  File: fetch.h
  **  Purpose: Prototypes for routines in fetch.c

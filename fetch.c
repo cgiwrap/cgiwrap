@@ -1,3 +1,5 @@
+static char *rcsid="$Id$";
+
 /**
  **  File: fetch.c
  **  Purpose: Routines to extract the user and script name from request
