@@ -1,0 +1,41 @@
+
+                         CGIWrap - Tips and Tricks
+                                      
+     _________________________________________________________________
+                                      
+From: Shane DeRidder
+
+Actually, if you use Apache 1.1 (recently released), you can use their
+built-in handlers like:
+
+AddHandler cgi-wrapper .cgi
+Action cgi-wrapper /virtual-path-to-wrapper/username
+
+Of course, this requires all cgi's to end in '.cgi' but there is no need
+to force the cgis to remain in one directory (as long as you compile the
+wrapper to believe cgi's are in the user's root html directory).
+
+I have my server configured to disallow all CGIs, so users are forced to
+use the wrapper...works better than I had ever expected.  They can do
+anything with their web sites - and none of them realize the wrapper
+is in use.
+
+Shane-
+
+--
+Shane DeRidder     | System Administrator / Webmaster
+shane@together.net | Together Networks
+(802)860-5166      | http://www.together.net
+
+     _________________________________________________________________
+                                      
+For netscape server in obj.conf:
+
+NameTrans fn="pfx2dir" from="/cgi" dir="path_to_cgiwrap" name="cgi"
+NameTrans fn="pfx2dir" from="/cgid" dir="path_to_cgiwrapd" name="cgi"
+
+-----
+Joe Hourcle
+Web Development Staff
+Computer and Information Resource Center
+The George Washington University

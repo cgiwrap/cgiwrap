@@ -1,0 +1,46 @@
+
+                        CGIWrap - User Instructions
+                                      
+     _________________________________________________________________
+                                      
+   The following are instructions for setting up your account to be able
+   to use cgiwrap to execute cgi scripts. It is assumed that you are
+   familiar with writing CGI scripts and writing HTML documents for the
+   WWW.
+   
+   In the following instructions, the following information is assumed:
+     * UserID: joe
+     * Home Directory: /users/joe
+     * CGI Directory: /users/joe/public_html/cgi-bin
+     * Name of Script: script.pl
+     * Web Server: www.domain.com
+       
+   If you do not already have a cgi-bin directory set up, create one:
+     * cd ~joe
+     * mkdir public_html
+     * mkdir public_html/cgi-bin
+       
+   If you are using AFS, you will need to set the AFS permissions on the
+   directories. See [1]Use of CGIwrap with AFS for details on the
+   necessary permissions.
+   
+   Install the script into the cgi-bin directory, and set the proper
+   execution permissions on the file.
+     * cp script.pl ~joe/public_html/cgi-bin/script.pl
+     * chmod 755 ~joe/public_html/cgi-bin/script.pl
+       
+   The script is executed using the following URL:
+     * http://www.domain.com/cgi-bin/cgiwrap/joe/script.pl
+       
+   If you wish to see debugging output for your CGI, specify _cgiwrapd_
+   instead of _cgiwrap_, as in the following URL:
+     * http://www.domain.com/cgi-bin/cgiwrapd/joe/script.pl
+       
+   If the script is an nph- style script, you will need to run it using
+   the following URL's:
+     * http://www.domain.com/cgi-bin/nph-cgiwrap/joe/script.pl
+     * http://www.domain.com/cgi-bin/nph-cgiwrapd/joe/script.pl
+
+References
+
+   1. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/afs.html

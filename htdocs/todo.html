@@ -6,13 +6,20 @@ Here are some things that still need to be done.
 
 <UL>
 	<LI>Fixing the PATH_TRANSLATED support
-	<LI>HTML'ize the error messages when they are output normally.
 	<LI>HTML version of cgiwrapd instead of text/plain
-	<LI>Rlimit value editing
 	<LI>More flexible approach to user directory mapping - rewrite 
 file, mapping dir to user instead of user to dir
 	<LI>Limiting script execution based on load average.
         <LI>Allow setting PATH from cgiwrap
         <LI>Allow setting TZ from cgiwrap
         <LI>Allow setting any environment variable from CGIwrap
+
+<LI>use SERVER_ADMIN
+
+<LI>add a "--with-cgiwrap-admin=email-address" option
+<LI>add a "--with-cgiwrap-docs=URL" option
+<LI>add a "--with-local-docs=URL"
+
+<LI>if you disable httpd user checking - you need to make sure to define the 
+installation group to be the group that the server is runnig as
 </UL>

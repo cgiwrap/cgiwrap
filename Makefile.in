@@ -9,7 +9,7 @@
 srcdir=@srcdir@
 VPATH=@srcdir@
 @SET_MAKE@
-CC=@CC@ -Wall
+CC=@CC@ 
 CFLAGS=@CFLAGS@ -I. -I$(srcdir) @CPPFLAGS@ @AFSCFLAGS@
 LDFLAGS=@LDFLAGS@ @AFSLDFLAGS@
 LIBS=@AFSLIBS@ @LIBS@
@@ -78,6 +78,11 @@ config.h.in: acconfig.h
 
 config.h: config.h.in
 	./config.status
+
+docs: Makefile
+	for p in htdocs/*.html; do \
+		lynx -dump $$p > doc/`basename $$p .html`; \
+	done
 
 dist:
 	rm -rf ../cgiwrap-$(VERSION)

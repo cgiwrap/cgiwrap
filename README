@@ -34,12 +34,9 @@ instructions.
 
 Quick Install:
 --------------
-	Type "./Configure"
-	Answer the questions
-	Type "make"
-	Copy cgiwrap to your server's cgi-bin directory
-	Make symlinks to cgiwrap: cgiwrapd/nph-cgiwrap/nph-cgiwrapd
-	Make it owned by root, and mode 4755. (or 4750 if httpd in own group)
+	./configure <options>
+	make
+	make install
 	
 	
 Mailing List:
@@ -62,5 +59,6 @@ FTP Site:
 ---------
 The current version of CGIwrap is available from:
 
-ftp://ftp.cc.umr.edu/pub/cgi/cgiwrap/
 http://www.umr.edu/~cgiwrap/
+ftp://ftp.umr.edu/pub/cgi/cgiwrap/
+http://ftp.umr.edu/pub/cgi/cgiwrap/
