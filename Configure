@@ -20,7 +20,7 @@
 
 # $Id$
 #
-# Generated on Fri May 31 14:17:11 CDT 1996 [metaconfig 3.0 PL60]
+# Generated on Fri May 31 14:24:52 CDT 1996 [metaconfig 3.0 PL60]
 
 cat >/tmp/c1$$ <<EOF
 ARGGGHHHH!!!!!
@@ -1243,7 +1243,7 @@ The file format is one userid per line, unless you enable host checking.
 
 EOM
 
-case "$d_conf_access in"
+case "$d_conf_access" in
 define)	dflt='y' ;;
 *)	dflt='n' 
 esac
@@ -3370,6 +3370,11 @@ The file format is line based, with each line having the format:
 
 userid:directory
 
+For example, if the user's home directory was "/users/fred", and you had
+"fred:/web/users/freds-cgi-scripts" in the userdir file - then cgiwrap 
+would look for cgi scripts in "/web/users/freds-cgi-scripts" instead of 
+in "/users/fred/public_html/cgi-bin".
+
 EOM
 
 	case "$userdirfile" in
@@ -3377,7 +3382,7 @@ EOM
 	*)	dflt="$userdirfile" ;;
 	esac
 
-	rp="What file contains the list of user dirs?"
+	rp="What file contains the list of user cgi dirs?"
 	. ./myread
 
 	userdirfile="$ans"

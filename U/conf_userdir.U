@@ -61,6 +61,11 @@ The file format is line based, with each line having the format:
 
 userid:directory
 
+For example, if the user's home directory was "/users/fred", and you had
+"fred:/web/users/freds-cgi-scripts" in the userdir file - then cgiwrap 
+would look for cgi scripts in "/web/users/freds-cgi-scripts" instead of 
+in "/users/fred/public_html/cgi-bin".
+
 EOM
 
 	case "$userdirfile" in
@@ -68,7 +73,7 @@ EOM
 	*)	dflt="$userdirfile" ;;
 	esac
 
-	rp="What file contains the list of user dirs?"
+	rp="What file contains the list of user cgi dirs?"
 	. ./myread
 
 	userdirfile="$ans"

@@ -58,7 +58,7 @@ The file format is one userid per line, unless you enable host checking.
 
 EOM
 
-case "$d_conf_access in"
+case "$d_conf_access" in
 define)	dflt='y' ;;
 *)	dflt='n' 
 esac
