@@ -1,8 +1,7 @@
 
                     CGIWrap - Installation Instructions
-                                      
      _________________________________________________________________
-                                      
+   
   Quick Installation
   
    Look at the notes to see if there are any hints for your platform.
@@ -20,16 +19,14 @@
           
    Copy cgiwrap executable to your servers cgi-bin directory
           
-   Make cgiwrap owned by root, executable by all, and setuid. (_Note:_
-          This step must be performed while logged in as "root")
-          
+   Make cgiwrap owned by root, executable by all, and setuid. (Note: This
+          step must be performed while logged in as "root")
           
           chown root cgiwrap
           chmod 4755 cgiwrap
           
    Hardlink or symlink nph-cgiwrap, nph-cgiwrapd, cgiwrapd to cgiwrap in
           the cgi-bin directory.
-          
           
           ln [-s] cgiwrap cgiwrapd
           ln [-s] cgiwrap nph-cgiwrap
@@ -64,7 +61,7 @@
    --with-local-contact-name=NAME
           Specify the name of the local contact
           
-   _--with-local-contact-email_
+   --with-local-contact-email
           Specify the local contact's email address
           
    --with-local-contact-phone
@@ -76,7 +73,7 @@
    --with-local-site-url
           Specify a URL for this site
           
-   _--with-local-doc-url_
+   --with-local-doc-url
           Specify a URL for a local copy of the cgiwrap docs
           
    --with-wall
@@ -86,14 +83,14 @@
    --with-install-group=GROUP
           group to install cgiwrap as
           
-   _--with-install-dir=PATH_
+   --with-install-dir=PATH
           path to installation directory - this should be the path to
           your server's cgi-bin directory
           
    --with-cgi-dir=PATH
           path relative to home dir for cgi scripts
           
-   _--with-httpd-user=USER_
+   --with-httpd-user=USER
           define what userid the web server is running as - this is
           required
           
@@ -203,9 +200,8 @@
           
    --with-afs=DIR
           enable afs setpag() support
-          
      _________________________________________________________________
-                                      
+   
   Password Protected Installation
   
    The following are pecial additional instructions for installing a copy
@@ -234,9 +230,8 @@
           else wasn't running it by hand) 2. That the REMOTE_USER
           environment variable contains a user name that they want to
           allow to access the script.
-          
      _________________________________________________________________
-                                      
+   
   Supplementary Configuration
   
    If you enabled the access file checking, you need to make sure and

@@ -1,16 +1,15 @@
 
                           CGIWrap - Usage with AFS
-                                      
      _________________________________________________________________
-                                      
+   
    CGIwrap will work with AFS, with at least the following directory
    permissions:
    
-                         Dir User/Group Permissions
-                             ~ system:anyuser l
-                       ~/public_html system:anyuser l
-                      ~/public_html system:anyuser rl
-                                      
+   Dir User/Group Permissions
+   ~ system:anyuser l
+   ~/public_html system:anyuser l
+   ~/public_html system:anyuser rl
+   
    If you are running httpd authenticated as an AFS userid, you can
    replace system:anyuser above with that userid.
    

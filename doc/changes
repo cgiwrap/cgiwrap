@@ -4,7 +4,7 @@
    These are some of the changes that have occured in CGIWrap from
    version to version.
      _________________________________________________________________
-                                      
+   
   New since version 3.6.3:
   
      Fixed netmask comparison
@@ -117,7 +117,7 @@
        
   New in version 3.4:
   
-     * Fixed typo "& instead of "&& in setgroups stuff
+     * Fixed typo "&" instead of "&&" in setgroups stuff
      * Added cgiwrap.aliases option to rewrite home dirs of users.
      * Moved entire cgiwrap source build tree to CVS, will make tracking
        changes easier.
