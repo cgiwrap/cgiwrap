@@ -5,6 +5,12 @@
    version to version.
      _________________________________________________________________
    
+  New since version 3.6.3:
+  
+     Fixed netmask comparison
+   
+     Added anonymous CVS server info
+   
   New in version 3.6.3:
   
      * Added support for checking if user has a valid shell, similar to
