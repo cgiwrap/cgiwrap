@@ -122,6 +122,13 @@ struct cgiwrap_context
 
 	/* Is this script executable - used for checking if we should invoke interpreter */
 	int script_is_executable;
+
+	/* The path to execute; distinct from the script path if using an
+	   interpreter. */
+	char *execPath;
+
+	/* The argument array with which to call the executable. */
+	char **execArgv;
 };
 extern struct cgiwrap_context Context;
 

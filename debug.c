@@ -52,4 +52,33 @@ void DEBUG_Int (char *msg, int var)
 	}
 }
 
+/*
+ * Intended to debug a call to execv by printing the path & argv array.
+ */
+void DEBUG_Exec (char *path, char **argv)
+{
+	if ( CONF_DEBUG )
+	{
+		printf("Executing: '%s'\n", path);
+		printf("Arguments:\n");
+
+		if ( argv == NULL )
+		{
+			printf("  missing argv\n");
+		}
+		else
+		{
+			int i = 0;
+			while (argv[i] != NULL) 
+			{ 
+				printf("\t%d: '%s'\n", i, NullCheck(argv[i]));
+				i++;
+			}
+		}
+		printf("\n");
+		fflush(stdout);
+	}
+}
+
+
 

@@ -130,7 +130,7 @@ char **CreateARGV( char *scrStr, int argc, char *argv[])
 
 	temp = (char **) SafeMalloc( (argc+1) * sizeof(char *), "ARGV array");
 	
-	temp[0] = StripPathComponents( CountSubDirs(scrStr), scrStr );
+	temp[0] = StripPathComponents( CountSubDirs(scrStr) - 1, scrStr );
 	temp[argc] = 0;
 
 	for (i=1; i<argc; i++)
@@ -151,9 +151,9 @@ char **CreateInterpreterARGV( char *interp, char *scrStr, int argc, char *argv[]
 	int i;
 
 	temp = (char **) SafeMalloc( (argc+2) * sizeof(char *), "ARGV array");
-	
-	temp[0] = StripPathComponents( CountSubDirs(interp), interp );
-	temp[1] = StripPathComponents( CountSubDirs(scrStr), scrStr );
+
+	temp[0] = interp;
+	temp[1] = StripPathComponents( CountSubDirs(scrStr) - 1, scrStr );
 	temp[argc+1] = 0;
 
 	for (i=1; i<argc; i++)

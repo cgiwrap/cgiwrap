@@ -256,7 +256,23 @@ int main (int argc, char *argv[])
 
 	/* Perform any AFS related tasks before executing script */
 	Create_AFS_PAG();
-	
+
+	/* Set execPath & execArgv appropriately, depending whether an
+	   interpreter is in use. Maybe this could be moved to the PHP & ASP
+	   sections, & the interpreted_script conditional & interPath variable
+	   removed? */
+	if (interPath && Context.interpreted_script) {
+		Context.execPath = interPath;
+		Context.execArgv = CreateInterpreterARGV(interPath, scrStr, argc, argv);
+	} else {
+		Context.execPath = scriptPath;
+		Context.execArgv = CreateARGV(scrStr, argc, argv);
+	}
+
+	/* If we're debugging, print the executable & argument array before
+	   calling execv. */
+	DEBUG_Exec(Context.execPath, Context.execArgv);
+
 	/* Execute the script */
 	DEBUG_Msg("\n\n");
 	DEBUG_Msg("Output of script follows:");
@@ -272,14 +288,7 @@ int main (int argc, char *argv[])
 	}
 	else if ( childpid == 0 )
 	{
-		if ( interPath && Context.interpreted_script )
-		{
-			execv(interPath, CreateInterpreterARGV(interPath, scrStr, argc, argv));
-		}
-		else
-		{
-			execv(scriptPath, CreateARGV(scrStr, argc, argv));
-		}
+		execv(Context.execPath, Context.execArgv);
 		MSG_Error_ExecFailed();
 		Log(userStr, scrStr, "failed execv of script");
 		exit(1);
@@ -301,14 +310,7 @@ int main (int argc, char *argv[])
 		exit(WEXITSTATUS(childstatus));
 	}
 #else
-	if ( interPath && Context.interpreted_script )
-	{
-		execv(interPath, CreateInterpreterARGV(interPath, scrStr, argc, argv));
-	}
-	else
-	{
-		execv(scriptPath, CreateARGV(scrStr, argc, argv));
-	}
+	execv(Context.execPath, Context.execArgv);
 	MSG_Error_ExecFailed();
 	exit(1);
 #endif
