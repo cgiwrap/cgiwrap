@@ -1,140 +1,250 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
-/* 
- * httpd user check
- */
-#undef CONF_CHECK_HTTPD_USER
-#undef CONF_HTTPD_USER 
 
-/*
- * Chroot prefix, requires significant infrastructure to use
- */
+/* set AFS pag */
+#undef CONF_AFS_SETPAG
+
+/* user allow config file */
+#undef CONF_ALLOWFILE
+
+/* cgi dir relative to user home dir */
+#undef CONF_CGIDIR
+
+/* check host in allow/deny files */
+#undef CONF_CHECKHOST
+
+/* check shell against /etc/shells */
+#undef CONF_CHECKSHELL
+
+/* check executing user - very important */
+#undef CONF_CHECK_HTTPD_USER
+
+/* check script gid */
+#undef CONF_CHECK_SCRGID
+
+/* check script is group writable */
+#undef CONF_CHECK_SCRGWRITE
+
+/* check script is world writable */
+#undef CONF_CHECK_SCROWRITE
+
+/* check script is sgid */
+#undef CONF_CHECK_SCRSGID
+
+/* check script is suid */
+#undef CONF_CHECK_SCRSUID
+
+/* check script uid */
+#undef CONF_CHECK_SCRUID
+
+/* check if script is symlink */
+#undef CONF_CHECK_SYMLINK
+
+/* chroot prefix */
 #undef CONF_CHROOT_PREFIX
 
-/*
- * Informational definitions
- */
-#undef CONF_LOCAL_SITE_URL
-#undef CONF_LOCAL_DOC_URL
-#undef CONF_LOCAL_INFO_ENABLED
-#undef CONF_LOCAL_CONTACT_NAME
-#undef CONF_LOCAL_CONTACT_EMAIL
-#undef CONF_LOCAL_CONTACT_PHONE
-#undef CONF_LOCAL_CONTACT_URL
-
-/* 
- * Environment variable setting
- */
-#undef CONF_SETENV_ANY
-#undef CONF_SETENV_PATH
-#undef CONF_SETENV_TZ
-
-/*
- * Script checks
- */
-#undef CONF_STRICT_NAMES
-#undef CONF_CHECK_SCRUID
-#undef CONF_CHECK_SCRGID
-#undef CONF_CHECK_SCRSUID
-#undef CONF_CHECK_SCRSGID
-#undef CONF_CHECK_SCRGWRITE
-#undef CONF_CHECK_SCROWRITE
-#undef CONF_CHECK_SYMLINK
-#undef CONF_USE_REDIRECT_URL
-#undef CONF_REQUIRE_REDIRECT_URL
-
-/*
- * Logging options
- */
-#undef CONF_LOG_USEFILE
-#undef CONF_LOG_USESYSLOG
-#undef CONF_LOG_LOGFILE
-#undef CONF_LOG_LABEL
-
-/*
- * Function availability
- */
-#undef HAS_SIGSET
-#undef HAS_INITGROUPS
-#undef HAS_SETGROUPS
-#undef HAS_GETGROUPS
-#undef HAS_SETGID
-#undef HAS_SETUID
-#undef HAS_SETEGID
-#undef HAS_SETEUID
-#undef HAS_SETRGID
-#undef HAS_SETRUID
-#undef HAS_SETREGID
-#undef HAS_SETREUID
-#undef HAS_SETRESGID
-#undef HAS_SETRESUID
-#undef HAS_PERROR
-#undef HAS_STRDUP
-#undef HAS_SYSLOG
-#undef HAS_SETRLIMIT
-#undef HAS_STRERROR
-#undef HAS_PUTENV
-#undef HAS_WAIT3
-
-/*
- * Various options
- */
-#undef CONF_MINIMUM_UID
-#undef CONF_MINIMUM_GID
-#undef CONF_REDIR_STDERR
-#undef CONF_SUBDIRS
-#undef CONF_USERDIRFILE
-#undef CONF_INITGROUPS
-#undef CONF_SETGROUPS
-#undef CONF_VHOST_ALLOWDIR
-#undef CONF_VHOST_DENYDIR
-#undef CONF_ALLOWFILE
+/* user deny config file */
 #undef CONF_DENYFILE
-#undef CONF_CHECKHOST
-#undef CONF_CHECKSHELL
-#undef CONF_AFS_SETPAG
-#undef CONF_CGIDIR
-#undef CONF_MULTIUSER_CGI_DIR
-#undef CONF_QUIET_ERRORS
-#undef CONF_VHOST_OVERRIDE
+
+/* CGIWRAP_REQUIRE_USER in env to restrict user */
 #undef CONF_ENV_REQUIRE_USER
 
-/*
- * RLimit Options
- */
-#undef CONF_USE_RLIMIT_ANY
-#undef CONF_USE_RLIMIT_AS
-#undef CONF_USE_RLIMIT_CPU
-#undef CONF_USE_RLIMIT_VMEM
-#undef CONF_USE_RLIMIT_FSIZE
-#undef CONF_USE_RLIMIT_DATA
-#undef CONF_USE_RLIMIT_STACK
-#undef CONF_USE_RLIMIT_CORE
-#undef CONF_USE_RLIMIT_RSS
-#undef CONF_USE_RLIMIT_NPROC
-#undef CONF_USE_RLIMIT_NOFILE
-#undef CONF_USE_RLIMIT_MEMLOCK
+/* user httpd executing as */
+#undef CONF_HTTPD_USER
 
-/*
- * Support for reporting rusage/return status
- */
-#undef CONF_REPORT_RUSAGE
+/* call initgroups */
+#undef CONF_INITGROUPS
 
-/*
- * OS Specific Definitions
- */
-#undef _HPUX_SOURCE
+/* local contact email */
+#undef CONF_LOCAL_CONTACT_EMAIL
 
-/*
- * PHP support
- */
-#undef PATH_PROG_PHP
+/* local contact */
+#undef CONF_LOCAL_CONTACT_NAME
+
+/* local contact phone */
+#undef CONF_LOCAL_CONTACT_PHONE
+
+/* local contact url */
+#undef CONF_LOCAL_CONTACT_URL
+
+/* local doc url */
+#undef CONF_LOCAL_DOC_URL
+
+/* local info enabled */
+#undef CONF_LOCAL_INFO_ENABLED
+
+/* local site url */
+#undef CONF_LOCAL_SITE_URL
+
+/* syslog log label */
+#undef CONF_LOG_LABEL
+
+/* logfile path */
+#undef CONF_LOG_LOGFILE
+
+/* use logfile for logging */
+#undef CONF_LOG_USEFILE
+
+/* use syslog for logging */
+#undef CONF_LOG_USESYSLOG
+
+/* check for minimum script gid */
+#undef CONF_MINIMUM_GID
+
+/* check for minimum script uid */
+#undef CONF_MINIMUM_UID
+
+/* support a shared multi-user cgi directory */
+#undef CONF_MULTIUSER_CGI_DIR
+
+/* pass script to php interpreter if suffix */
 #undef CONF_PHP_INTERPRETER
 
-/*
- * Quiet warning about rcsid
- */
-#define RCSID(msg) \
-static /**/const char *const rcsid[] = { (char *)rcsid, "\100(#)" msg }
+/* avoid release of information */
+#undef CONF_QUIET_ERRORS
+
+/* redirect stderr on script execution */
+#undef CONF_REDIR_STDERR
+
+/* report rusage after script terminates */
+#undef CONF_REPORT_RUSAGE
+
+/* require REDIRECT_URL in environment */
+#undef CONF_REQUIRE_REDIRECT_URL
+
+/* some setenvs are defined */
+#undef CONF_SETENV_ANY
+
+/* setenv for LD_LIBRARY_PATH to $withval */
+#undef CONF_SETENV_LD_LIBRARY_PATH
+
+/* setenv for PATH to $withval */
+#undef CONF_SETENV_PATH
+
+/* setenv for TZ to $withval */
+#undef CONF_SETENV_TZ
+
+/* call setgroups */
+#undef CONF_SETGROUPS
+
+/* check for nonprintables in script path */
+#undef CONF_STRICT_NAMES
+
+/* allow scripts in subdirs */
+#undef CONF_SUBDIRS
+
+/* check user homedir rewrite file */
+#undef CONF_USERDIRFILE
+
+/* use REDIRECT_URL in building SCRIPT_NAME if available */
+#undef CONF_USE_REDIRECT_URL
+
+/* any rlimits are set */
+#undef CONF_USE_RLIMIT_ANY
+
+/* set rlimit for AS to bytes */
+#undef CONF_USE_RLIMIT_AS
+
+/* set rlimit for CORE to bytes */
+#undef CONF_USE_RLIMIT_CORE
+
+/* set rlimit for CPU to cpu seconds */
+#undef CONF_USE_RLIMIT_CPU
+
+/* set rlimit for DATA to bytes */
+#undef CONF_USE_RLIMIT_DATA
+
+/* set rlimit for FSIZE to bytes */
+#undef CONF_USE_RLIMIT_FSIZE
+
+/* set rlimit for MEMLOCK to bytes */
+#undef CONF_USE_RLIMIT_MEMLOCK
+
+/* set rlimit for NOFILE to files */
+#undef CONF_USE_RLIMIT_NOFILE
+
+/* set rlimit for NPROC to processes */
+#undef CONF_USE_RLIMIT_NPROC
+
+/* set rlimit for RSS to bytes */
+#undef CONF_USE_RLIMIT_RSS
+
+/* set rlimit for STACK to bytes */
+#undef CONF_USE_RLIMIT_STACK
+
+/* set rlimit for VMEM to bytes */
+#undef CONF_USE_RLIMIT_VMEM
+
+/* dir for vhost allow files */
+#undef CONF_VHOST_ALLOWDIR
+
+/* dir for vhost deny files */
+#undef CONF_VHOST_DENYDIR
+
+/* CGIWRAP_AUTH_VHOST overrides HTTP_HOST */
+#undef CONF_VHOST_OVERRIDE
+
+/* has getgroups library function */
+#undef HAS_GETGROUPS
+
+/* has initgroups library function */
+#undef HAS_INITGROUPS
+
+/* has perror library function */
+#undef HAS_PERROR
+
+/* has putenv library function */
+#undef HAS_PUTENV
+
+/* has setegid library function */
+#undef HAS_SETEGID
+
+/* has seteuid library function */
+#undef HAS_SETEUID
+
+/* has setgid library function */
+#undef HAS_SETGID
+
+/* has setgroups library function */
+#undef HAS_SETGROUPS
+
+/* has setregid library function */
+#undef HAS_SETREGID
+
+/* has setresgid library function */
+#undef HAS_SETRESGID
+
+/* has setresuid library function */
+#undef HAS_SETRESUID
+
+/* has setreuid library function */
+#undef HAS_SETREUID
+
+/* has setrgid library function */
+#undef HAS_SETRGID
+
+/* has setrlimit library function */
+#undef HAS_SETRLIMIT
+
+/* has setruid library function */
+#undef HAS_SETRUID
+
+/* has setuid library function */
+#undef HAS_SETUID
+
+/* has sigset library function */
+#undef HAS_SIGSET
+
+/* has strdup library function */
+#undef HAS_STRDUP
+
+/* has strerror library function */
+#undef HAS_STRERROR
+
+/* has syslog library function */
+#undef HAS_SYSLOG
+
+/* has wait3 library function */
+#undef HAS_WAIT3
 
 /* Define to 1 if you have the <ctype.h> header file. */
 #undef HAVE_CTYPE_H
@@ -219,6 +329,9 @@ static /**/const char *const rcsid[] = { (char *)rcsid, "\100(#)" msg }
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
+
+/* path to php executable to use */
+#undef PATH_PROG_PHP
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS

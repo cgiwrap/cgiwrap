@@ -79,7 +79,7 @@ $(srcdir)/configure: $(srcdir)/configure.in
 Makefile: $(srcdir)/Makefile.in
 	./config.status
 
-config.h.in: $(srcdir)/acconfig.h
+config.h.in: 
 	autoheader
 
 config.h: $(srcdir)/config.h.in

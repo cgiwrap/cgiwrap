@@ -39,6 +39,7 @@
      * Added  ability  to  only allow scripts run by a specific userid if
        the   CGIWRAP_REQUIRE_USER   env   var   is   specified   and  the
        --with-env-require-user feature is enabled.
+     * Changed to autoconf 2.5 style templates and eliminated acconfig.h.
 
   New in version 3.7.1:
 

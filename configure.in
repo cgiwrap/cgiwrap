@@ -1,4 +1,5 @@
 dnl Process this file with autoconf to produce a configure script
+AC_PREREQ(2.5)
 AC_INIT(cgiwrap.h)
 AC_CONFIG_AUX_DIR(.)
 AC_CANONICAL_SYSTEM
@@ -39,7 +40,7 @@ AC_ARG_WITH( use-redirect-url,
 	[  use REDIRECT_URL in building SCRIPT_NAME if available],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_USE_REDIRECT_URL)
+			AC_DEFINE(CONF_USE_REDIRECT_URL, [], [use REDIRECT_URL in building SCRIPT_NAME if available])
 			AC_MSG_RESULT([enabled])
 		else
 			AC_MSG_RESULT([disabled])
@@ -55,7 +56,7 @@ AC_ARG_WITH( require-redirect-url,
 	[  require REDIRECT_URL in environment, to force use of Action/Handlers],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_REQUIRE_REDIRECT_URL)
+			AC_DEFINE(CONF_REQUIRE_REDIRECT_URL, [], [require REDIRECT_URL in environment])
 			AC_MSG_RESULT([enabled])
 		else
 			AC_MSG_RESULT([disabled])
@@ -74,7 +75,7 @@ AC_ARG_WITH( quiet-errors,
 	[  avoid releasing internal information in error messages],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_QUIET_ERRORS)
+			AC_DEFINE(CONF_QUIET_ERRORS, [], [avoid release of information])
 			AC_MSG_RESULT([enabled])
 		else
 			AC_MSG_RESULT([disabled])
@@ -93,7 +94,7 @@ AC_ARG_WITH( vhost-override,
 	[  allow overriding HTTP_HOST with CGIWRAP_AUTH_VHOST],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_VHOST_OVERRIDE)
+			AC_DEFINE(CONF_VHOST_OVERRIDE, [], [CGIWRAP_AUTH_VHOST overrides HTTP_HOST])
 			AC_MSG_RESULT([enabled])
 		else
 			AC_MSG_RESULT([disabled])
@@ -112,7 +113,7 @@ AC_ARG_WITH( env-require-user,
 	[  allow specifying CGIWRAP_REQUIRE_USER in env to restrict to specific userid],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_ENV_REQUIRE_USER)
+			AC_DEFINE(CONF_ENV_REQUIRE_USER, [], [CGIWRAP_REQUIRE_USER in env to restrict user])
 			AC_MSG_RESULT([enabled])
 		else
 			AC_MSG_RESULT([disabled])
@@ -132,7 +133,7 @@ AC_ARG_WITH( php,
 		AC_MSG_CHECKING(for php)
 		if test "x$withval" != x; then
 			PATH_PROG_PHP="$withval"
-			AC_DEFINE_UNQUOTED(PATH_PROG_PHP,"$withval")
+			AC_DEFINE_UNQUOTED(PATH_PROG_PHP,"$withval", [php path])
 			AC_MSG_RESULT($withval)
 		else
 			AC_MSG_RESULT(not found)
@@ -141,7 +142,7 @@ AC_ARG_WITH( php,
 	[
 		AC_PATH_PROG(PATH_PROG_PHP, php, no)
 		if test "x${PATH_PROG_PHP}" != "xno"; then
-			AC_DEFINE_UNQUOTED(PATH_PROG_PHP,"${PATH_PROG_PHP}")
+			AC_DEFINE_UNQUOTED(PATH_PROG_PHP,"${PATH_PROG_PHP}", [path to php executable to use])
 		fi
 	])
 
@@ -150,27 +151,27 @@ AC_ARG_WITH( php,
 dnl
 dnl Check needed library functions
 dnl
-AC_CHECK_FUNC(sigset,[AC_DEFINE(HAS_SIGSET)])
-AC_CHECK_FUNC(initgroups, [AC_DEFINE(HAS_INITGROUPS)])
-AC_CHECK_FUNC(setgroups, [AC_DEFINE(HAS_SETGROUPS)])
-AC_CHECK_FUNC(getgroups, [AC_DEFINE(HAS_GETGROUPS)])
-AC_CHECK_FUNC(setgid, [AC_DEFINE(HAS_SETGID)])
-AC_CHECK_FUNC(setuid, [AC_DEFINE(HAS_SETUID)])
-AC_CHECK_FUNC(setegid, [AC_DEFINE(HAS_SETEGID)])
-AC_CHECK_FUNC(seteuid, [AC_DEFINE(HAS_SETEUID)])
-AC_CHECK_FUNC(setrgid, [AC_DEFINE(HAS_SETRGID)])
-AC_CHECK_FUNC(setruid, [AC_DEFINE(HAS_SETRUID)])
-AC_CHECK_FUNC(setregid, [AC_DEFINE(HAS_SETREGID)])
-AC_CHECK_FUNC(setreuid, [AC_DEFINE(HAS_SETREUID)])
-AC_CHECK_FUNC(setresgid, [AC_DEFINE(HAS_SETRESGID)])
-AC_CHECK_FUNC(setresuid, [AC_DEFINE(HAS_SETRESUID)])
-AC_CHECK_FUNC(perror, [AC_DEFINE(HAS_PERROR)])
-AC_CHECK_FUNC(strerror, [AC_DEFINE(HAS_STRERROR)])
-AC_CHECK_FUNC(strdup, [AC_DEFINE(HAS_STRDUP)])
-AC_CHECK_FUNC(syslog, [AC_DEFINE(HAS_SYSLOG)])
-AC_CHECK_FUNC(setrlimit, [AC_DEFINE(HAS_SETRLIMIT)])
-AC_CHECK_FUNC(putenv, [AC_DEFINE(HAS_PUTENV)])
-AC_CHECK_FUNC(wait3, [AC_DEFINE(HAS_WAIT3)])
+AC_CHECK_FUNC(sigset,		[AC_DEFINE(HAS_SIGSET, 		[], [has sigset library function])])
+AC_CHECK_FUNC(initgroups, 	[AC_DEFINE(HAS_INITGROUPS, 	[], [has initgroups library function])])
+AC_CHECK_FUNC(setgroups, 	[AC_DEFINE(HAS_SETGROUPS, 	[], [has setgroups library function])])
+AC_CHECK_FUNC(getgroups, 	[AC_DEFINE(HAS_GETGROUPS, 	[], [has getgroups library function])])
+AC_CHECK_FUNC(setgid, 		[AC_DEFINE(HAS_SETGID, 		[], [has setgid library function])])
+AC_CHECK_FUNC(setuid, 		[AC_DEFINE(HAS_SETUID, 		[], [has setuid library function])])
+AC_CHECK_FUNC(setegid, 		[AC_DEFINE(HAS_SETEGID, 	[], [has setegid library function])])
+AC_CHECK_FUNC(seteuid, 		[AC_DEFINE(HAS_SETEUID, 	[], [has seteuid library function])])
+AC_CHECK_FUNC(setrgid, 		[AC_DEFINE(HAS_SETRGID, 	[], [has setrgid library function])])
+AC_CHECK_FUNC(setruid, 		[AC_DEFINE(HAS_SETRUID, 	[], [has setruid library function])])
+AC_CHECK_FUNC(setregid, 	[AC_DEFINE(HAS_SETREGID, 	[], [has setregid library function])])
+AC_CHECK_FUNC(setreuid, 	[AC_DEFINE(HAS_SETREUID, 	[], [has setreuid library function])])
+AC_CHECK_FUNC(setresgid, 	[AC_DEFINE(HAS_SETRESGID, 	[], [has setresgid library function])])
+AC_CHECK_FUNC(setresuid, 	[AC_DEFINE(HAS_SETRESUID, 	[], [has setresuid library function])])
+AC_CHECK_FUNC(perror, 		[AC_DEFINE(HAS_PERROR, 		[], [has perror library function])])
+AC_CHECK_FUNC(strerror, 	[AC_DEFINE(HAS_STRERROR, 	[], [has strerror library function])])
+AC_CHECK_FUNC(strdup, 		[AC_DEFINE(HAS_STRDUP, 		[], [has strdup library function])])
+AC_CHECK_FUNC(syslog, 		[AC_DEFINE(HAS_SYSLOG, 		[], [has syslog library function])])
+AC_CHECK_FUNC(setrlimit, 	[AC_DEFINE(HAS_SETRLIMIT, 	[], [has setrlimit library function])])
+AC_CHECK_FUNC(putenv, 		[AC_DEFINE(HAS_PUTENV, 		[], [has putenv library function])])
+AC_CHECK_FUNC(wait3, 		[AC_DEFINE(HAS_WAIT3, 		[], [has wait3 library function])])
 
 dnl
 dnl Information options
@@ -190,7 +191,7 @@ AC_ARG_WITH( chroot,
                         AC_MSG_RESULT([disabled, must specify value])
                 else
                         AC_MSG_RESULT($withval)
-                        AC_DEFINE_UNQUOTED(CONF_CHROOT_PREFIX,"$withval")
+                        AC_DEFINE_UNQUOTED(CONF_CHROOT_PREFIX,"$withval", [chroot prefix])
                 fi
         ],
         [
@@ -213,8 +214,8 @@ AC_ARG_WITH( local-contact-name,
 			AC_MSG_RESULT([disabled, must specify value])
 		else
 			AC_MSG_RESULT($withval)
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_NAME,"$withval")
-			AC_DEFINE(CONF_LOCAL_INFO_ENABLED)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_NAME,"$withval", [local contact])
+			AC_DEFINE(CONF_LOCAL_INFO_ENABLED, [], [local info enabled])
 		fi
 	],
 	[ 
@@ -234,8 +235,8 @@ AC_ARG_WITH( local-contact-email,
 			AC_MSG_RESULT([disabled, must specify value])
 		else
 			AC_MSG_RESULT($withval)
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_EMAIL,"$withval")
-			AC_DEFINE(CONF_LOCAL_INFO_ENABLED)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_EMAIL,"$withval", [local contact email])
+			AC_DEFINE(CONF_LOCAL_INFO_ENABLED, [], [local info enabled])
 		fi
 	],
 	[ 
@@ -255,8 +256,8 @@ AC_ARG_WITH( local-contact-phone,
 			AC_MSG_RESULT([disabled, must specify value])
 		else
 			AC_MSG_RESULT($withval)
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_PHONE,"$withval")
-			AC_DEFINE(CONF_LOCAL_INFO_ENABLED)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_PHONE,"$withval", [local contact phone])
+			AC_DEFINE(CONF_LOCAL_INFO_ENABLED, [], [local info enabled])
 		fi
 	],
 	[ 
@@ -276,8 +277,8 @@ AC_ARG_WITH( local-contact-url,
 			AC_MSG_RESULT([disabled, must specify value])
 		else
 			AC_MSG_RESULT($withval)
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_URL,"$withval")
-			AC_DEFINE(CONF_LOCAL_INFO_ENABLED)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_URL,"$withval", [local contact url])
+			AC_DEFINE(CONF_LOCAL_INFO_ENABLED, [], [local info enabled])
 		fi
 	],
 	[ 
@@ -297,8 +298,8 @@ AC_ARG_WITH( local-site-url,
 			AC_MSG_RESULT([disabled, must specify value])
 		else
 			AC_MSG_RESULT($withval)
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_SITE_URL,"$withval")
-			AC_DEFINE(CONF_LOCAL_INFO_ENABLED)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_SITE_URL,"$withval", [local site url])
+			AC_DEFINE(CONF_LOCAL_INFO_ENABLED, [], [local info enabled])
 		fi
 	],
 	[ 
@@ -318,8 +319,8 @@ AC_ARG_WITH( local-doc-url,
 			AC_MSG_RESULT([disabled, must specify value])
 		else
 			AC_MSG_RESULT($withval)
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_DOC_URL,"$withval")
-			AC_DEFINE(CONF_LOCAL_INFO_ENABLED)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_DOC_URL,"$withval", [local doc url])
+			AC_DEFINE(CONF_LOCAL_INFO_ENABLED, [], [local info enabled])
 		fi
 	],
 	[ 
@@ -414,7 +415,7 @@ AC_ARG_WITH( cgi-dir,
 	[  path relative to home dir for cgi scripts], 
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE_UNQUOTED(CONF_CGIDIR, "$withval")
+			AC_DEFINE_UNQUOTED(CONF_CGIDIR, "$withval", [cgi dir relative to user home dir])
 			AC_MSG_RESULT($withval)
 		else
 			AC_MSG_ERROR([must be defined])
@@ -422,7 +423,7 @@ AC_ARG_WITH( cgi-dir,
 	],
 	[
 		AC_MSG_RESULT([public_html/cgi-bin])
-		AC_DEFINE_UNQUOTED(CONF_CGIDIR,"public_html/cgi-bin")
+		AC_DEFINE_UNQUOTED(CONF_CGIDIR,"public_html/cgi-bin", [cgi dir relative to user home dir])
 	])
 
 
@@ -447,7 +448,7 @@ AC_ARG_WITH( httpd-user,
 	[ 
 		withval=http
 	])
-AC_DEFINE_UNQUOTED(CONF_HTTPD_USER, "$withval")
+AC_DEFINE_UNQUOTED(CONF_HTTPD_USER, "$withval", [user httpd executing as])
 AC_MSG_RESULT([server running as "$withval"])
 
 dnl
@@ -468,7 +469,7 @@ AC_ARG_WITH( multiuser-cgi-dir,
 			AC_MSG_RESULT([must specify path, disabled.])
 		else
 			AC_MSG_RESULT([$withval])
-			AC_DEFINE_UNQUOTED(CONF_MULTIUSER_CGI_DIR, "$withval")
+			AC_DEFINE_UNQUOTED(CONF_MULTIUSER_CGI_DIR, "$withval", [support a shared multi-user cgi directory])
 		fi
 	],
 	[ 
@@ -487,7 +488,7 @@ AC_ARG_WITH( check-httpd-user,
 		INSTALLMODE=4750
 	],
 	[
-		AC_DEFINE(CONF_CHECK_HTTPD_USER)
+		AC_DEFINE(CONF_CHECK_HTTPD_USER, [], [check executing user - very important])
 		AC_MSG_RESULT([enabled, be sure to restrict permissions])
 		INSTALLMODE=4755
 	])
@@ -504,7 +505,7 @@ AC_ARG_WITH( report-rusage,
 	[  report rusage and return status of cgi script after execution], 
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_REPORT_RUSAGE)
+			AC_DEFINE(CONF_REPORT_RUSAGE, [], [report rusage after script terminates])
 			AC_MSG_RESULT([enabled, rusage and return code will be logged])
 		else
 			AC_MSG_RESULT([disabled, rusage and return code will not be logged])
@@ -523,7 +524,7 @@ AC_ARG_WITH( php-interpreter,
 	[  pass script to php interpreter if filename matches], 
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_PHP_INTERPRETER)
+			AC_DEFINE(CONF_PHP_INTERPRETER, [], [pass script to php interpreter if suffix])
 			AC_MSG_RESULT([enabled, php will be handled specially])
 		else
 			AC_MSG_RESULT([disabled, no special handling for php scripts])
@@ -562,14 +563,14 @@ AC_ARG_WITH( strict-names,
 	[  disable check for !isprint() and isspace() in script path],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_STRICT_NAMES)
+			AC_DEFINE(CONF_STRICT_NAMES, [], [check for nonprintables in script path])
 			AC_MSG_RESULT([enabled, script must be all alphanumeric])
 		else
 			AC_MSG_RESULT([disabled, script name not checked])
 		fi
 	],
 	[
-		AC_DEFINE(CONF_STRICT_NAMES)
+		AC_DEFINE(CONF_STRICT_NAMES, [], [check for nonprintables in script path])
 		AC_MSG_RESULT([enabled, script name must be all alphanumeric])
 	])
 
@@ -583,14 +584,14 @@ AC_ARG_WITH( check-owner,
 	[  disable check for matching owner],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_CHECK_SCRUID)
+			AC_DEFINE(CONF_CHECK_SCRUID, [], [check script uid])
 			AC_MSG_RESULT([enabled, owner of script must match])
 		else
 			AC_MSG_RESULT([disabled, owner of script can be different])
 		fi
 	],
 	[
-		AC_DEFINE(CONF_CHECK_SCRUID)
+		AC_DEFINE(CONF_CHECK_SCRUID, [], [check script uid])
 		AC_MSG_RESULT([enabled, owner of script must match])
 	])
 
@@ -600,14 +601,14 @@ AC_ARG_WITH( check-group,
 	[  disable check for matching group],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_CHECK_SCRGID)
+			AC_DEFINE(CONF_CHECK_SCRGID, [], [check script gid])
 			AC_MSG_RESULT([enabled, group of script must match])
 		else
 			AC_MSG_RESULT([disabled, group of script can be different])
 		fi
 	],
 	[
-		AC_DEFINE(CONF_CHECK_SCRGID)
+		AC_DEFINE(CONF_CHECK_SCRGID, [], [check script gid])
 		AC_MSG_RESULT([enabled, group of script must match])
 	])
 
@@ -617,7 +618,7 @@ AC_ARG_WITH( check-setuid,
 	[  disable check for setuid script],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_CHECK_SCRSUID)
+			AC_DEFINE(CONF_CHECK_SCRSUID, [], [check script is suid])
 			AC_MSG_RESULT([enabled, script cannot be setuid])
 		else
 			AC_MSG_RESULT([disabled, script can be setuid])
@@ -625,7 +626,7 @@ AC_ARG_WITH( check-setuid,
 	],
 	[
 		AC_MSG_RESULT([enabled, script cannot be setuid])
-		AC_DEFINE(CONF_CHECK_SCRSUID)		
+		AC_DEFINE(CONF_CHECK_SCRSUID, [], [check script is suid])		
 	])
 
 AC_MSG_CHECKING(for check-setgid)
@@ -634,7 +635,7 @@ AC_ARG_WITH( check-setgid,
 	[  disable check for setgid script],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_CHECK_SCRSGID)
+			AC_DEFINE(CONF_CHECK_SCRSGID, [], [check script is sgid])
 			AC_MSG_RESULT([enabled, script cannot be setuid])
 		else
 			AC_MSG_RESULT([disabled, script can be setgid])
@@ -642,7 +643,7 @@ AC_ARG_WITH( check-setgid,
 	],
 	[
 		AC_MSG_RESULT([enabled, script cannot be setgid])
-		AC_DEFINE(CONF_CHECK_SCRSGID)		
+		AC_DEFINE(CONF_CHECK_SCRSGID, [], [check script is sgid])		
 	])
 
 AC_MSG_CHECKING(for check-group-writable)
@@ -651,14 +652,14 @@ AC_ARG_WITH( check-group-writable,
 	[  disable check for group writable script],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_CHECK_SCRGWRITE)
+			AC_DEFINE(CONF_CHECK_SCRGWRITE, [], [check script is group writable])
 			AC_MSG_RESULT([enabled, script cannot be group writable])
 		else
 			AC_MSG_RESULT([disabled, script can be group writable])
 		fi
 	],
 	[
-		AC_DEFINE(CONF_CHECK_SCRGWRITE)
+		AC_DEFINE(CONF_CHECK_SCRGWRITE, [], [check script is group writable])
 		AC_MSG_RESULT([enabled, script cannot be group writable])
 	])
 
@@ -668,14 +669,14 @@ AC_ARG_WITH( check-world-writable,
 	[  disable check for world writable script],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_CHECK_SCROWRITE)
+			AC_DEFINE(CONF_CHECK_SCROWRITE, [], [check script is world writable])
 			AC_MSG_RESULT([enabled, script cannot be world writable])
 		else
 			AC_MSG_RESULT([disabled, script can be world writable])
 		fi
 	],
 	[
-		AC_DEFINE(CONF_CHECK_SCROWRITE)
+		AC_DEFINE(CONF_CHECK_SCROWRITE, [], [check script is world writable])
 		AC_MSG_RESULT([enabled, script cannot be world writable])
 	])
 
@@ -685,7 +686,7 @@ AC_ARG_WITH( check-symlink,
 	[  disable check for symlinked script],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_CHECK_SYMLINK)
+			AC_DEFINE(CONF_CHECK_SYMLINK, [], [check if script is symlink])
 			AC_MSG_RESULT([enabled, script cannot be a symlink])
 		else
 			AC_MSG_RESULT([disabled, script can be a symlink])
@@ -693,7 +694,7 @@ AC_ARG_WITH( check-symlink,
 	],
 	[
 		AC_MSG_RESULT([enabled, script cannot be a symlink])
-		AC_DEFINE(CONF_CHECK_SYMLINK)
+		AC_DEFINE(CONF_CHECK_SYMLINK, [], [check if script is symlink])
 	])
 
 dnl
@@ -705,7 +706,7 @@ AC_ARG_WITH( minimum-uid,
 	[  minimum uid to allow script execution], 
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE_UNQUOTED(CONF_MINIMUM_UID, $withval)
+			AC_DEFINE_UNQUOTED(CONF_MINIMUM_UID, $withval, [check for minimum script uid])
 			AC_MSG_RESULT($withval)
 		else
 			AC_MSG_RESULT([disabled])
@@ -713,7 +714,7 @@ AC_ARG_WITH( minimum-uid,
 	],
 	[
 		AC_MSG_RESULT([10])
-		AC_DEFINE_UNQUOTED(CONF_MINIMUM_UID,10)
+		AC_DEFINE_UNQUOTED(CONF_MINIMUM_UID,10,[check for minimum script uid])
 	])
 
 dnl
@@ -725,7 +726,7 @@ AC_ARG_WITH( minimum-gid,
 	[  minimum gid to allow script execution], 
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE_UNQUOTED(CONF_MINIMUM_GID, $withval)
+			AC_DEFINE_UNQUOTED(CONF_MINIMUM_GID, $withval, [check for minimum script gid])
 			AC_MSG_RESULT($withval)
 		else
 			AC_MSG_RESULT([disabled])
@@ -745,8 +746,8 @@ AC_ARG_WITH( logging-syslog,
 	[  enable logging script execution to syslog],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_LOG_USESYSLOG)
-			AC_DEFINE_UNQUOTED(CONF_LOG_LABEL, "$withval")
+			AC_DEFINE(CONF_LOG_USESYSLOG, [], [use syslog for logging])
+			AC_DEFINE_UNQUOTED(CONF_LOG_LABEL, "$withval", [syslog log label])
 			AC_MSG_RESULT([enabled, label is '${withval}'])
 		else
 			AC_MSG_RESULT([disabled])
@@ -766,8 +767,8 @@ AC_ARG_WITH( logging-file,
 		fi
 
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_LOG_USEFILE)
-			AC_DEFINE_UNQUOTED(CONF_LOG_LOGFILE, "$withval")
+			AC_DEFINE(CONF_LOG_USEFILE, [], [use logfile for logging])
+			AC_DEFINE_UNQUOTED(CONF_LOG_LOGFILE, "$withval", [logfile path])
 			AC_MSG_RESULT([enabled, logging to file '${withval}'])
 		else
 			AC_MSG_RESULT(disabled)
@@ -787,14 +788,14 @@ AC_ARG_WITH( script-subdirs,
 	[  prevent users from storing scripts in subdirs],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_SUBDIRS)
+			AC_DEFINE(CONF_SUBDIRS, [], [allow scripts in subdirs])
 			AC_MSG_RESULT([enabled, scripts allowed in subdirectories])
 		else
 			AC_MSG_RESULT([disabled, scripts not allowed in subdirectories])
 		fi
 	],
 	[
-		AC_DEFINE(CONF_SUBDIRS)
+		AC_DEFINE(CONF_SUBDIRS, [], [allow scripts in subdirs])
 		AC_MSG_RESULT([enabled, scripts allowed in subdirectories])
 	])
 
@@ -808,14 +809,14 @@ AC_ARG_WITH( redirect-stderr,
 	[  don't redirect stderr to stdout in scripts],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_REDIR_STDERR)
+			AC_DEFINE(CONF_REDIR_STDERR, [], [redirect stderr on script execution])
 			AC_MSG_RESULT([enabled, stderr output will go to stdout])
 		else
 			AC_MSG_RESULT([disabled, server will get stderr output])
 		fi
 	],
 	[
-		AC_DEFINE(CONF_REDIR_STDERR)
+		AC_DEFINE(CONF_REDIR_STDERR, [], [redirect stderr on script execution])
 		AC_MSG_RESULT([enabled, stderr output will go to stdout])
 	])
 
@@ -829,14 +830,14 @@ AC_ARG_WITH( initgroups,
 	[  disable use of initgroups() to clear non-userid auxilliary groups],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_INITGROUPS)
+			AC_DEFINE(CONF_INITGROUPS, [], [call initgroups])
 			AC_MSG_RESULT([enabled, aux groups will be cleared])
 		else
 			AC_MSG_RESULT([disabled, aux groups will not be cleared])
 		fi
 	],
 	[
-		AC_DEFINE(CONF_INITGROUPS)
+		AC_DEFINE(CONF_INITGROUPS, [], [call initgroups])
 		AC_MSG_RESULT([enabled, aux groups will be cleared])
 	])
 
@@ -846,14 +847,14 @@ AC_ARG_WITH( setgroups,
 	[  disable use of setgroups() to add userid's auxilliary groups],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_SETGROUPS)
+			AC_DEFINE(CONF_SETGROUPS, [], [call setgroups])
 			AC_MSG_RESULT([enabled, aux groups will be set])
 		else
 			AC_MSG_RESULT([disabled, aux groups will not be set])
 		fi
 	],
 	[
-		AC_DEFINE(CONF_SETGROUPS)
+		AC_DEFINE(CONF_SETGROUPS, [], [call setgroups])
 		AC_MSG_RESULT([enabled, aux groups will be set])
 	])
 
@@ -867,7 +868,7 @@ AC_ARG_WITH( rewrite,
 	[  use a file to rewrite user directories],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE_UNQUOTED(CONF_USERDIRFILE, "$withval")
+			AC_DEFINE_UNQUOTED(CONF_USERDIRFILE, "$withval", [check user homedir rewrite file])
 			AC_MSG_RESULT([enabled, rewrite file is "$withval"])
 		else
 			AC_MSG_RESULT([disabled, no rewrite file will be used])
@@ -895,8 +896,8 @@ AC_DEFUN(CGIWRAP_SETENV,[
 		elif test "x$withval" = xno; then
 			AC_MSG_RESULT([disabled])
 		else
-			AC_DEFINE(CONF_SETENV_ANY)
-			AC_DEFINE_UNQUOTED(CONF_SETENV_$2, "$withval")
+			AC_DEFINE(CONF_SETENV_ANY, [], [some setenvs are defined])
+			AC_DEFINE_UNQUOTED(CONF_SETENV_$2, "$withval", [setenv for $2 to $withval])
 			AC_MSG_RESULT([enabled, set to ("$withval")])
 		fi
 	],
@@ -905,6 +906,7 @@ AC_DEFUN(CGIWRAP_SETENV,[
 	])
 ])
 
+CGIWRAP_SETENV(ld_library_path,LD_LIBRARY_PATH,STRING,[lib search path])
 CGIWRAP_SETENV(path,PATH,STRING,[search path])
 CGIWRAP_SETENV(tz,TZ,STRING,[time zone])
 
@@ -927,8 +929,8 @@ AC_DEFUN(CGIWRAP_RLIMIT,[
 			withval=$5
 		fi
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_USE_RLIMIT_ANY)
-			AC_DEFINE_UNQUOTED(CONF_USE_RLIMIT_$2, $withval)
+			AC_DEFINE(CONF_USE_RLIMIT_ANY, [], [any rlimits are set])
+			AC_DEFINE_UNQUOTED(CONF_USE_RLIMIT_$2, $withval, [set rlimit for $2 to $4])
 			AC_MSG_RESULT(["$withval" $4])
 		else
 			AC_MSG_RESULT([none])
@@ -967,7 +969,7 @@ AC_ARG_WITH( allow-file,
 			withval="/usr/adm/cgiwrap.allow"
 		fi
 		if test "x$withval" != xno; then
-			AC_DEFINE_UNQUOTED(CONF_ALLOWFILE, "$withval")
+			AC_DEFINE_UNQUOTED(CONF_ALLOWFILE, "$withval", [user allow config file])
 			AC_MSG_RESULT([enabled, file is "$withval"])
 		else
 			AC_MSG_RESULT([disabled])
@@ -986,7 +988,7 @@ AC_ARG_WITH( deny-file,
 			withval="/usr/adm/cgiwrap.deny"
 		fi
 		if test "x$withval" != xno; then
-			AC_DEFINE_UNQUOTED(CONF_DENYFILE, "$withval")
+			AC_DEFINE_UNQUOTED(CONF_DENYFILE, "$withval", [user deny config file])
 			AC_MSG_RESULT([enabled, file is "$withval"])
 		else
 			AC_MSG_RESULT([disabled])
@@ -1009,7 +1011,7 @@ AC_ARG_WITH( vhost-allow-dir,
 		if test "x$withval" = x; then
 			AC_MSG_RESULT([disabled])
 		elif test "x$withval" != xno; then
-			AC_DEFINE_UNQUOTED(CONF_VHOST_ALLOWDIR, "$withval")
+			AC_DEFINE_UNQUOTED(CONF_VHOST_ALLOWDIR, "$withval", [dir for vhost allow files])
 			AC_MSG_RESULT([enabled, dir is "$withval"])
 		else
 			AC_MSG_RESULT([disabled])
@@ -1027,7 +1029,7 @@ AC_ARG_WITH( vhost-deny-dir,
 		if test "x$withval" = x; then
 			AC_MSG_RESULT([disabled])
 		elif test "x$withval" != xno; then
-			AC_DEFINE_UNQUOTED(CONF_VHOST_DENYDIR, "$withval")
+			AC_DEFINE_UNQUOTED(CONF_VHOST_DENYDIR, "$withval", [dir for vhost deny files])
 			AC_MSG_RESULT([enabled, dir is "$withval"])
 		else
 			AC_MSG_RESULT([disabled])
@@ -1043,7 +1045,7 @@ AC_ARG_WITH( host-checking,
 	[  allow specifying hosts in allow/deny files],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_CHECKHOST)
+			AC_DEFINE(CONF_CHECKHOST, [], [check host in allow/deny files])
 			AC_MSG_RESULT([enabled])
 		else
 			AC_MSG_RESULT([disabled])
@@ -1060,7 +1062,7 @@ AC_ARG_WITH( check-shell,
 	[
 		GETUSERSHELL=""
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_CHECKSHELL)
+			AC_DEFINE(CONF_CHECKSHELL, [], [check shell against /etc/shells])
 			AC_MSG_RESULT([enabled])
 			AC_CHECK_FUNC(getusershell, , [GETUSERSHELL="getusershell.o"])
 			AC_MSG_CHECKING(for OS specific getusershell support)
@@ -1102,7 +1104,7 @@ AC_ARG_WITH( afs,
 			AFSDIR="$withval"
 			AFSLDFLAGS="-L${AFSDIR}/lib -L${AFSDIR}/lib/afs"
 			AFSLIBS="-lsys -lrx -llwp ${AFSDIR}/lib/afs/util.a"
-			AC_DEFINE(CONF_AFS_SETPAG)
+			AC_DEFINE(CONF_AFS_SETPAG, [], [set AFS pag])
 			AC_MSG_RESULT([enabled, afs dir is "$withval"])
 		fi
 	],
