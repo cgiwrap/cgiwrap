@@ -275,6 +275,7 @@ void OutputEnvironment(void)
 	DEBUG_Str("     QUERY_STRING:", (char *) getenv("QUERY_STRING") );
         DEBUG_Str("      SCRIPT_NAME:", (char *) getenv("SCRIPT_NAME") );
         DEBUG_Str("  SCRIPT_FILENAME:", (char *) getenv("SCRIPT_FILENAME") );
+        DEBUG_Str("     REDIRECT_URL:", (char *) getenv("REDIRECT_URL") );
         DEBUG_Str("        PATH_INFO:", (char *) getenv("PATH_INFO") );
         DEBUG_Str("  PATH_TRANSLATED:", (char *) getenv("PATH_TRANSLATED") );
         DEBUG_Str("      REMOTE_USER:", (char *) getenv("REMOTE_USER") );
@@ -1133,11 +1134,9 @@ void SetScriptName(char *userStr, char *scrStr )
 	 */
 	if ( redurl )
 	{
-		DEBUG_Str("\t----REDIRECT_URL: ", redurl);
 		name = getenv("PATH_INFO");
 		if ( name ) {
 			/* We need to strip PATH_INFO from REDIRECT_URL */
-			DEBUG_Str("\t----PATH_INFO: ", getenv("PATH_INFO"));
 			len = strlen(redurl) - strlen(name);
 			buf = (char*) SafeMalloc (strlen("SCRIPT_NAME=") +
 		    		len + 2,
