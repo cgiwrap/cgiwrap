@@ -66,6 +66,10 @@
 #include <grp.h>
 #endif
 
+#if defined(HAVE_SYS_WAIT_H) && defined(CONF_REPORT_RUSAGE)
+#include <sys/wait.h>
+#endif
+
 #if defined(HUGE_STRING_LEN)
 #undef HUGE_STRING_LEN
 #endif

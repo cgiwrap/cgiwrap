@@ -27,6 +27,9 @@ int main (int argc, char *argv[])
 	struct rusage childrusage;
 	int childstatus;
 	char rusagemsg[1000];
+	time_t stime;
+	time_t etime;
+	time_t elap_time;
 #endif
 
 	/* Determine if debugging output should be done */
@@ -123,8 +126,10 @@ int main (int argc, char *argv[])
 	/* Output the modified environment variables */
 	OutputEnvironment();
 
+#if !defined(CONF_REPORT_RUSAGE)
 	/* Log the query request to the log file */
 	Log(userStr, scrStr, "ok");
+#endif
 
 	/* Change auxilliary groups to match this user */
 	ChangeAuxGroups(user);
@@ -153,7 +158,8 @@ int main (int argc, char *argv[])
 	DEBUG_Msg("Output of script follows:");
 	DEBUG_Msg("=====================================================");
 
-#if defined(CONF_REPORT_RUSAGE) && defined(HAVE_WAIT3)
+#if defined(CONF_REPORT_RUSAGE) && defined(HAS_WAIT3)
+	stime = time(NULL);
 	childpid = fork();
 	if ( childpid < 0 ) /* fork failed */
 	{
@@ -170,9 +176,12 @@ int main (int argc, char *argv[])
 	else /* fork ok */
 	{
 		wait3(&childstatus, 0, &childrusage);
+		etime = time(NULL);
+		elap_time = etime-stime;
 		sprintf(rusagemsg, 
-			"status=%d utime='%ds %dus' stime='%ds %dus'",
+			"status=%d wtime='%lds' utime='%ds %dus' stime='%ds %dus'",
 			WEXITSTATUS(childstatus), 
+			elap_time,
 			childrusage.ru_utime.tv_sec, 
 			childrusage.ru_utime.tv_usec,
 			childrusage.ru_stime.tv_sec, 

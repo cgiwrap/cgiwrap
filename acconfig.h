@@ -63,6 +63,7 @@
 #undef HAS_SETRLIMIT
 #undef HAS_STRERROR
 #undef HAS_PUTENV
+#undef HAS_WAIT3
 
 /*
  * Various options

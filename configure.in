@@ -54,6 +54,7 @@ AC_CHECK_FUNC(strdup, [AC_DEFINE(HAS_STRDUP)])
 AC_CHECK_FUNC(syslog, [AC_DEFINE(HAS_SYSLOG)])
 AC_CHECK_FUNC(setrlimit, [AC_DEFINE(HAS_SETRLIMIT)])
 AC_CHECK_FUNC(putenv, [AC_DEFINE(HAS_PUTENV)])
+AC_CHECK_FUNC(wait3, [AC_DEFINE(HAS_WAIT3)])
 
 
 dnl
@@ -319,7 +320,8 @@ AC_SUBST(INSTALLMODE)
 dnl
 dnl Use fork/wait3 to get rusage info 
 dnl
-AC_FUNC_WAIT3
+dnl AC_FUNC_WAIT3
+dnl don't use the above, it fails on sol26
 AC_MSG_CHECKING(for report-rusage)
 AC_ARG_WITH( report-rusage, 
 	[  --with-report-rusage]
@@ -852,6 +854,6 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(limits.h stdlib.h pwd.h string.h strings.h)
 AC_CHECK_HEADERS(sys/resource.h sys/types.h sys/time.h unistd.h)
 AC_CHECK_HEADERS(syslog.h fcntl.h sys/stat.h signal.h ctype.h grp.h)
-AC_CHECK_HEADERS(errno.h)
+AC_CHECK_HEADERS(errno.h sys/wait.h)
 
 AC_OUTPUT(Makefile unsup/loganalyze.pl)

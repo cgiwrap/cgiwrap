@@ -1069,5 +1069,3 @@ int DirExists(char *path)
 
 	return 1;
 }
-
-
