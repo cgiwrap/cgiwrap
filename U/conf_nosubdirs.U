@@ -14,7 +14,7 @@ $cat <<'EOM'
 
 CGIwrap has the capability of allowing users to store scripts in 
 subdirectories of their cgi-bin directory. You need to decide whether
-or not you wish to allow this. I reccomend allowing it, it is extremely
+or not you wish to allow this. I recommend allowing it, it is extremely
 convenient when you start to develop alot of scripts.
 
 EOM

@@ -19,7 +19,7 @@ This question deals with how you want to have the script executed. If for
 some reason you don't want to exec() the script directly. (For instance, 
 if your architecture does not support exec()'ing shell scripts directly) 
 Answering this question yes will cause cgiwrap to use system() to execute
-the script. I reccomend choosing no unless you know for certain you can't
+the script. I recommend choosing no unless you know for certain you can't
 use exec.
 
 EOM

@@ -13,7 +13,7 @@ $cat <<'EOM'
 CGIwrap has the capability of automatically redirecting the stderr output
 to stdout. This means that users can debug their scripts from the web 
 browser instead of having to look at the server's error_log to see the error
-output from their scripts. I reccomend you leave this as yes.
+output from their scripts. I recommend you leave this as yes.
 
 This feature has actually turned out to be one of the more handy 
 capabilities of CGIwrap, particularly when combined with the debugging mode.

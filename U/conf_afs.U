@@ -28,7 +28,7 @@ prevent user scripts that do anything with authentication from
 conflicting with other scripts, and to prevent them from conflicting with 
 the authentication of the server (if it is running authenticated), 
 CGIwrap can automatically create a new PAG (Process Authentication Group) 
-for the script. I highly reccomend doing this if you are using AFS.
+for the script. I highly recommend doing this if you are using AFS.
 
 EOM
 	
