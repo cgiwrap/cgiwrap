@@ -10,9 +10,11 @@
 
      SSSSYYYYNNNNOOOOPPPPSSSSIIIISSSS
           http://server:port/cgi-bin/cgiwrap?user=USERID&script=SCRIPTNAME
+          http://server:port/cgi-bin/cgiwrap/USERID/SCRIPTNAME
+          http://server:port/cgi-bin/cgiwrap/~USERID/SCRIPTNAME
 
      DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
-          Cgiwrap is a gateway program that allows general users to
+          CgiWrap is a gateway program that allows general users to
           use CGI scripts and HTML forms without compromising the
           security of the http server. Scripts are run with the
           permissions of the user who owns the script. In addition,
@@ -56,11 +58,9 @@
 
           1. cd
 
-          2. mkdir public_html
 
 
-
-     Page 1                                           (printed 2/5/95)
+     Page 1                                          (printed 6/30/95)
 
 
 
@@ -70,6 +70,8 @@
      CCCCGGGGIIIIWWWWRRRRAAAAPPPP((((1111))))                    AAAA////UUUUXXXX                     CCCCGGGGIIIIWWWWRRRRAAAAPPPP((((1111))))
 
 
+
+          2. mkdir public_html
 
           3. mkdir public_html/cgi-bin
 
@@ -107,12 +109,33 @@
           in any case due to the limited amount of data that can be
           passed to the script.
 
+          I suggest installnig 4 copies of cgiwrap into the servers
+          cgi-bin directory.  (cgiwrap, cgiwrapd, nph-cgiwrap, nph-
+          cgiwrapd) This will allow your users to run almost any kind
+          of script. The two ending in "d" will display debugging
+          output, which is a great aid when writing CGI scripts, as
+          you usually can't see the output of your script if it screws
+          up.
+
 
      FFFFIIIILLLLEEEESSSS
           HTTPD/cgi-bin/cgiwrap ~USERID/public_html/cgi-bin/SCRIPTNAME
 
      AAAAUUUUTTTTHHHHOOOORRRR
           Nathan Neulinger (nneul@umr.edu)
+
+
+
+     Page 2                                          (printed 6/30/95)
+
+
+
+
+
+
+     CCCCGGGGIIIIWWWWRRRRAAAAPPPP((((1111))))                    AAAA////UUUUXXXX                     CCCCGGGGIIIIWWWWRRRRAAAAPPPP((((1111))))
+
+
 
      SSSSEEEEEEEE AAAALLLLSSSSOOOO
           Mosaic, lynx
@@ -126,7 +149,50 @@
 
 
 
-     Page 2                                           (printed 2/5/95)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     Page 3                                          (printed 6/30/95)
 
 
 

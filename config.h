@@ -10,7 +10,6 @@
 
 /* #define LOGFILE "cgiwrap.log" /**/
 #define LOGFILE "/usr/adm/cgiwrap.log" /**/
-
 #define CGIDIR  "public_html/cgi-bin"
 
 /**/
@@ -21,19 +20,26 @@
 
 /* Choose which method to run CGI wrap */
 #undef SETUID    	/* Server run as root */
-#define SETREUID  	/* Server run as other, cgiwrap suid root */
-#undef SETRESUID	/* Server run as other, cgiwrap suid root, hpux */
+#define SETREUID  	/* Server run as other, cgiwrap suid root, A/UX */
+#undef SETRESUID	/* Server run as other, cgiwrap suid root, HPUX */
 
-/* Enable Debugging Output */
-/* #undef DEBUG */
+
+/* Debugging Output */
+#undef FORCE_DEBUG     /* Force debugging output on */
+#define DEBUG_BY_NAME  /* Debugging output on if correct name */
+
+
+/* Set what the name of the executable must end with to trigger */
+/* debugging output if DEBUG_BY_NAME is defined */
+#define DEBUG_EXTENSION "d"
 
 
 /* Error if user UID <> script owner ID */
-#undef CHECK_UID
+#define CHECK_UID
 
 
 /* Error if user GID <> script group ID */
-#undef CHECK_GID
+#define CHECK_GID
 
 
 /* Error if SUID bit of script is set */
@@ -46,10 +52,6 @@
 
 /* Do not allow subdirectories of cgi-bin dir */
 #define NO_SUB_DIRS
-
-
-/* Check to make sure script is not a sym-link (NOT FUNCTIONAL YET) */
-#undef NO_SCRIPT_SYMLINK
 
 
 /* Log all requests coming into this script */
@@ -66,3 +68,13 @@
 
 /* Double check to make sure GID changed */
 #define CHECK_RGID
+
+
+/* Use system() call instead of exec to run script */
+#undef USE_SYSTEM
+
+
+/* Redirect STDERR to STDOUT before executing script - this way, 
+   if running in debugging mode, you'll see stderr instead of having to look
+   at the error_log. */
+#define REDIR_STDERR

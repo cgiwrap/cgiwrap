@@ -6,8 +6,12 @@
 # Installation info
 # 
 INSTALLDIR=/usr/local/etc/httpd/cgi-bin
-INSTALLNAME=cgiwrap
-DINSTALLNAME=cgiwrapd
+
+CGIW_NAME=cgiwrap
+CGIWD_NAME=cgiwrapd
+NPHCGIW_NAME=nph-cgiwrap
+NPHCGIWD_NAME=nph-cgiwrapd
+
 INSTALLPERMS="u=srx,g=x"
 INSTALLOWNER=root
 INSTALLGROUP=root
@@ -16,37 +20,34 @@ INSTALLGROUP=root
 # Other Compiler Flags
 #
 CC= gcc
+CCOPT= -O
 
-all: cgiwrap cgiwrapd man
+
+#
+# Dependencies and rules
+#
+all: cgiwrap man
 
 cgiwrap: cgiwrap.c config.h Makefile
-	$(CC) -O cgiwrap.c -o cgiwrap
-
-cgiwrapd: cgiwrap.c config.h Makefile
-	$(CC) -O -DDEBUG cgiwrap.c -o cgiwrapd
+	$(CC) $(CCOPT) cgiwrap.c -o cgiwrap
 
 man: cgiwrap.1
 	nroff -man cgiwrap.1 > cgiwrap.cat
 
 tar: clean
-	rm -f cgiwrap.tar
-	cd .. ; tar -cvf /tmp/cgiwrap.tar cgiwrap
-	mv /tmp/cgiwrap.tar .
+	rm -f cgiwrap-2.0.tar
+	cd .. ; tar -cvf /tmp/cgiwrap-2.0.tar cgiwrap-2.0
+	mv /tmp/cgiwrap-2.0.tar .
 
 install: cgiwrap
 	cp cgiwrap $(INSTALLDIR)/$(INSTALLNAME)
-	chgrp $(INSTALLGROUP) $(INSTALLDIR)/$(INSTALLNAME)
-	chown $(INSTALLOWNER) $(INSTALLDIR)/$(INSTALLNAME)
-	chmod $(INSTALLPERMS) $(INSTALLDIR)/$(INSTALLNAME)
-
-installd: cgiwrapd
-	cp cgiwrapd $(INSTALLDIR)/$(DINSTALLNAME)
-	chgrp $(INSTALLGROUP) $(INSTALLDIR)/$(DINSTALLNAME)
-	chown $(INSTALLOWNER) $(INSTALLDIR)/$(DINSTALLNAME)
-	chmod $(INSTALLPERMS) $(INSTALLDIR)/$(DINSTALLNAME)
-
-installboth: install installd
+	chgrp $(INSTALLGROUP) $(INSTALLDIR)/$(CGIW_NAME)
+	chown $(INSTALLOWNER) $(INSTALLDIR)/$(CGIW_NAME)
+	chmod $(INSTALLPERMS) $(INSTALLDIR)/$(CGIW_NAME)
+	ln $(CGIW_NAME) $(CGIWD_NAME)
+	ln $(CGIW_NAME) $(NPHCGIW_NAME)
+	ln $(CGIW_NAME) $(NPGCGIWD_NAME)
 
 clean:
-	rm -f *.o cgiwrap cgiwrapd core
+	rm -f *.o cgiwrap core
 

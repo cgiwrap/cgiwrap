@@ -11,9 +11,11 @@ cgiwrap \- CGI Wrapper for HTTPd WWW Server
 .SH SYNOPSIS
 
 http://server:port/cgi\-bin/cgiwrap?user=USERID&script=SCRIPTNAME
+http://server:port/cgi\-bin/cgiwrap/USERID/SCRIPTNAME
+http://server:port/cgi\-bin/cgiwrap/~USERID/SCRIPTNAME
 .SH DESCRIPTION
 
-Cgiwrap is a gateway program that allows general users to use CGI scripts 
+CgiWrap is a gateway program that allows general users to use CGI scripts 
 and HTML forms without compromising the security of the http server. 
 Scripts are run with the permissions of the user who owns the script. In 
 addition, several security checks are performed on the script, which will 
@@ -84,6 +86,12 @@ Cgiwrap can be used with forms, but it is suggested that you use the
 fields to your form containing the user and script name. "GET" types 
 requests are discouraged in any case due to the limited amount of data 
 that can be passed to the script.
+
+I suggest installnig 4 copies of cgiwrap into the servers cgi\-bin directory.
+(cgiwrap, cgiwrapd, nph-cgiwrap, nph-cgiwrapd) This will allow your users 
+to run almost any kind of script. The two ending in "d" will display 
+debugging output, which is a great aid when writing CGI scripts, as you 
+usually can't see the output of your script if it screws up.
 
 .SH FILES
 HTTPD/cgi-bin/cgiwrap
