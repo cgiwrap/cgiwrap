@@ -306,11 +306,6 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
  */
 #$d_conf_redir_stderr CONF_REDIR_STDERR		/**/
 
-/* CONF_USESET:
- *	Defined if you want cgiwrap to use the set_ calls.
- */
-#$d_conf_useset CONF_USESET           /**/
-
 /* CONF_USE_RLIMIT_CPU:
  *	Defined if you want cgiwrap to issue a set_rlimit call to limit
  *	the cgi script's usage of cpu resources.

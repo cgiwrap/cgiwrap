@@ -28,5 +28,5 @@ stdutil.c
 stdutil.h
 Makefile.SH
 Configure                    Portability tool
-config_h.SH                  Produces config.h
 CVS
+config_h.SH                  Produces config.h

@@ -20,7 +20,7 @@
 
 # $Id$
 #
-# Generated on Mon Aug  5 16:35:19 CDT 1996 [metaconfig 3.0 PL60]
+# Generated on Sat Aug 17 19:30:41 CDT 1996 [metaconfig 3.0 PL60]
 
 cat >/tmp/c1$$ <<EOF
 ARGGGHHHH!!!!!
@@ -234,7 +234,7 @@ d_conf_log_usefile=''
 d_conf_log_usesyslog=''
 d_conf_subdirs=''
 d_conf_redir_stderr=''
-d_conf_useset=''
+d_conf_setmethod=''
 d_conf_use_rlimit_cpu=''
 d_conf_use_rlimit_vmem=''
 d_conf_use_system=''
@@ -355,6 +355,7 @@ large=''
 defvoidused=15
 
 
+defvoidused=9
 : script used to extract .SH files with variable substitutions
 cat >extract <<'EOS'
 CONFIG=true
@@ -1224,6 +1225,275 @@ httpd_user="$ans"
 *) ;;
 esac
 
+: decide how portable to be
+case "$d_portable" in
+"$define") dflt=y;;
+*)	dflt=n;;
+esac
+$cat <<'EOH'
+ 
+I can set things up so that your shell scripts and binaries are more portable,
+at what may be a noticable cost in performance.  In particular, if you
+ask to be portable, the following happens:
+
+     1) Shell scripts will rely on the PATH variable rather than using
+	the paths derived above.
+     2) ~username interpretations will be done at run time rather than
+	by Configure.
+
+EOH
+rp="Do you expect to run these scripts and binaries on multiple machines?"
+. ./myread
+case "$ans" in
+	y*) d_portable="$define"
+	;;
+	*)  d_portable="$undef" ;;
+esac
+
+: set up shell script to do ~ expansion
+cat >filexp <<EOSS
+$startsh
+: expand filename
+case "\$1" in
+ ~/*|~)
+	echo \$1 | $sed "s|~|\${HOME-\$LOGDIR}|"
+	;;
+ ~*)
+	if $test -f /bin/csh; then
+		/bin/csh -f -c "glob \$1"
+		failed=\$?
+		echo ""
+		exit \$failed
+	else
+		name=\`$expr x\$1 : '..\([^/]*\)'\`
+		dir=\`$sed -n -e "/^\${name}:/{s/^[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:\([^:]*\).*"'\$'"/\1/" -e p -e q -e '}' </etc/passwd\`
+		if $test ! -d "\$dir"; then
+			me=\`basename \$0\`
+			echo "\$me: can't locate home directory for: \$name" >&2
+			exit 1
+		fi
+		case "\$1" in
+		*/*)
+			echo \$dir/\`$expr x\$1 : '..[^/]*/\(.*\)'\`
+			;;
+		*)
+			echo \$dir
+			;;
+		esac
+	fi
+	;;
+*)
+	echo \$1
+	;;
+esac
+EOSS
+chmod +x filexp
+$eunicefix filexp
+
+: now set up to get a file name
+cat <<'EOSC' >getfile
+tilde=''
+fullpath=''
+already=''
+skip=''
+none_ok=''
+exp_file=''
+nopath_ok=''
+orig_rp="$rp"
+orig_dflt="$dflt"
+
+case "$fn" in
+*\(*)
+	expr $fn : '.*(\(.*\)).*' | tr ',' '\012' >getfile.ok
+	fn=`echo $fn | sed 's/(.*)//'`
+	;;
+esac
+
+case "$fn" in
+*:*)
+	loc_file=`expr $fn : '.*:\(.*\)'`
+	fn=`expr $fn : '\(.*\):.*'`
+	;;
+esac
+
+case "$fn" in
+*~*) tilde=true;;
+esac
+case "$fn" in
+*/*) fullpath=true;;
+esac
+case "$fn" in
+*+*) skip=true;;
+esac
+case "$fn" in
+*n*) none_ok=true;;
+esac
+case "$fn" in
+*e*) exp_file=true;;
+esac
+case "$fn" in
+*p*) nopath_ok=true;;
+esac
+
+case "$fn" in
+*f*) type='File';;
+*d*) type='Directory';;
+*l*) type='Locate';;
+esac
+
+what="$type"
+case "$what" in
+Locate) what='File';;
+esac
+
+case "$exp_file" in
+'')
+	case "$d_portable" in
+	"$define") ;;
+	*) exp_file=true;;
+	esac
+	;;
+esac
+
+cd ..
+while test "$type"; do
+	redo=''
+	rp="$orig_rp"
+	dflt="$orig_dflt"
+	case "$tilde" in
+	true) rp="$rp (~name ok)";;
+	esac
+	. UU/myread
+	if test -f UU/getfile.ok && \
+		$contains "^$ans\$" UU/getfile.ok >/dev/null 2>&1
+	then
+		value="$ans"
+		ansexp="$ans"
+		break
+	fi
+	case "$ans" in
+	none)
+		value=''
+		ansexp=''
+		case "$none_ok" in
+		true) type='';;
+		esac
+		;;
+	*)
+		case "$tilde" in
+		'') value="$ans"
+			ansexp="$ans";;
+		*)
+			value=`UU/filexp $ans`
+			case $? in
+			0)
+				if test "$ans" != "$value"; then
+					echo "(That expands to $value on this system.)"
+				fi
+				;;
+			*) value="$ans";;
+			esac
+			ansexp="$value"
+			case "$exp_file" in
+			'') value="$ans";;
+			esac
+			;;
+		esac
+		case "$fullpath" in
+		true)
+			case "$ansexp" in
+			/*) value="$ansexp" ;;
+			*)
+				redo=true
+				case "$already" in
+				true)
+				echo "I shall only accept a full path name, as in /bin/ls." >&4
+				echo "Use a ! shell escape if you wish to check pathnames." >&4
+					;;
+				*)
+				echo "Please give a full path name, starting with slash." >&4
+					case "$tilde" in
+					true)
+				echo "Note that using ~name is ok provided it expands well." >&4
+						already=true
+						;;
+					esac
+				esac
+				;;
+			esac
+			;;
+		esac
+		case "$redo" in
+		'')
+			case "$type" in
+			File)
+				if test -f "$ansexp"; then
+					type=''
+				elif test -r "$ansexp" || (test -h "$ansexp") >/dev/null 2>&1
+				then
+					echo "($value is not a plain file, but that's ok.)"
+					type=''
+				fi
+				;;
+			Directory)
+				if test -d "$ansexp"; then
+					type=''
+				fi
+				;;
+			Locate)
+				if test -d "$ansexp"; then
+					echo "(Looking for $loc_file in directory $value.)"
+					value="$value/$loc_file"
+					ansexp="$ansexp/$loc_file"
+				fi
+				if test -f "$ansexp"; then
+					type=''
+				fi
+				case "$nopath_ok" in
+				true)	case "$value" in
+					*/*) ;;
+					*)	echo "Assuming $value will be in people's path."
+						type=''
+						;;
+					esac
+					;;
+				esac
+				;;
+			esac
+
+			case "$skip" in
+			true) type='';
+			esac
+
+			case "$type" in
+			'') ;;
+			*)
+				if test "$fastread" = yes; then
+					dflt=y
+				else
+					dflt=n
+				fi
+				rp="$what $value doesn't exist.  Use that name anyway?"
+				. UU/myread
+				dflt=''
+				case "$ans" in
+				y*) type='';;
+				*) echo " ";;
+				esac
+				;;
+			esac
+			;;
+		esac
+		;;
+	esac
+done
+cd UU
+ans="$value"
+rp="$orig_rp"
+dflt="$orig_dflt"
+rm -f getfile.ok
+EOSC
+
 
 
 $cat <<'EOM'
@@ -1286,7 +1556,8 @@ EOM
 	esac
 
 	rp="Location of allow file?"
-	. ./myread
+	fn="f~+"
+        . ./getfile
 
 	allowfile="$ans"
 
@@ -1299,7 +1570,8 @@ EOM
 	esac
 
 	rp="Location of deny file?"
-	. ./myread
+	fn="f~+"
+        . ./getfile
 
 	denyfile="$ans"
 
@@ -1580,275 +1852,6 @@ esac
 
 set d_conf_fixed_pathtrans
 eval $setvar
-
-: decide how portable to be
-case "$d_portable" in
-"$define") dflt=y;;
-*)	dflt=n;;
-esac
-$cat <<'EOH'
- 
-I can set things up so that your shell scripts and binaries are more portable,
-at what may be a noticable cost in performance.  In particular, if you
-ask to be portable, the following happens:
-
-     1) Shell scripts will rely on the PATH variable rather than using
-	the paths derived above.
-     2) ~username interpretations will be done at run time rather than
-	by Configure.
-
-EOH
-rp="Do you expect to run these scripts and binaries on multiple machines?"
-. ./myread
-case "$ans" in
-	y*) d_portable="$define"
-	;;
-	*)  d_portable="$undef" ;;
-esac
-
-: set up shell script to do ~ expansion
-cat >filexp <<EOSS
-$startsh
-: expand filename
-case "\$1" in
- ~/*|~)
-	echo \$1 | $sed "s|~|\${HOME-\$LOGDIR}|"
-	;;
- ~*)
-	if $test -f /bin/csh; then
-		/bin/csh -f -c "glob \$1"
-		failed=\$?
-		echo ""
-		exit \$failed
-	else
-		name=\`$expr x\$1 : '..\([^/]*\)'\`
-		dir=\`$sed -n -e "/^\${name}:/{s/^[^:]*:[^:]*:[^:]*:[^:]*:[^:]*:\([^:]*\).*"'\$'"/\1/" -e p -e q -e '}' </etc/passwd\`
-		if $test ! -d "\$dir"; then
-			me=\`basename \$0\`
-			echo "\$me: can't locate home directory for: \$name" >&2
-			exit 1
-		fi
-		case "\$1" in
-		*/*)
-			echo \$dir/\`$expr x\$1 : '..[^/]*/\(.*\)'\`
-			;;
-		*)
-			echo \$dir
-			;;
-		esac
-	fi
-	;;
-*)
-	echo \$1
-	;;
-esac
-EOSS
-chmod +x filexp
-$eunicefix filexp
-
-: now set up to get a file name
-cat <<'EOSC' >getfile
-tilde=''
-fullpath=''
-already=''
-skip=''
-none_ok=''
-exp_file=''
-nopath_ok=''
-orig_rp="$rp"
-orig_dflt="$dflt"
-
-case "$fn" in
-*\(*)
-	expr $fn : '.*(\(.*\)).*' | tr ',' '\012' >getfile.ok
-	fn=`echo $fn | sed 's/(.*)//'`
-	;;
-esac
-
-case "$fn" in
-*:*)
-	loc_file=`expr $fn : '.*:\(.*\)'`
-	fn=`expr $fn : '\(.*\):.*'`
-	;;
-esac
-
-case "$fn" in
-*~*) tilde=true;;
-esac
-case "$fn" in
-*/*) fullpath=true;;
-esac
-case "$fn" in
-*+*) skip=true;;
-esac
-case "$fn" in
-*n*) none_ok=true;;
-esac
-case "$fn" in
-*e*) exp_file=true;;
-esac
-case "$fn" in
-*p*) nopath_ok=true;;
-esac
-
-case "$fn" in
-*f*) type='File';;
-*d*) type='Directory';;
-*l*) type='Locate';;
-esac
-
-what="$type"
-case "$what" in
-Locate) what='File';;
-esac
-
-case "$exp_file" in
-'')
-	case "$d_portable" in
-	"$define") ;;
-	*) exp_file=true;;
-	esac
-	;;
-esac
-
-cd ..
-while test "$type"; do
-	redo=''
-	rp="$orig_rp"
-	dflt="$orig_dflt"
-	case "$tilde" in
-	true) rp="$rp (~name ok)";;
-	esac
-	. UU/myread
-	if test -f UU/getfile.ok && \
-		$contains "^$ans\$" UU/getfile.ok >/dev/null 2>&1
-	then
-		value="$ans"
-		ansexp="$ans"
-		break
-	fi
-	case "$ans" in
-	none)
-		value=''
-		ansexp=''
-		case "$none_ok" in
-		true) type='';;
-		esac
-		;;
-	*)
-		case "$tilde" in
-		'') value="$ans"
-			ansexp="$ans";;
-		*)
-			value=`UU/filexp $ans`
-			case $? in
-			0)
-				if test "$ans" != "$value"; then
-					echo "(That expands to $value on this system.)"
-				fi
-				;;
-			*) value="$ans";;
-			esac
-			ansexp="$value"
-			case "$exp_file" in
-			'') value="$ans";;
-			esac
-			;;
-		esac
-		case "$fullpath" in
-		true)
-			case "$ansexp" in
-			/*) value="$ansexp" ;;
-			*)
-				redo=true
-				case "$already" in
-				true)
-				echo "I shall only accept a full path name, as in /bin/ls." >&4
-				echo "Use a ! shell escape if you wish to check pathnames." >&4
-					;;
-				*)
-				echo "Please give a full path name, starting with slash." >&4
-					case "$tilde" in
-					true)
-				echo "Note that using ~name is ok provided it expands well." >&4
-						already=true
-						;;
-					esac
-				esac
-				;;
-			esac
-			;;
-		esac
-		case "$redo" in
-		'')
-			case "$type" in
-			File)
-				if test -f "$ansexp"; then
-					type=''
-				elif test -r "$ansexp" || (test -h "$ansexp") >/dev/null 2>&1
-				then
-					echo "($value is not a plain file, but that's ok.)"
-					type=''
-				fi
-				;;
-			Directory)
-				if test -d "$ansexp"; then
-					type=''
-				fi
-				;;
-			Locate)
-				if test -d "$ansexp"; then
-					echo "(Looking for $loc_file in directory $value.)"
-					value="$value/$loc_file"
-					ansexp="$ansexp/$loc_file"
-				fi
-				if test -f "$ansexp"; then
-					type=''
-				fi
-				case "$nopath_ok" in
-				true)	case "$value" in
-					*/*) ;;
-					*)	echo "Assuming $value will be in people's path."
-						type=''
-						;;
-					esac
-					;;
-				esac
-				;;
-			esac
-
-			case "$skip" in
-			true) type='';
-			esac
-
-			case "$type" in
-			'') ;;
-			*)
-				if test "$fastread" = yes; then
-					dflt=y
-				else
-					dflt=n
-				fi
-				rp="$what $value doesn't exist.  Use that name anyway?"
-				. UU/myread
-				dflt=''
-				case "$ans" in
-				y*) type='';;
-				*) echo " ";;
-				esac
-				;;
-			esac
-			;;
-		esac
-		;;
-	esac
-done
-cd UU
-ans="$value"
-rp="$orig_rp"
-dflt="$orig_dflt"
-rm -f getfile.ok
-EOSC
 
 : determine where manual pages are on this system
 echo " "
@@ -3169,7 +3172,8 @@ EOM
 	esac
 
 	rp="What file should cgiwrap log to?"
-	. ./myread
+	fn="f~+"
+	. ./getfile
 
 	conf_log_logfile="$ans"
 ;;
@@ -3425,7 +3429,8 @@ EOM
 	esac
 
 	rp="What file contains the list of user cgi dirs?"
-	. ./myread
+	fn="f~+"
+	. ./getfile
 
 	userdirfile="$ans"
 
@@ -3434,34 +3439,20 @@ EOM
 *) ;;
 esac
 
-: see if seteuid exists
-set seteuid d_seteuid
+: see if perror exists
+set perror d_perror
 eval $inlibc
 
 : see if setegid exists
 set setegid d_setegid
 eval $inlibc
 
-: see if setuid exists
-set setuid d_setuid
+: see if seteuid exists
+set seteuid d_seteuid
 eval $inlibc
 
 : see if setrgid exists
 set setgid d_setgid
-eval $inlibc
-
-: see if setruid exists
-set setruid d_setruid
-eval $inlibc
-
-: see if setrgid exists
-set setrgid d_setrgid
-eval $inlibc
-
-: see if setreuid exists
-set setreuid d_setreuid
-eval $inlibc
-set setresuid d_setresuid
 eval $inlibc
 
 : see if setregid exists
@@ -3470,91 +3461,22 @@ eval $inlibc
 set setresgid d_setresgid
 eval $inlibc
 
-$cat <<'EOM'
+: see if setreuid exists
+set setreuid d_setreuid
+eval $inlibc
+set setresuid d_setresuid
+eval $inlibc
 
-In order to function, CGIwrap issues a library call to change the real 
-and effective uid and gid of the current process.
+: see if setrgid exists
+set setrgid d_setrgid
+eval $inlibc
 
-Different systems have different calls available for doing this. 
+: see if setruid exists
+set setruid d_setruid
+eval $inlibc
 
-Your system has the following calls available:
-
-EOM
-
-d_conf_useset='define'
-
-# sete_
-if [ "$d_setegid" = "define" ]; then
-	echo "   setegid()"
-fi
-
-if [ "$d_seteuid" = "define" ]; then
-	echo "   seteuid()"
-fi
-
-# setre_
-if [ "$d_setreuid" = "define" ]; then
-	echo "   setreuid()"
-fi
-
-if [ "$d_setregid" = "define" ]; then
-	echo "   setregid()"
-fi
-
-# setres_
-if [ "$d_setresuid" = "define" ]; then
-	echo "   setresuid()"
-fi
-
-if [ "$d_setresgid" = "define" ]; then
-	echo "   setresgid()"
-fi
-
-# setr_
-if [ "$d_setruid" = "define" ]; then
-	echo "   setruid()"
-fi
-
-if [ "$d_setrgid" = "define" ]; then
-	echo "   setrgid()"
-fi
-
-# set_
-if [ "$d_setuid" = "define" ]; then
-	echo "   setuid()"
-fi
-
-if [ "$d_setgid" = "define" ]; then
-	echo "   setgid()"
-fi
-
-
-$cat <<'EOM'
-
-The CGIwrap source code uses the following logic to determine which
-set_ call to use. If this is not correct for your system, or you have 
-special needs: 1) Send me a note about it, particularly if it is a 
-problem with support for a particular machine. 2) Hand edit the config.sh 
-file to change the d_set*id to 'define' and 'undef' as appropriate for the
-configuration you desire.
-
-The first match in the following list is used:
-
-	setuid & setgid
-	setreuid & setregid
-	setresuid & setresgid
-	seteuid, setegid, setruid, & setrgid
-
-Regardless of which is chosen, CGIwrap as distributed WILL NOT allow
-the script to execute if the both the real and effective uid and gid have 
-not been successfully changed to those of the user owning the script. 
-This is the case REGARDLESS of what options or setting have been chosen 
-in this Configure script.
-
-EOM
-
-: see if perror exists
-set perror d_perror
+: see if setuid exists
+set setuid d_setuid
 eval $inlibc
 
 : see if sigset exists
@@ -3992,6 +3914,87 @@ eval $inhdr
 set unistd.h i_unistd
 eval $inhdr
 
+$cat <<'EOM'
+
+In order to function, CGIwrap issues a library call to change the real 
+and effective uid and gid of the current process.
+
+Different systems have different calls available for doing this. 
+
+Your system has the following calls available:
+
+EOM
+
+# sete_
+if [ "$d_setegid" = "define" ]; then
+	echo "   setegid()"
+fi
+
+if [ "$d_seteuid" = "define" ]; then
+	echo "   seteuid()"
+fi
+
+# setre_
+if [ "$d_setreuid" = "define" ]; then
+	echo "   setreuid()"
+fi
+
+if [ "$d_setregid" = "define" ]; then
+	echo "   setregid()"
+fi
+
+# setres_
+if [ "$d_setresuid" = "define" ]; then
+	echo "   setresuid()"
+fi
+
+if [ "$d_setresgid" = "define" ]; then
+	echo "   setresgid()"
+fi
+
+# setr_
+if [ "$d_setruid" = "define" ]; then
+	echo "   setruid()"
+fi
+
+if [ "$d_setrgid" = "define" ]; then
+	echo "   setrgid()"
+fi
+
+# set_
+if [ "$d_setuid" = "define" ]; then
+	echo "   setuid()"
+fi
+
+if [ "$d_setgid" = "define" ]; then
+	echo "   setgid()"
+fi
+
+
+$cat <<'EOM'
+
+The CGIwrap source code uses the following logic to determine which
+set_ call to use. If this is not correct for your system, or you have 
+special needs: 1) Send me a note about it, particularly if it is a 
+problem with support for a particular machine. 2) Hand edit the config.sh 
+file to change the d_set*id to 'define' and 'undef' as appropriate for the
+configuration you desire.
+
+The first match in the following list is used:
+
+	setuid & setgid
+	setreuid & setregid
+	setresuid & setresgid
+	seteuid, setegid, setruid, & setrgid
+
+Regardless of which is chosen, CGIwrap as distributed WILL NOT allow
+the script to execute if the both the real and effective uid and gid have 
+not been successfully changed to those of the user owning the script. 
+This is the case REGARDLESS of what options or setting have been chosen 
+in this Configure script.
+
+EOM
+
 : end of configuration questions
 echo " "
 echo "End of configuration questions."
@@ -4162,7 +4165,7 @@ d_conf_log_usefile='$d_conf_log_usefile'
 d_conf_log_usesyslog='$d_conf_log_usesyslog'
 d_conf_subdirs='$d_conf_subdirs'
 d_conf_redir_stderr='$d_conf_redir_stderr'
-d_conf_useset='$d_conf_useset'
+d_conf_setmethod='$d_conf_setmethod'
 d_conf_use_rlimit_cpu='$d_conf_use_rlimit_cpu'
 d_conf_use_rlimit_vmem='$d_conf_use_rlimit_vmem'
 d_conf_use_system='$d_conf_use_system'
