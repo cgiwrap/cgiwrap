@@ -106,6 +106,9 @@ struct cgiwrap_context
 
 	/* Is this script executing out of the multiuser cgi dir */
 	int multiuser_cgi_script;
+
+	/* Is this an interpreted script with special handling? ie php */
+	int interpreted_script;
 };
 extern struct cgiwrap_context Context;
 

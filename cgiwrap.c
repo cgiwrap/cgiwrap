@@ -21,6 +21,7 @@ int main (int argc, char *argv[])
 	char *scriptPath; /* Path to script file */
 	char *cgiBaseDir; /* Base directory for cgi scripts in user's dir */
 	struct passwd *user; /* For getting uid from name */
+	char *interPath = NULL; /* Path to interpreter - i.e. php */
 #ifdef CONF_REPORT_RUSAGE
 	pid_t childpid;
 	struct rusage childrusage;
@@ -33,6 +34,7 @@ int main (int argc, char *argv[])
 	
 	/* Initially not a multiuser cgi script */
 	Context.multiuser_cgi_script = 0;
+	Context.interpreted_script = 0;
 
 	/* Determine if debugging output should be done */
 	if ( strlen(argv[0]) >= 1 )
@@ -49,6 +51,13 @@ int main (int argc, char *argv[])
 	{
 		MSG_Need_NPH_Header = 1;
 	}
+#if defined(PATH_PROG_PHP)
+	else if ( !strncmp(argv[0], "php-", 4) )
+	{
+		Context.interpreted_script = 1;
+		interPath = PATH_PROG_PHP;
+	}
+#endif
 	
 	/* Output a Content-type header if in debugging mode */
 	if ( CONF_DEBUG )
@@ -121,9 +130,9 @@ int main (int argc, char *argv[])
 	}
 
 	/* Get the script name from the given data */
-DEBUG_Msg("\tFetching script string\n");
+	DEBUG_Msg("\tFetching script string\n");
 	scrStr = FetchScriptString(cgiBaseDir);
-DEBUG_Msg("\tBuilding script path\n");
+	DEBUG_Msg("\tBuilding script path\n");
 #ifdef CONF_MULTIUSER_CGI_DIR
 	if ( Context.multiuser_cgi_script )
 	{
@@ -134,12 +143,18 @@ DEBUG_Msg("\tBuilding script path\n");
 	{
 		scriptPath = BuildScriptPath(cgiBaseDir,scrStr);
 	}
-DEBUG_Msg("\tCondensing slashes.\n");
+
+	DEBUG_Msg("\tCondensing slashes.\n");
 	Context.scriptFullPath = CondenseSlashes(scriptPath);
 	Context.scriptRelativePath = CondenseSlashes(scrStr);
 
 	DEBUG_Str("\tScript Relative Path: ", scrStr);
 	DEBUG_Str("\tScript Absolute Path: ", scriptPath);
+
+	if ( interPath )
+	{
+		DEBUG_Str("\tInterpreter Path: ", interPath);
+	}
 
 	/* Set the Correct Values of environment variables */
 	DEBUG_Msg("\nFixing Environment Variables.");
@@ -207,7 +222,14 @@ DEBUG_Msg("\tCondensing slashes.\n");
 	}
 	else if ( childpid == 0 )
 	{
-		execv(scriptPath, CreateARGV(scrStr, argc,argv));
+		if ( interPath )
+		{
+			execv(interPath, CreateARGV(scrStr, argc, argv));
+		}
+		else
+		{
+			execv(scriptPath, CreateARGV(scrStr, argc, argv));
+		}
 		MSG_Error_ExecFailed();
 		Log(userStr, scrStr, "failed execv of script");
 		exit(1);
@@ -229,7 +251,14 @@ DEBUG_Msg("\tCondensing slashes.\n");
 		exit(WEXITSTATUS(childstatus));
 	}
 #else
-	execv(scriptPath, CreateARGV(scrStr, argc,argv));
+	if ( interPath )
+	{
+		execv(interPath, CreateARGV(scrStr, argc, argv));
+	}
+	else
+	{
+		execv(scriptPath, CreateARGV(scrStr, argc, argv));
+	}
 	MSG_Error_ExecFailed();
 	exit(1);
 #endif

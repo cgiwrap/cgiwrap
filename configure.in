@@ -3,8 +3,9 @@ AC_INIT(cgiwrap.h)
 AC_CONFIG_AUX_DIR(.)
 AC_CANONICAL_SYSTEM
 AC_CONFIG_HEADER(config.h)
+AC_PREREQ(2.5)
 
-VERSION="3.7.1"
+VERSION="3.8"
 AC_SUBST(VERSION)
 
 AC_PROG_CC
@@ -28,6 +29,29 @@ AC_ARG_WITH( perl,
 	],
 	[
 		AC_PATH_PROG(PATH_PROG_PERL, perl, no)
+	])
+
+dnl
+dnl Path to perl for unsupported stuff
+dnl
+AC_ARG_WITH( php, 
+	[  --with-php=PATH]
+	[  path to php executable to use], 
+	[
+		AC_MSG_CHECKING(for php)
+		if test "x$withval" != x; then
+			PATH_PROG_PHP="$withval"
+			AC_DEFINE_UNQUOTED(PATH_PROG_PHP,"$withval")
+			AC_MSG_RESULT($withval)
+		else
+			AC_MSG_RESULT(not found)
+		fi
+	],
+	[
+		AC_PATH_PROG(PATH_PROG_PHP, php, no)
+		if test "x${PATH_PROG_PHP}" != "xno"; then
+			AC_DEFINE_UNQUOTED(PATH_PROG_PHP,${PATH_PROG_PHP})
+		fi
 	])
 
 
@@ -271,18 +295,27 @@ AC_ARG_WITH( install-dir,
 		if test "x$withval" != x; then
 			INSTALLDIR="$withval"
 			DOINSTALL=""
+			if test "x${PATH_PROG_PHP}" != "xno"; then
+				DOINSTALLPHP=""
+			else
+				DOINSTALLPHP="#"
+			fi
 			AC_MSG_RESULT($withval)
 		else
 			AC_MSG_RESULT(not found)
 			DOINSTALL="#"
+			DOINSTALLPHP="#"
 		fi
 	],
 	[
 		AC_MSG_RESULT([not found])
 		DOINSTALL="#"
+		DOINSTALLPHP="#"
 	])
 AC_SUBST(INSTALLDIR)
 AC_SUBST(DOINSTALL)
+AC_SUBST(DOINSTALLPHP)
+
 
 AC_MSG_CHECKING(for path to cgi scripts)
 AC_ARG_WITH( cgi-dir, 
@@ -933,23 +966,6 @@ fi
 AC_SUBST(AFSDIR)
 AC_SUBST(AFSLDFLAGS)
 AC_SUBST(AFSLIBS)
-
-
-
-dnl
-dnl Special stuff for particular O/S's
-dnl
-dnl AC_MSG_CHECKING(for OS specific flags/options)
-dnl os_specific_msg="none needed"
-dnl case $target_os in
-dnl 	hpux* )	
-dnl 		AC_DEFINE(_HPUX_SOURCE)
-dnl 		LIBS="$LIBS -lBSD"
-dnl 		os_specific_msg="HPUX_SOURCE"
-dnl 	;;
-dnl esac
-dnl AC_MSG_RESULT([$os_specific_msg])
-
 
 AC_HEADER_STDC
 AC_CHECK_HEADERS(limits.h stdlib.h pwd.h string.h strings.h)

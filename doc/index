@@ -1,11 +1,11 @@
 
                                   CGIWrap
-                                      
+
                               User CGI Access
      _________________________________________________________________
-   
+
   General Information
-  
+
         Introduction
         Frequently Asked Questions
         Mailing List Info
@@ -14,35 +14,35 @@
         Stuff still to be done
         Year 2000 Issues
         Chrooting - for experts only
-                
+
         Acknowledgements
         Publications mentioning CGIwrap
         Comments
-                
+
         Author's Home Page
         Mailing List Archive (FindMail)
         SourceForge Project Page
-                
+
   User CGI Execution
-  
+
         Account Setup
         Quick Reference to URLs
-                
+
   Compilation, Installation, and Administration
-  
+
           This section is for people who are installing CGIWrap. This is
           for server administrators and people who have root access on
           web server machines.
-          
+
         Installation and Configuration
         Access Control Files (allow/deny)
         Compilation Notes
         Use of CGIWrap with AFS
         Tips and Tricks
      _________________________________________________________________
-   
-   If you have any questions about CGIwrap, please direct them to the
-   mailing list (you have to subscribe first though) or to the author,
+
+   If  you  have  any  questions about CGIwrap, please direct them to the
+   mailing  list  (you  have to subscribe first though) or to the author,
    Nathan Neulinger <nneul@umr.edu>
-   
+
    [sflogo.php?group_id=8209&type=1] 

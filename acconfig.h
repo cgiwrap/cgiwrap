@@ -117,6 +117,11 @@
 #undef _HPUX_SOURCE
 
 /*
+ * PHP support
+ */
+#undef PATH_PROG_PHP
+
+/*
  * Quiet warning about rcsid
  */
 #define RCSID(msg) \

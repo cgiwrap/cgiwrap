@@ -184,7 +184,33 @@ char *FetchScriptString( char *basedir )
 	}
 
 	/* Figure out the PATH_INFO and the script name */
-	tempStr = StripPathComponents(max, scrStr);
+
+#if 0
+/* WHAT IS THIS DOING? WHY THE SPECIAL HANDLING??? */
+/* leaving out till explanation */
+#ifdef PATH_PROG_PHP
+	if (Context.interpreted_script) {
+		char *c;
+		char *reqStr = getenv("REQUEST_URI");
+		max = 0;
+
+		if ((c = index(reqStr,'?')) != NULL)
+		{
+			tempStr = (char *) SafeMalloc (c - reqStr + 1, "reqStr");
+			tempStr = strncat(tempStr, reqStr, c - reqStr);
+			tempStr[(c-reqStr)] = '\0';
+		}
+		else
+		{
+			tempStr = strdup(reqStr);
+		}
+	}
+	else
+#endif
+#endif
+	{
+		tempStr = StripPathComponents(max, scrStr);
+	}
 	tempStr2 = (char *) SafeMalloc( strlen(tempStr) + 12, 
 		"PATH_INFO environment variable" );
 	if ( !strcmp("", tempStr) )

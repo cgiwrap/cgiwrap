@@ -1,66 +1,66 @@
 
                        CGIWrap - URL Quick Reference
      _________________________________________________________________
-   
-   In all of the below examples, replace SERVER with the hostname and
-   port of your webserver. Replace USER with your userid, and replace
-   SCRIPT with the name of the script that is located in your cgi-bin
+
+   In  all  of  the  below examples, replace SERVER with the hostname and
+   port  of  your  webserver.  Replace USER with your userid, and replace
+   SCRIPT  with  the  name  of the script that is located in your cgi-bin
    directory.
-   
-   In the below URLs you can replace "cgiwrap" according to the
+
+   In  the  below  URLs  you  can  replace  "cgiwrap"  according  to  the
    following:
-   
+
    cgiwrap
           Normal script execution
-          
+
    cgiwrapd
-          Executes script, but returns debugging information, also is
-          returned preformatted, so you can see the source that the
+          Executes  script,  but  returns  debugging information, also is
+          returned  preformatted,  so  you  can  see  the source that the
           script is outputting.
-          
+
    nph-cgiwrap
-          
+
    nph-cgiwrapd
-          Same as above, except you sometimes need to use this if your
+          Same  as  above,  except you sometimes need to use this if your
           script outputs binary data, such as an image counter script.
-          
+
   Standard Installation of CGIWrap
-  
+
    Place your scripts in your ~/public_html/cgi-bin/ directory
-   
+
      * http://SERVER/cgi-bin/cgiwrap/USER/SCRIPT
      * http://SERVER/cgi-bin/cgiwrap/~USER/SCRIPT
-       
+
    Or the old deprecated syntax of:
      * http://SERVER/cgi-bin/cgiwrap?user=USER&script=SCRIPT
-       
+
   Password Protected Installation of CGIWrap
-  
+
    Place your scripts in your ~/public_html/auth-cgi-bin/ directory
-   
+
      * http://SERVER/auth-cgi-bin/cgiwrap/USER/SCRIPT
      * http://SERVER/auth-cgi-bin/cgiwrap/~USER/SCRIPT
-       
+
    Or the old deprecated syntax of:
      * http://SERVER/auth-cgi-bin/cgiwrap?user=USER&script=SCRIPT
-       
+
   Other Options
-  
-   With certain other web servers, the above syntax can sometimes be
-   shortened depending on how the local administrator has set up the
-   server. For example, some site support a URL syntax similar some of
+
+   With  certain  other  web  servers,  the above syntax can sometimes be
+   shortened  depending  on  how  the  local administrator has set up the
+   server.  For  example,  some site support a URL syntax similar some of
    the following:
      * http://SERVER/~USER/SCRIPT.cgi
      * http://SERVER/cgi-bin/~USER/SCRIPT
      * http://SERVER/cgiwrap/~USER/SCRIPT
      * http://SERVER/~USER/cgi-bin/SCRIPT.cgi
-       
-   The administrator can look at the tricks document for some ideas on
+
+   The  administrator  can  look at the tricks document for some ideas on
    configuring the server.
-   
+
   Notes
-  
-   The syntax examples above using user= and script= are carryovers from
-   the original versions of CGIwrap, and are not really needed. I highly
-   reccomend you don't use them, the other examples are much clearer and
+
+   The  syntax examples above using user= and script= are carryovers from
+   the  original versions of CGIwrap, and are not really needed. I highly
+   reccomend  you don't use them, the other examples are much clearer and
    easier to use.
