@@ -28,8 +28,8 @@ experienced, they might catch something you missed.
 
 Installation Instructions:
 --------------------------
-Read doc/NOTES for suggestions and restrictions for specific architectures.
-Read doc/INSTALL for compilation and installation instructions
+Read the documentation in htdocs/index.html for hints and installation 
+instructions.
 
 
 Quick Install:
@@ -37,7 +37,7 @@ Quick Install:
 	Type "./Configure"
 	Answer the questions
 	Type "make"
-	Copy cgiwrap to your cgi-bin directory
+	Copy cgiwrap to your server's cgi-bin directory
 	Make symlinks to cgiwrap: cgiwrapd/nph-cgiwrap/nph-cgiwrapd
 	Make it owned by root, and mode 4755. (or 4750 if httpd in own group)
 	
@@ -54,6 +54,8 @@ To unsubscribe from the list: Send an email message, from the address you are
 subscribe at, to "listserv@rollanet.org" containing:
 
 	UNSUBSCRIBE CGIWRAP 
+
+DO NOT SEND UNSUBSCRIBE MESSAGES TO THE LIST!
 
 
 FTP Site:
