@@ -3,6 +3,9 @@
 /* set AFS pag */
 #undef CONF_AFS_SETPAG
 
+/* enabled checking netgroup syntax in allow/deny files */
+#undef CONF_ALLOWDENY_NETGROUPS
+
 /* user allow config file */
 #undef CONF_ALLOWFILE
 
@@ -194,6 +197,9 @@
 
 /* has initgroups library function */
 #undef HAS_INITGROUPS
+
+/* has innetgr library function */
+#undef HAS_INNETGR
 
 /* has perror library function */
 #undef HAS_PERROR

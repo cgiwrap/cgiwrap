@@ -193,6 +193,7 @@ AC_CHECK_FUNC(syslog, 		[AC_DEFINE(HAS_SYSLOG, 		[], [has syslog library functio
 AC_CHECK_FUNC(setrlimit, 	[AC_DEFINE(HAS_SETRLIMIT, 	[], [has setrlimit library function])])
 AC_CHECK_FUNC(putenv, 		[AC_DEFINE(HAS_PUTENV, 		[], [has putenv library function])])
 AC_CHECK_FUNC(wait3, 		[AC_DEFINE(HAS_WAIT3, 		[], [has wait3 library function])])
+AC_CHECK_FUNC(innetgr, 		[AC_DEFINE(HAS_INNETGR, 	[], [has innetgr library function])])
 
 dnl
 dnl Information options
@@ -1040,6 +1041,24 @@ AC_ARG_WITH( deny-file,
 dnl
 dnl Options for access control files
 dnl
+
+AC_MSG_CHECKING(for allow-deny-netgroups)
+AC_ARG_WITH( allow-deny-netgroups,
+	[  --with-allow-deny-netgroups  (disabled)]
+	[  limit cgiwrap usage based on netgroup membership],
+	[
+		if test "x$withval" = x; then
+			AC_MSG_RESULT([disabled])
+		elif test "x$withval" != xno; then
+			AC_DEFINE(CONF_ALLOWDENY_NETGROUPS, [], [enabled checking netgroup syntax in allow/deny files])
+			AC_MSG_RESULT([enabled])
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
+	])
 
 AC_MSG_CHECKING(for vhost-allow-dir)
 AC_ARG_WITH( vhost-allow-dir,

@@ -423,7 +423,7 @@ void CheckUserAccess(struct passwd *user)
 	denyfile = CONF_DENYFILE;
 	DEBUG_Str("Global Deny File: ", denyfile);
 #endif
-#if defined(CONF_ALLOWILE)
+#if defined(CONF_ALLOWFILE)
 	allowfile = CONF_ALLOWFILE;
 	DEBUG_Str("Global Allow File: ", allowfile);
 #endif
@@ -1111,6 +1111,20 @@ int UserInFile(char *filename, char *user)
 			DEBUG_Str("    Found",user);
 			return 1;
 		}
+
+#if defined(CONF_ALLOWDENY_NETGROUPS) && defined(HAS_INNETGR)
+		if ( strlen(temp) > 3 && temp[0] == '+' && temp[1] == '@' )
+		{
+			if ( innetgr(&temp[2], NULL, user, NULL) )
+			{
+				DEBUG_Str("    Found in netgroup ", user);
+				return 1;
+			}
+		}
+#elif defined(CONF_ALLOWDENY_NETGROUPS)
+#error netgroup support requested, but innetgr not available
+#endif
+
 #if defined(CONF_CHECKHOST)
 		i = strchr(temp, '@');
 		tmpuser = strtok(temp, "@");
