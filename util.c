@@ -107,6 +107,7 @@ int CheckPath(char *path)
 {
 	int i,c;
 
+#if defined(CONF_STRICT_NAMES)
 	for (i=0; i< strlen(path); i++)
 	{
 		c = path[i];
@@ -115,6 +116,7 @@ int CheckPath(char *path)
 			return 1;
 		}
 	}
+#endif
 
 	return ( strstr(path, "../") != NULL );
 }

@@ -25,6 +25,7 @@
 /*
  * Script checks
  */
+#undef CONF_STRICT_NAMES
 #undef CONF_CHECK_SCRUID
 #undef CONF_CHECK_SCRGID
 #undef CONF_CHECK_SCRSUID

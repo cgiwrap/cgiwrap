@@ -30,6 +30,7 @@
 /*
  * Script checks
  */
+#undef CONF_STRICT_NAMES
 #undef CONF_CHECK_SCRUID
 #undef CONF_CHECK_SCRGID
 #undef CONF_CHECK_SCRSUID
@@ -83,6 +84,7 @@
 #undef CONF_ALLOWFILE
 #undef CONF_DENYFILE
 #undef CONF_CHECKHOST
+#undef CONF_CHECKSHELL
 #undef CONF_AFS_SETPAG
 #undef CONF_CGIDIR
 

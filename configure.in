@@ -339,6 +339,29 @@ AC_ARG_WITH( report-rusage,
 	])
 
 dnl
+dnl Enable/disable check for special characters in the script path
+dnl Disabling this turns off the !isprint and isspace checks in the
+dnl CheckPath routine. Thanks to Cobalt for pointing out that this
+dnl would break japanese compatability. 
+dnl
+AC_MSG_CHECKING(for strict-names)
+AC_ARG_WITH( strict-names,
+	[  --without-strict-names]
+	[  disable check for !isprint() and isspace() in script path],
+	[
+		if test "x$withval" != xno; then
+			AC_DEFINE(CONF_STRICT_NAMES)
+			AC_MSG_RESULT([enabled, script must be all alphanumeric])
+		else
+			AC_MSG_RESULT([disabled, script name not checked])
+		fi
+	],
+	[
+		AC_DEFINE(CONF_STRICT_NAMES)
+		AC_MSG_RESULT([enabled, script name must be all alphanumeric])
+	])
+
+dnl
 dnl Various cgi-script permission checks
 dnl The DEFINE is in the 'not-found' section of the macro
 dnl
