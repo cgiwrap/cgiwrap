@@ -19,6 +19,7 @@ int CountSubDirs(char *path);
 int CheckPath(char *path);
 void ChangeToCgiDir(struct passwd *user);
 void OutputEnvironment(void);
+void SaveEnvironment(void);
 void CheckUser(struct passwd *user);
 char *CondenseSlashes(char *path);
 void CheckScriptFile(void); 

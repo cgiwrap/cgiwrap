@@ -12,6 +12,7 @@
        changes.
      * Added   options   for   php  support.  --with-php-interpreter  and
        --with-php-cgiwrap
+     * Rewrote the path translated support. Is it finally correct?
 
   New in version 3.7.1:
 

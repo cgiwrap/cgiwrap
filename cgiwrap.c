@@ -91,6 +91,9 @@ int main (int argc, char *argv[])
 
 	/* Output the contents of important environment variables */
 	OutputEnvironment();
+
+	/* Save copies of the original values for use later */
+	SaveEnvironment();
 	
 	/* Get the user name from the given data */
 	userStr = FetchUserString();

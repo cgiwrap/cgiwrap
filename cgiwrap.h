@@ -101,6 +101,10 @@ struct cgiwrap_context
 	/* Path of script relative to user cgi directory */
 	char *scriptRelativePath;
 
+	/* Path info */
+	char *origPathInfo;
+	char *newPathInfo;
+
 	/* Previously opened log file */
 	FILE *logFile;
 

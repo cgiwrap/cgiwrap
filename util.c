@@ -282,6 +282,20 @@ void OutputEnvironment(void)
         DEBUG_Str("      REMOTE_ADDR:", (char *) getenv("REMOTE_ADDR") );
 }
 
+/* 
+ * Save a copy of the old environment variables 
+ */
+void SaveEnvironment(void)
+{
+	char *c;
+
+	c = getenv("PATH_INFO");
+	if ( c )
+	{
+		Context.origPathInfo = strdup(c);
+	}
+}
+
 /*
  * Change to the users cgi-bin directory, this serves to provide
  * a consistent strting point for paths.
@@ -1147,22 +1161,42 @@ void SetScriptFilename (char *scriptPath)
  */
 void SetPathTranslated( char *cgiBaseDir, char *scriptPath )
 {
-	char *buf, *pathinfo;
+	char *buf;
+	char *old_pt, *new_pt;
+	char *old_pi, *new_pi;
 	
-	pathinfo = getenv("PATH_INFO");
-
-	if ( !pathinfo )
+	old_pt = getenv("PATH_TRANSLATED");
+	if ( ! old_pt )
 	{
-		SafePutenv("PATH_TRANSLATED=", 
-			"set PATH_TRANSLATED environment variable");
+		/* don't set one if the server didn't */
+		return;
+	}
+	new_pt = strdup(old_pt);
+
+	old_pi = Context.origPathInfo;
+	new_pi = Context.newPathInfo;
+	if ( !old_pi || !new_pi )
+	{
+		/* can't match against anything */
 		return;
 	}
 
-	buf = (char *) SafeMalloc( strlen("PATH_TRANSLATED") +
-		strlen(cgiBaseDir) + strlen(pathinfo) + 5, 
-		"new PATH_TRANSLATED environment variable");
+	/* check if we find old path_info (with user) in the path_translated string */
+	buf = strstr(new_pt, old_pi);
+	if ( buf )
+	{
+		/* if so, copy in what we determined pathinfo should be after stripping off user portion */
+		strcpy(buf, new_pi);
+	}
+	else
+	{
+		/* not found, can't do anything with information we have */
+		return;
+	}
 
-	sprintf(buf, "%s=%s%s", "PATH_TRANSLATED", cgiBaseDir, pathinfo); 
+	buf = (char *) SafeMalloc( strlen(new_pt) + 5, 
+		"new PATH_TRANSLATED environment variable");
+	sprintf(buf, "%s=%s", "PATH_TRANSLATED", new_pt); 
 	putenv(buf);
 }
 
