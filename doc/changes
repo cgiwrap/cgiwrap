@@ -46,6 +46,8 @@
      * Changed tardist target to touch all files and directories so that
        a consistent time stamp is reached. This should eliminate spurious
        calls to autoheader when building cgiwrap.
+     * Added in code to configure.in for the various information options
+       such as local-site-url, local-contact-phone, etc.
        
   New in version 3.5:
   
