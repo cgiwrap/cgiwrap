@@ -1,21 +1,21 @@
 
                         CGIWrap - Compilation Notes
      _________________________________________________________________
-   
+
   CDC 4680 EP/IX 2.1.1ad
-  
+
           CC=cc
           CCOPT=-systype sysv -I/usr/include/bsd -lbsd
-          
+
           Don't include "strings.h"
-          
+
   HP-UX 9.0.x
-  
-          Don't enable the setrlimit checking, it is not completely
+
+          Don't  enable  the  setrlimit  checking,  it  is not completely
           supported by HPUX.
-          
+
   SCO Unixware 2.03
-  
-          Problems with sete[ug]id. You might need to undefine these in
-          the config.sh file at the end of the Configure run. (Thanks to
+
+          Problems  with  sete[ug]id. You might need to undefine these in
+          the  config.sh file at the end of the Configure run. (Thanks to
           John Romano for pointing this problem out.)

@@ -113,3 +113,9 @@
  * OS Specific Definitions
  */
 #undef _HPUX_SOURCE
+
+/*
+ * Quiet warning about rcsid
+ */
+#define RCSID(msg) \
+static /**/const char *const rcsid[] = { (char *)rcsid, "\100(#)" msg }

@@ -1,11 +1,10 @@
-static char *rcsid="$Id$";
-
 /**
  **  File: messages.c
  **  Purpose: Routines for printing out error and other messages
  **/ 
 
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
+RCSID("$Id$");
 
 /* 
  * Mode to output the message - plaintext or HTML
@@ -211,27 +210,27 @@ void MSG_Info(void)
 	if ( getenv("SERVER_ADMIN") )
 	{
 	      printf("%sServer Administrator/Contact%s: %s\n", 
-		      prefix, suffix, getenv("SERVER_ADMIN"));
+		      prefix, suffix, HTMLEncode(getenv("SERVER_ADMIN")));
 	}
 	if ( getenv("SERVER_NAME") )
 	{
 	      printf("%sServer Name%s: %s\n", 
-		      prefix, suffix, getenv("SERVER_NAME"));
+		      prefix, suffix, HTMLEncode(getenv("SERVER_NAME")));
 	}
 	if ( getenv("SERVER_HOST") )
 	{
 	      printf("%sServer Host%s: %s\n", 
-		      prefix, suffix, getenv("SERVER_HOST"));
+		      prefix, suffix, HTMLEncode(getenv("SERVER_HOST")));
 	}
 	if ( getenv("SERVER_PORT") )
 	{
 	      printf("%sServer Port%s: %s\n", 
-		      prefix, suffix, getenv("SERVER_PORT"));
+		      prefix, suffix, HTMLEncode(getenv("SERVER_PORT")));
 	}
 	if ( getenv("SERVER_PROTOCOL") )
 	{
 	      printf("%sServer Protocol%s: %s\n", 
-		      prefix, suffix, getenv("SERVER_PROTOCOL"));
+		      prefix, suffix, HTMLEncode(getenv("SERVER_PROTOCOL")));
 	}
 	
 	if ( MSG_HTMLMessages )
@@ -252,39 +251,39 @@ void MSG_Info(void)
 	if ( getenv("HTTP_USER_AGENT") )
 	{
 		printf("%sUser Agent/Browser%s: %s\n", 
-			prefix, suffix, getenv("HTTP_USER_AGENT"));
+			prefix, suffix, HTMLEncode(getenv("HTTP_USER_AGENT")));
 	}
 	if ( getenv("REQUEST_METHOD") )
 	{
 		printf("%sRequest Method%s: %s\n", 
-			prefix, suffix, getenv("REQUEST_METHOD"));
+			prefix, suffix, HTMLEncode(getenv("REQUEST_METHOD")));
 	}
 	if ( getenv("REMOTE_HOST") )
 	{
 		printf("%sRemote Host%s: %s\n", 
-			prefix, suffix, getenv("REMOTE_HOST"));
+			prefix, suffix, HTMLEncode(getenv("REMOTE_HOST")));
 	}
 	if ( getenv("REMOTE_ADDR") )
 	{
 		printf("%sRemote Address%s: %s\n", 
-			prefix, suffix, getenv("REMOTE_ADDR"));
+			prefix, suffix, HTMLEncode(getenv("REMOTE_ADDR")));
 	}
 	if ( getenv("REMOTE_PORT") )
 	{
 		printf("%sRemote Port%s: %s\n", 
-			prefix, suffix, getenv("REMOTE_PORT"));
+			prefix, suffix, HTMLEncode(getenv("REMOTE_PORT")));
 	}
 	if ( getenv("REMOTE_USER") )
 	{
 		printf("%sRemote User%s: %s\n", 
-			prefix, suffix, getenv("REMOTE_USER"));
+			prefix, suffix, HTMLEncode(getenv("REMOTE_USER")));
 	}
 	if ( getenv("QUERY_STRING") )
 	{
 		if ( strlen(getenv("QUERY_STRING")) > 0)
 		{	
 			printf("%sQuery String%s: %s\n", 
-				prefix, suffix, getenv("QUERY_STRING"));
+				prefix, suffix, HTMLEncode(getenv("QUERY_STRING")));
 		}
 	}
 	if ( getenv("PATH_INFO") )
@@ -292,18 +291,18 @@ void MSG_Info(void)
 		if ( strlen(getenv("PATH_INFO")) > 0)
 		{	
 			printf("%sExtra Path Info%s: %s\n", 
-				prefix, suffix, getenv("PATH_INFO"));
+				prefix, suffix, HTMLEncode(getenv("PATH_INFO")));
 		}
 	}
 	if ( getenv("HTTP_REFERRER") )
 	{
 		printf("%sReferring Page%s: %s\n", 
-			prefix, suffix, getenv("HTTP_REFERRER"));
+			prefix, suffix, HTMLEncode(getenv("HTTP_REFERRER")));
 	}
 	if ( getenv("HTTP_REFERER") )
 	{
 		printf("%sReferring Page%s: %s\n", 
-			prefix, suffix, getenv("HTTP_REFERER"));
+			prefix, suffix, HTMLEncode(getenv("HTTP_REFERER")));
 	}
 
 
@@ -402,7 +401,7 @@ void MSG_Error_ExecutionNotPermitted(char *path, char *reason)
 
 	if ( path )
 	{
-		printf("Execution of (%s) is not permitted\n",path);
+		printf("Execution of (%s) is not permitted\n",HTMLEncode(path));
 	}
 	else
 	{
@@ -519,6 +518,8 @@ void MSG_Error_ExecFailed(void)
 	"executing. An easy fix that takes care of this most of the time\n"
 	"is to put '#!/.../perl --' instead of '#!/.../perl' on the first\n"
 	"line of the script.\n"
+	"This is typically a problem if the script was edited or uploaded\n"
+	"from a DOS/Windows/Macintosh station to a unix based server.\n"
 	);
 
 	if ( MSG_HTMLMessages )
@@ -540,7 +541,8 @@ void MSG_Error_NoSuchUser(char *user)
 {
 	MSG_Header("CGIWrap Error", "User not found");
 
-	printf("CGIWrap was unable to find the user '%s' in the\n", user);
+	printf("CGIWrap was unable to find the user '%s' in the\n", 
+		HTMLEncode(user));
 	printf("password file on this server.\n\n");
 	if ( MSG_HTMLMessages )
 	{

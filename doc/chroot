@@ -1,28 +1,28 @@
 
                       CGIWrap - Chroot Implementation
      _________________________________________________________________
-   
-   Note - This facility is for expert administrators only, cgi scripts
+
+   Note  -  This  facility is for expert administrators only, cgi scripts
    will not work AT ALL if you don't do this right.
      _________________________________________________________________
-   
-   The chroot facility in cgiwrap is built on a loopback filesystem
-   approach. What this means is - cgiwrap expects an equivalent
-   filesystem structure inside the chrooted area as is outside. The
-   prefix specified with --with-chroot=PATH should point to the top of
+
+   The  chroot  facility  in  cgiwrap  is  built on a loopback filesystem
+   approach.   What  this  means  is  -  cgiwrap  expects  an  equivalent
+   filesystem  structure  inside  the  chrooted  area  as is outside. The
+   prefix  specified  with  --with-chroot=PATH should point to the top of
    your chrooted area.
-   
-   Within the chrooted area, you should place any
-   executables/libraries/tools that you want available to cgi scripts.
-   For the user data within the filesystem I suggest you use a loopback
-   NFS mount. Is suggest using the nosuid and nodev options on the mount
+
+   Within     the     chrooted     area,    you    should    place    any
+   executables/libraries/tools  that  you  want available to cgi scripts.
+   For  the  user data within the filesystem I suggest you use a loopback
+   NFS  mount. Is suggest using the nosuid and nodev options on the mount
    for additional protection.
-   
-   For optimum protection, you might also consider using a loopback NFS
-   mount for the top level of the chroot area as well, mounted with the
+
+   For  optimum  protection, you might also consider using a loopback NFS
+   mount  for  the top level of the chroot area as well, mounted with the
    'ro' mount option. This will prevent ANY changes to that filesystem.
-   
-   Note, this is not as secure as some chroot facilities, but it is more
-   secure than the basic cgiwrap setup. For additional security, it is
+
+   Note,  this is not as secure as some chroot facilities, but it is more
+   secure  than  the  basic cgiwrap setup. For additional security, it is
    recommended that user home directories have NO world/other permissions
    set.

@@ -1,11 +1,93 @@
-static char *rcsid="$Id$";
-
 /**
  **  File: util.c
  **  Purpose: Various utility routines used by cgiwrap
  **/ 
 
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
+RCSID("$Id$");
+
+/*
+ * Encode string to protect against cross-site scripting, but only
+ * encode if we are outputting in HTML. Otherwise send as is so that
+ * error message shows up as transmitted.
+ *
+ * Strings is returned in malloced space, but should be treated as if
+ * it was allocated staticly.
+ */
+char *HTMLEncode(char *what)
+{
+	static char *res = NULL;
+	static int len = 0;
+	int i,j;
+
+	/* passed a null string, so return same */
+	if ( !what )
+	{
+		return NULL;	
+	}
+
+	/* if we are in plaintext mode, just return string as is */
+	if ( ! MSG_HTMLMessages )
+	{
+		return what;
+	}
+
+	/* deallocate previous mem if not sufficient for current string */
+	/* largest encoding is &amp; so *5 should be sufficient. */
+	if ( res && ((strlen(what)*5+1) > len) )
+	{
+		free(res);
+		res = NULL;
+		len = 0;
+	}
+
+	/* allocate mem */
+	if ( ! res )
+	{
+		/* default to HUGE_STRING_LEN to eliminate excess mallocing */
+		len = (strlen(what)*5+1);
+		if ( len < HUGE_STRING_LEN )
+		{
+			len = HUGE_STRING_LEN;
+		}
+		res = SafeMalloc(len, "SafeEncode");
+	}
+
+	/* copy string to result, encoding as we go */
+	j = 0;
+	for ( i = 0; i<=strlen(what); i++ )
+	{
+		if ( what[i] == '<' )
+		{
+			res[j++] = '&';
+			res[j++] = 'l';
+			res[j++] = 't';
+			res[j++] = ';';
+		}
+		else if ( what[i] == '>' )
+		{
+			res[j++] = '&';
+			res[j++] = 'g';
+			res[j++] = 't';
+			res[j++] = ';';
+		}
+		else if ( what[i] == '&' )
+		{
+			res[j++] = '&';
+			res[j++] = 'a';
+			res[j++] = 'm';
+			res[j++] = 'p';
+			res[j++] = ';';
+		}
+		else
+		{
+			res[j++] = what[i];
+		}
+	}
+	res[j] = '\0';
+
+	return res;
+}
 
 /*
  * Safe malloc

@@ -1,7 +1,7 @@
 
                          CGIWrap - Tips and Tricks
      _________________________________________________________________
-   
+
 Ok, here's a few examples on how you can use mod_rewrite to rewrite your 
 CGIwrap URL's in a way that is totally transparent to the end user.
 
@@ -112,7 +112,7 @@ comments/corrections roady@linux-solutions.org
 --
 Ben O'Shea
      _________________________________________________________________
-   
+
 From: Shane DeRidder 
 
 Actually, if you use Apache 1.1 (recently released), you can use their
@@ -137,7 +137,7 @@ Shane DeRidder     | System Administrator / Webmaster
 shane@together.net | Together Networks
 (802)860-5166      | http://www.together.net
      _________________________________________________________________
-   
+
 For netscape server in obj.conf:
 
 NameTrans fn="pfx2dir" from="/cgi" dir="path_to_cgiwrap" name="cgi"
@@ -149,7 +149,7 @@ Web Development Staff
 Computer and Information Resource Center
 The George Washington University
      _________________________________________________________________
-   
+
 From: Seth Chaiklin 
 
 cgiwrapd and nph-cgiwrapd provide information about the installation of
@@ -176,7 +176,7 @@ Depending on what value you place for allow from, you can control how
 widely these debugging versions
 are available.
      _________________________________________________________________
-   
+
 
 Date: Sun, 7 Dec 1997 23:20:28 -0500 (EST)
 From: Yuji Shinozaki 

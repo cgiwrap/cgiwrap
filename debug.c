@@ -1,11 +1,10 @@
-static char *rcsid="$Id$";
-
 /**
  **  File: debug.c
  **  Purpose: Debugging output routines
  **/ 
 
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
+RCSID("$Id$");
 
 /*
  * Global flag to turn debugging output on/off

@@ -1,11 +1,10 @@
-static char *rcsid="$Id$";
-
 /**
  **  File: stdutil.c
  **  Purpose: Home grown alternatives for routines not in standard library
  **/
  
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
+RCSID("$Id$");
 
 /*
  * strdup() - copy a string into a newly allocated block of memory

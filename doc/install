@@ -1,41 +1,41 @@
 
                     CGIWrap - Installation Instructions
      _________________________________________________________________
-   
+
   Quick Installation
-  
+
    Look at the notes to see if there are any hints for your platform.
-          
+
    Issue "./configure --help" to find out the various configuration
           options. You will need to specify some of them. At the very
           least, you will want to specify "--with-httpd-user=USERID".
-          
+
    Type "./configure <options>" with whatever options you need..
-          
+
    Type "make"
-          
+
    If you specified the installation directory in the options, you can
           type "make install" to do all the following steps.
-          
+
    Copy cgiwrap executable to your servers cgi-bin directory
-          
+
    Make cgiwrap owned by root, executable by all, and setuid. (Note: This
           step must be performed while logged in as "root")
-          
+
           chown root cgiwrap
           chmod 4755 cgiwrap
-          
+
    Hardlink or symlink nph-cgiwrap, nph-cgiwrapd, cgiwrapd to cgiwrap in
           the cgi-bin directory.
-          
+
           ln [-s] cgiwrap cgiwrapd
           ln [-s] cgiwrap nph-cgiwrap
           ln [-s] cgiwrap nph-cgiwrapd
-          
+
    You can, if you wish, install it with less permissive permissions.
           (Eg. 4750) But if you do this, make sure that the group of
           cgiwrap is the same as the group that the server runs as.
-          
+
    *VERY IMPORTANT* - Do NOT allow any non-trusted user to run scripts
           directly out of the main cgi-bin directory, as this will allow
           them to use cgiwrap to run any of the other users scripts. The
@@ -44,208 +44,208 @@
           security checks to allow them to run other users scripts. I
           recommend not running ANY scripts on the web server directly,
           once you have cgiwrap installed.
-          
+
   Configuration Options
-  
-   The following are options available with the 'configure' command.
-   Items in boldface are highly recommended. Defaults can be seen by
-   issuing './configure --help' or by looking at the 'config.h' file
+
+   The  following  are  options  available  with the 'configure' command.
+   Items  in  boldface  are  highly  recommended. Defaults can be seen by
+   issuing  './configure  --help'  or  by  looking at the 'config.h' file
    after you have run 'configure'.
-   
-   At an absolute minimum, you will probably want to specify the
+
+   At  an  absolute  minimum,  you  will  probably  want  to  specify the
    '--with-install-dir' and '--with-httpd-user' options.
-   
+
    --with-perl=PATH
           path to perl executable to use
-          
+
    --with-local-contact-name=NAME
           Specify the name of the local contact
-          
+
    --with-local-contact-email
           Specify the local contact's email address
-          
+
    --with-local-contact-phone
           Specify the local contact's phone number
-          
+
    --with-local-contact-url
           Specify a URL for the local contact
-          
+
    --with-local-site-url
           Specify a URL for this site
-          
+
    --with-local-doc-url
           Specify a URL for a local copy of the cgiwrap docs
-          
+
    --with-wall
-          Add the '-Wall' option for compilation with gcc, this is
+          Add  the  '-Wall'  option  for  compilation  with  gcc, this is
           intended primarily for development debugging.
-          
+
    --with-install-group=GROUP
           group to install cgiwrap as
-          
+
    --with-install-dir=PATH
-          path to installation directory - this should be the path to
+          path  to  installation  directory  - this should be the path to
           your server's cgi-bin directory
-          
+
    --with-cgi-dir=PATH
           path relative to home dir for cgi scripts
-          
+
    --with-multiuser-cgi-dir=PATH
-          define a central cgi script directory that is searched if the
-          script is not found in a user directory. This can be used to
-          make a single script available that will run as any user,
-          however, this can be very dangerous if you're not extremely
-          careful designing your script. Do not enable this unless you
+          define  a  central cgi script directory that is searched if the
+          script  is  not  found in a user directory. This can be used to
+          make  a  single  script  available  that  will run as any user,
+          however,  this  can  be  very dangerous if you're not extremely
+          careful  designing  your  script. Do not enable this unless you
           know what you're doing. It is not needed for normal usage.
-          
+
    --with-httpd-user=USER
-          define what userid the web server is running as - this is
+          define  what  userid  the  web  server  is running as - this is
           required
-          
+
    --without-check-httpd-user
-          don't check to make sure cgiwrap is being run by server userid
+          don't  check to make sure cgiwrap is being run by server userid
           - this is not recommended
-          
+
    --without-check-owner
           disable check for matching owner
-          
+
    --without-check-group
           disable check for matching group
-          
+
    --without-check-setuid
           disable check for setuid script
-          
+
    --without-check-setgid
           disable check for setgid script
-          
+
    --without-check-group-writable
           disable check for group writable script
-          
+
    --without-check-world-writable
           disable check for world writable script
-          
+
    --without-check-symlink
           disable check for symlinked script
-          
+
    --with-check-shell
           enable check for a valid user shell
-          
+
    --with-chroot=PATH
-          chroots script to PATH prior to script execution, requires
-          specific environment to be set up. See chroot docs for more
+          chroots  script  to  PATH  prior  to script execution, requires
+          specific  environment  to  be  set up. See chroot docs for more
           details.
-          
+
    --with-minimum-uid=UID set the minimum uid of user that can use
           cgiwrap
-          
+
    --with-logging-syslog=LABEL
           enable logging script execution to syslog
-          
+
    --with-logging-file=FILE
           enable logging script execution to file
-          
+
    --without-script-subdirs
           prevent users from storing scripts in subdirs
-          
+
    --without-redirect-stderr
           don't redirect stderr to stdout in scripts
-          
+
    --without-initgroups
-          disable use of initgroups() to clear non-userid auxilliary
+          disable  use  of  initgroups()  to  clear non-userid auxilliary
           groups
-          
+
    --without-setgroups
           disable use of setgroups() to add userid's auxilliary groups
-          
+
    --with-rewrite=FILE
           use a file to rewrite user directories
-          
+
    --with-setenv-path=STRING
           set PATH environment variable to STRING
-          
+
    --with-setenv-tz=STRING
           set TZ environment variable to STRING
-          
+
    --with-rlimit-cpu=SECONDS
           limit cpu time with setrlimit
-          
+
    --with-rlimit-vmem=BYTES
           limit total virtual memory with setrlimit
-          
+
    --with-rlimit-as=BYTES
           limit total available memory with setrlimit
-          
+
    --with-rlimit-fsize=BYTES
           limit writable file size with setrlimit
-          
+
    --with-rlimit-data=BYTES
           limit data segment size with setrlimit
-          
+
    --with-rlimit-stack=BYTES
           limit stack segment size with setrlimit
-          
+
    --with-rlimit-core=BYTES
           limit core file size with setrlimit
-          
+
    --with-rlimit-rss=BYTES
           limit resident set size with setrlimit
-          
+
    --with-rlimit-nproc=COUNT
           limit number of processes with setrlimit
-          
+
    --with-rlimit-nofile=COUNT
           limit number of open files with setrlimit
-          
+
    --with-rlimit-memlock=BYTES
           limit lockable memory with setrlimit
-          
+
    --with-allow-file=FILE
           limit cgiwrap usage
-          
+
    --with-deny-file=FILE
           limit cgiwrap usage
-          
+
    --with-host-checking
           allow specifying hosts in allow/deny files
-          
+
    --with-afs=DIR
           enable afs setpag() support
      _________________________________________________________________
-   
+
   Password Protected Installation
-  
+
    The following are pecial additional instructions for installing a copy
-   of cgiwrap that allows users to create access controlled scripts. For
+   of  cgiwrap that allows users to create access controlled scripts. For
    this to work, you will need to have a single common password file that
    will be used by all authenticated scripts.
-   
+
    Re run configure, specify "public_html/auth-cgi-bin" instead of
           "public_html/cgi-bin" for the cgi directory.
-          
+
    Type make.
-          
+
    Create a new server cgi-bin directory called "auth-cgi-bin", and
           install this new copy of cgiwrap into that directory the same
           way you installed it into the cgi-bin directory. (4 copies, and
           set permissions). You will now be able to use the url:
           http://server/auth-cgi-bin/cgiwrap...
-          
+
    To enable access control, place a .htaccess or equivalent file in the
           auth-cgi-bin directory where cgiwrap is located, that requires
           authentication to get at any file in that directory, but will
           allow any valid user to get through.
-          
+
    Now, your users can simply check: 1. That their script was executed by
           them (eg. check the real uid of the script to make sure someone
           else wasn't running it by hand) 2. That the REMOTE_USER
           environment variable contains a user name that they want to
           allow to access the script.
      _________________________________________________________________
-   
+
   Supplementary Configuration
-  
-   If you enabled the access file checking, you need to make sure and
+
+   If  you  enabled  the  access file checking, you need to make sure and
    create the necessary files.
-   
-   If you enabled the user directory rewriting feature, you need to
+
+   If  you  enabled  the  user  directory  rewriting feature, you need to
    create the configuration file that you specified in the configure run.

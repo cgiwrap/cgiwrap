@@ -1,13 +1,10 @@
-static char *rcsid="$Id$";
-
 /**
  **  File: fetch.c
  **  Purpose: Routines to extract the user and script name from request
  **/ 
 
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
-
-
+RCSID("$Id$");
 
 char *FetchUserString(void)
 {

@@ -16,6 +16,10 @@
 #include <signal.h>		/* For signals stuff */
 #endif
 
+#if defined(HAVE_SYS_SIGNAL_H)
+#include <sys/signal.h>		/* For signals stuff */
+#endif
+
 #if defined(HAVE_ERRNO_H)
 #include <errno.h>      /* Error numbers for functions */
 #endif
@@ -52,6 +56,10 @@
 
 #if defined(HAVE_SYS_TIME_H)
 #include <sys/time.h>	/* Time for logging stuff */
+#endif
+
+#if defined(HAVE_TIME_H)
+#include <time.h>	/* Time for logging stuff */
 #endif
 
 #if defined(HAVE_SYS_RESOURCE_H)	/* For rlimit use */

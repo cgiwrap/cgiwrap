@@ -1,30 +1,30 @@
 
                     CGIWrap - Frequently Asked Questions
      _________________________________________________________________
-   
+
   General Questions
-  
+
    How do I subscribe/unsubscribe from the CGIWrap mailing list?
-          To subscribe, send a note containing "subscribe cgiwrap" to
-          listserv@rollanet.org.
-          
-          To unsubscribe, send a note containing "unsubscribe cgiwrap" to
-          listserv@rollanet.org from the account that is subscribed to
-          the list.
-          
+          To subscribe, send a note containing "subscribe" to
+          cgiwrap-users-request@lists.sourceforge.net.
+
+          To unsubscribe, send a note containing "unsubscribe" to
+          cgiwrap-users-request@lists.sourceforge.net from the account
+          that is subscribed to the list.
+
           If you are unable to subscribe or unsubscribe, send a note to
           me at nneul@umr.edu. Please do not send subscribe/unsubscribe
           messages to the list.
-          
+
           More information on the mailing list is available here.
-          
+
    How do I send a message to the mailing list?
-          Any mail sent to cgiwrap@rollanet.org will be sent to the
-          mailing list, however, you have to be subscribed to the list. I
-          will occasionally hand approve messages to the list if I see
-          one from a non-subscriber, but you need to subscribe to the
-          list.
-          
+          Any mail sent to cgiwrap-users@lists.sourceforge.net will be
+          sent to the mailing list, however, you have to be subscribed to
+          the list. I will occasionally hand approve messages to the list
+          if I see one from a non-subscriber, but you need to subscribe
+          to the list.
+
    What is on topic for the mailing list?
           anything cgiwrap related
           use of cgiwrap with ssi/cgi/various servers/tricks/etc
@@ -34,27 +34,27 @@
           cgiwrap.
           Anything else that comes up that is of interest to a large
           number of cgiwrap users.
-          
+
   Administrative Questions
-  
+
    I am getting the error about the server userid.
           CGIwrap needs to be configured with the userid that your web
           server is running as. For apache based servers, this is the
           userid that is listed on the "User" line in httpd.conf. You
           specify this when configuring CGIWrap using the
           --with-httpd-user option.
-          
+
    I am getting the error "Can't ... ". How can I fix this?
           CGIwrap needs to be installed set-uid to root. Log in as root,
           change to the server's cgi-bin directory, and issue the
           commands:
-          
+
         chown root cgiwrap
         chmod 4755 cgiwrap
 
    How do I use CGIwrap with server side includes
           This is not supported by all web servers, but with Apache, use:
-          
+
         <!--#include virtual="/cgi-bin/cgiwrap/user/script...."-->
 
           One of the problems is that this often is a security hole
@@ -62,7 +62,7 @@
           executables that are in ExecCGI capable directories. Some
           people have made patches that will allow this to work. Ask on
           the list for details.
-          
+
    I am getting the error "setgroups() failed!". What is wrong?
           This occurs when CGIwrap is unable to set auxilliary groups.
           Auxilliary groups are groups that a user is a member of in
@@ -71,7 +71,7 @@
           CGIwrap is installed correctly (has to be setuid root to be
           able to set auxilliary groups.), or disable setting auxilliary
           groups.
-          
+
    ld.so.1: /net/bin/perl: fatal: /usr/lib/libintl.so.1: can't map file:
           errno=12
           This indicates that you installed cgiwrap with resource
@@ -79,14 +79,14 @@
           There isn't enough memory for perl to load. Keep in mind that
           unix applications usually use alot of virtual memory, even
           though their resident size is small.
-          
+
   User Questions
-  
+
    I am getting a 500 Server Error, how can I debug my script?
           CGIwrap supports a debugging mode which can help to debug
           scripts. To use it, call CGIwrap via the URL
           http://.../cgiwrapd/... instead of http://.../cgiwrap/....
-          
+
    I am getting the error execv() failed
           This generally results from either having the wrong path to
           perl, or having control-M's after the path to perl. This is
@@ -97,18 +97,18 @@
           For some situations, simply adding " -- " to the end of the
           first line of the script will cause the error to go away,
           sometimes not.
-          
+
    How do I use cgiwrapd on a Cobalt RaQ?
           cgiwrapd is still there, it just isn't directly obvious how to
           use it. If you normally call your script as
-          
+
           http://www.site1.com/test.cgi
-          
+
           you can call it as
-          
+
           http://www.site1.com/cgiwrapDir/cgiwrapd/test.cgi
-          
+
           to run it under cgiwrapd. Basically they ScriptAlias
           "cgiwrapDir" to the directory where cgiwrap is installed.
-          
+
           Chris Adams

@@ -1,11 +1,10 @@
-static char *rcsid="$Id$";
-
 /**
  **  File: cgiwrap.c
  **  Purpose: Main program for cgiwrap
  **/ 
 
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
+RCSID("$Id$");
 
 /*
  * Global context structure
@@ -222,10 +221,10 @@ DEBUG_Msg("\tCondensing slashes.\n");
 			"status=%d wtime='%lds' utime='%ds %dus' stime='%ds %dus'",
 			WEXITSTATUS(childstatus), 
 			elap_time,
-			childrusage.ru_utime.tv_sec, 
-			childrusage.ru_utime.tv_usec,
-			childrusage.ru_stime.tv_sec, 
-			childrusage.ru_stime.tv_usec);
+			(int) childrusage.ru_utime.tv_sec, 
+			(int) childrusage.ru_utime.tv_usec,
+			(int) childrusage.ru_stime.tv_sec, 
+			(int) childrusage.ru_stime.tv_usec);
 		Log(userStr, scrStr, rusagemsg);
 		exit(WEXITSTATUS(childstatus));
 	}
