@@ -235,7 +235,9 @@ void CheckUser(struct passwd *user)
 void CheckScriptFile(struct passwd *user, char *scriptPath)
 {
 	struct stat fileStat; /* For checking file status */
+	struct stat fileLStat /* For checking symlink status */
 	char tempErrString[255];
+	int res;
 
 	if ( CheckPath(scriptPath) )
 	{
@@ -251,11 +253,21 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 	}
 #endif
 
-	if ( stat(scriptPath, &fileStat) )
+	res = stat(scriptPath, &fileStat);
+	if ( res )
 	{
 		DoPError("Script file not found!");
 	}
 
+#if defined(CONF_CHECK_SYMLINK)
+	res = lstat(scriptPath, &fileLStat);
+
+	if ( S_ISLNK(fileLStat.st_mode) )
+	{
+		DoError("Script is a symlink - Will not Execute!");
+	}
+#endif		
+	
 	if ( !S_ISREG(fileStat.st_mode) )
 	{
 		DoError("Script is not a regular file");
