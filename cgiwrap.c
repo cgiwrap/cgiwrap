@@ -22,6 +22,12 @@ int main (int argc, char *argv[])
 	char *scriptPath; /* Path to script file */
 	char *cgiBaseDir; /* Base directory for cgi scripts in user's dir */
 	struct passwd *user; /* For getting uid from name */
+#ifdef CONF_REPORT_RUSAGE
+	pid_t childpid;
+	struct rusage childrusage;
+	int childstatus;
+	char rusagemsg[1000];
+#endif
 
 	/* Determine if debugging output should be done */
 	if ( strlen(argv[0]) >= 1 )
@@ -135,16 +141,48 @@ int main (int argc, char *argv[])
 	/* Perform any AFS related tasks before executing script */
 	Create_AFS_PAG();
 	
+#if 0
+	/* disabled, now using F_SETFD to set close-on-exec */
 	/* Close the log files - some thought to doing this below 
 		so could log failure */	
 	LogEnd();
+#endif
 
 	/* Execute the script */
 	DEBUG_Msg("\n\n");
 	DEBUG_Msg("Output of script follows:");
 	DEBUG_Msg("=====================================================");
 
+#if defined(CONF_REPORT_RUSAGE) && defined(HAVE_WAIT3)
+	childpid = fork();
+	if ( childpid < 0 ) /* fork failed */
+	{
+		Log(userStr, scrStr, "fork failed");
+		exit(1);
+	}
+	else if ( childpid == 0 )
+	{
+		execv(scriptPath, CreateARGV(scrStr, argc,argv));
+		MSG_Error_ExecFailed();
+		Log(userStr, scrStr, "failed execv of script");
+		exit(1);
+	}
+	else /* fork ok */
+	{
+		wait3(&childstatus, 0, &childrusage);
+		sprintf(rusagemsg, 
+			"status=%d utime='%ds %dus' stime='%ds %dus'",
+			WEXITSTATUS(childstatus), 
+			childrusage.ru_utime.tv_sec, 
+			childrusage.ru_utime.tv_usec,
+			childrusage.ru_stime.tv_sec, 
+			childrusage.ru_stime.tv_usec);
+		Log(userStr, scrStr, rusagemsg);
+		exit(WEXITSTATUS(childstatus));
+	}
+#else
 	execv(scriptPath, CreateARGV(scrStr, argc,argv));
 	MSG_Error_ExecFailed();
 	exit(1);
+#endif
 }

@@ -47,6 +47,17 @@
         chown root cgiwrap
         chmod 4755 cgiwrap
 
+   How do I use CGIwrap with server side includes
+          This is not supported by all web servers, but with Apache, use:
+          
+
+        <!--#include virtual="/cgi-bin/cgiwrap/user/script...."-->
+
+   
+          One of the problems is that this often is a security hole
+          unless you can enable server side exec/virtual include only of
+          executables that are in ExecCGI capable directories.
+          
    I am getting the error "setgroups() failed!". What is wrong?
           This occurs when CGIwrap is unable to set auxilliary groups.
           Auxilliary groups are groups that a user is a member of in

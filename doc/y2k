@@ -1,0 +1,12 @@
+
+                         CGIWrap - Year 2000 Issues
+                                      
+     _________________________________________________________________
+                                      
+   As far as I know, cgiwrap is as y2k compliant as the C libraries on
+   the machine it was compiled on. The only place it uses a date is in
+   it's logging routine, and it uses the "ctime" and "time" functions.
+   
+   Worst case scenario, presuming the system libraries are terribly
+   non-compliant, is just disable the printing of the time and date in
+   the logging routine.

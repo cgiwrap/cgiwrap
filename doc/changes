@@ -5,6 +5,15 @@
    version to version.
      _________________________________________________________________
                                       
+  New in version 3.6.2:
+  
+     * Fixed the !logfd check. Thanks to Alexander Wolgast for pointing
+       this out.
+     * Added support for reporting rusage/return code after executing
+       script.
+     * Changed logging to use close-on-exec flag of file descriptor, so
+       it can be left open for reporting rusage if enabled.
+       
   New in version 3.6.1:
   
      * Fixed the UserInFile routine. It broke cause I forgot to remove

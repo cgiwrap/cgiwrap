@@ -4,7 +4,7 @@ AC_CONFIG_AUX_DIR(.)
 AC_CANONICAL_SYSTEM
 AC_CONFIG_HEADER(config.h)
 
-VERSION="3.6.1"
+VERSION="3.6.2"
 AC_SUBST(VERSION)
 
 AC_PROG_CC
@@ -316,6 +316,25 @@ AC_ARG_WITH( check-httpd-user,
 	])
 AC_SUBST(INSTALLMODE)
 
+dnl
+dnl Use fork/wait3 to get rusage info 
+dnl
+AC_FUNC_WAIT3
+AC_MSG_CHECKING(for report-rusage)
+AC_ARG_WITH( report-rusage, 
+	[  --with-report-rusage]
+	[  report rusage and return status of cgi script after execution], 
+	[
+		if test "x$withval" != xno; then
+			AC_DEFINE(CONF_REPORT_RUSAGE)
+			AC_MSG_RESULT([enabled, rusage and return code will be logged])
+		else
+			AC_MSG_RESULT([disabled, rusage and return code will not be logged])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled, rusage and return code will not be logged])
+	])
 
 dnl
 dnl Various cgi-script permission checks

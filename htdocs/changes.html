@@ -8,6 +8,10 @@ to version.
 <P><H3>New in version 3.6.2:</H3><UL>
 	<LI>Fixed the !logfd check. Thanks to Alexander Wolgast for pointing
 this out.
+	<LI>Added support for reporting rusage/return code after executing
+script.
+	<LI>Changed logging to use close-on-exec flag of file descriptor, so
+it can be left open for reporting rusage if enabled.
 </UL>
 
 <P><H3>New in version 3.6.1:</H3><UL>

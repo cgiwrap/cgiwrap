@@ -811,6 +811,10 @@ void LogInit (void)
 	{
 		MSG_Error_SystemError("Could not open log file for appending!");
 	}
+	/* set the close-on-exec flag for logfd */
+	fcntl(logfd, F_SETFD, 1);
+
+	/* open a file pointer from that file descriptor */
 	logFile = fdopen(logfd, "a");
 	if ( !logFile )
 	{
@@ -862,7 +866,8 @@ void Log (char *user, char *script, char *msg)
 		NullCheck( getenv("REMOTE_USER") ),
 		NullCheck( msg ) );
 
-	closelog();
+/* don't want to close log at this point */
+/*	closelog(); */
 #endif
 }
 

@@ -1,5 +1,8 @@
 /* config.h.in.  Generated automatically from configure.in by autoheader.  */
 
+/* Define if you have the wait3 system call.  */
+#undef HAVE_WAIT3
+
 /* Define if you have the ANSI C header files.  */
 #undef STDC_HEADERS
 
@@ -100,6 +103,11 @@
 #undef CONF_USE_RLIMIT_NPROC
 #undef CONF_USE_RLIMIT_NOFILE
 #undef CONF_USE_RLIMIT_MEMLOCK
+
+/*
+ * Support for reporting rusage/return status
+ */
+#undef CONF_REPORT_RUSAGE
 
 /* Define if you have the <ctype.h> header file.  */
 #undef HAVE_CTYPE_H

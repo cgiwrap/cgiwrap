@@ -97,6 +97,11 @@
 #undef CONF_USE_RLIMIT_MEMLOCK
 
 /*
+ * Support for reporting rusage/return status
+ */
+#undef CONF_REPORT_RUSAGE
+
+/*
  * OS Specific Definitions
  */
 #undef _HPUX_SOURCE
