@@ -422,7 +422,7 @@ void MSG_Error_ExecutionNotPermitted(char *path, char *reason)
 	exit(1);
 }
 
-void MSG_Error_AccessControl(char *why, char *controlfile)
+void MSG_Error_AccessControl(char *why, char *allowfile, char *denyfile)
 {
 	MSG_Header("CGIWrap Error", "Access Control");
 	
@@ -435,13 +435,20 @@ void MSG_Error_AccessControl(char *why, char *controlfile)
 	}
 	printf("\t%s\n", why);	
 	
-	if ( controlfile )
+	if ( allowfile || denyfile )
 	{
 		if ( MSG_HTMLMessages )
 		{
 			printf("<P>\n");
 		}
-		printf("\tAccess Control File: %s\n", controlfile);
+		if ( allowfile )
+		{
+			printf("\tAccess Control Allow File: %s\n", allowfile);
+		}
+		if ( denyfile )
+		{
+			printf("\tAccess Control Deny File: %s\n", denyfile);
+		}
 	}
 
 	MSG_Footer();

@@ -327,75 +327,25 @@ void ChangeToCGIDir(char *scriptPath)
 }
 
 /*
- * Perform checks on the userid 
+ * Perform checks on the userid (global checks)
  */
 void CheckUser(struct passwd *user)
 {
-#if defined(CONF_DENYFILE) || defined(CONF_ALLOWFILE)
-	int deny_exists=0, allow_exists=0;
-	int in_deny, in_allow;	
-
 #if defined(CONF_CHECKHOST)
 	if ( ( !getenv("REMOTE_ADDR") ) || (getenv("REMOTE_ADDR")[0] == '\0') )
 	{
 		Log(user->pw_name, "-", "no remote host");
-		MSG_Error_General("Your host (null) is not allowed to run this");
+		MSG_Error_General("Cannot determine if your host is allowed to run this script.");
 	}
 #endif
 
-#if defined(CONF_DENYFILE)
-	deny_exists = FileExists(CONF_DENYFILE);
-#endif
-#if defined(CONF_ALLOWFILE)
-	allow_exists = FileExists(CONF_ALLOWFILE);
-#endif
-	in_deny = 0;
-	in_allow = 0;
-
-#if defined(CONF_DENYFILE)
-	if ( deny_exists )
-	{
-	        DEBUG_Str("Checking deny file for",user->pw_name);
-		in_deny = UserInFile(CONF_DENYFILE, user->pw_name);
-	}
-#endif
-#if defined(CONF_ALLOWFILE)
-	if ( allow_exists )
-	{
-	        DEBUG_Str("Checking allow file for",user->pw_name);
-		in_allow = UserInFile(CONF_ALLOWFILE, user->pw_name);
-	}
-#endif
-
-	if ( !deny_exists && !allow_exists )
-	{
-		Log(user->pw_name, "-", "access control files not found");
-#if defined(CONF_ALLOWFILE) && defined(CONF_DENYFILE)
-		MSG_Error_AccessControl("Access control files not found!",
-			CONF_ALLOWFILE " and " CONF_DENYFILE);
-#elif defined(CONF_ALLOWFILE)
-		MSG_Error_AccessControl("Access control file not found!",
-			CONF_ALLOWFILE);
-#elif defined(CONF_DENYFILE)
-		MSG_Error_AccessControl("Access control file not found!",
-			CONF_DENYFILE);
-#endif
-	}
-
-	if ( (in_allow && in_deny) ||
-		( allow_exists && !in_allow ) ||
-		( deny_exists && in_deny ) )
-	{
-		Log(user->pw_name, "-", "user/host not permitted");
-		MSG_Error_AccessControl("Script userid and/or remote host not permitted!",NULL);
-	}
-#endif
 
 #if defined(CONF_MINIMUM_UID)
 	if ( user->pw_uid < CONF_MINIMUM_UID )
 	{
 		Log(user->pw_name, "-", "uid less than minimum");
-		MSG_Error_AccessControl("UID of script userid less than configured minimum.",NULL);
+		MSG_Error_AccessControl("UID of script userid less than configured minimum.",
+			NULL, NULL);
 	}
 #endif
 
@@ -403,7 +353,8 @@ void CheckUser(struct passwd *user)
 	if ( user->pw_gid < CONF_MINIMUM_GID )
 	{
 		Log(user->pw_name, "-", "gid less than minimum");
-		MSG_Error_AccessControl("GID of script userid less than configured minimum.",NULL);
+		MSG_Error_AccessControl("GID of script userid less than configured minimum.",
+			NULL, NULL);
 	}
 #endif
 
@@ -423,13 +374,151 @@ void CheckUser(struct passwd *user)
 	if (found == 0)
 	{
 	  Log(user->pw_name, "-", "restricted login shell");
-	  MSG_Error_AccessControl("Restricted login shell, permission denied.",NULL);
+	  MSG_Error_AccessControl("Restricted login shell, permission denied.",
+	  	NULL, NULL);
 	}
+	}
+#endif
+
+#if defined(CONF_CHECKHOST)
+	if ( ( !getenv("REMOTE_ADDR") ) || (getenv("REMOTE_ADDR")[0] == '\0') )
+	{
+		Log(user->pw_name, "-", "no remote host");
+		MSG_Error_General("Cannot determine if your host is allowed to run this script.");
+	}
+#endif
+
+#if defined(CONF_REQUIRE_REDIRECT_URL)
+	if ( ( !getenv("REDIRECT_URL") ) || (getenv("REDIRECT_URL")[0] == '\0') )
+	{
+		Log(user->pw_name, "-", "no redirect url");
+		MSG_Error_AccessControl("REDIRECT_URL not in environment, cgiwrap not invoked via Action/Handler.",
+			NULL, NULL);
 	}
 #endif
 
 }
 
+
+/*
+ * Perform checks on the userid (global checks)
+ */
+void CheckUserAccess(struct passwd *user)
+{
+#if defined(CONF_DENYFILE) || defined(CONF_ALLOWFILE)
+	char *denyfile = NULL;
+	char *allowfile = NULL;
+	
+#if defined(CONF_DENYFILE)
+	denyfile = CONF_DENYFILE;
+#endif
+#if defined(CONF_ALLOWILE)
+	allowfile = CONF_ALLOWFILE;
+#endif
+
+	CheckAccess_Helper(user, allowfile, denyfile);
+#endif
+}
+
+/*
+ * Build paths of the vhost access control files, and check to
+ * see if they allow this access. If not found, fail. 
+ */
+void CheckVHostUserAccess(struct passwd *user)
+{
+#if defined(CONF_VHOST_ALLOWDIR) || defined(CONF_VHOST_DENYDIR)
+	char *denyfile = NULL;
+	char *allowfile = NULL;
+	char *http_host = getenv("HTTP_HOST");
+	char *lower_http_host = NULL;
+	int i;
+		
+	/* Get the vhost we are running on */
+	if ( ! http_host || ! http_host[0] )
+	{
+		MSG_Error_AccessControl(
+			"Cannot determine virtual host for access control.", NULL, NULL);
+	}
+	
+	/* Force to all lowercase */
+	lower_http_host = (char *) SafeMalloc(strlen(http_host) + 1,
+		"lower_http_host");
+	for (i=0; i<=strlen(http_host); i++)
+	{
+		lower_http_host[i] = tolower(http_host[i]);
+	}
+	free(http_host);
+
+	/* Now build the two filenames */	
+#if defined(CONF_VHOST_ALLOWDIR)
+	allowfile = (char *) SafeMalloc(strlen(CONF_VHOST_ALLOWDIR) + 1 +
+		strlen(lower_http_host) + 1, "vhost allowfile");
+	strcpy(allowfile, CONF_VHOST_ALLOWDIR);
+	strcat(allowfile, "/");
+	strcat(allowfile, lower_http_host);
+#endif
+
+#if defined(CONF_VHOST_DENYDIR)
+	denyfile = (char *) SafeMalloc(strlen(CONF_VHOST_DENYDIR) + 1 +
+		strlen(lower_http_host) + 1, "vhost denyfile");
+	strcpy(denyfile, CONF_VHOST_DENYDIR);
+	strcat(denyfile, "/");
+	strcat(denyfile, lower_http_host);
+#endif
+
+	CheckAccess_Helper(user, allowfile, denyfile);
+	
+	/* Clean up */
+	free(denyfile);
+	free(allowfile);
+	free(lower_http_host);
+#endif
+}
+
+void CheckAccess_Helper(struct passwd *user, char *allowfile, char *denyfile)
+{
+	int deny_exists=0, allow_exists=0;
+	int in_deny=0, in_allow=0;	
+
+	/* If neither specified, we're not configured for it */
+	if ( !allowfile && !denyfile )
+	{
+		return;
+	}
+
+	if ( denyfile )
+		deny_exists = FileExists(denyfile);
+	if ( allowfile )
+		allow_exists = FileExists(allowfile);
+
+	if ( !deny_exists && !allow_exists )
+	{
+		Log(user->pw_name, "-", "access control files not found");
+		MSG_Error_AccessControl("Access control files not found!",
+			allowfile, denyfile);
+	}
+
+	if ( deny_exists )
+	{
+	        DEBUG_Str("Checking deny file for",user->pw_name);
+		in_deny = UserInFile(denyfile, user->pw_name);
+	}
+	if ( allow_exists )
+	{
+	        DEBUG_Str("Checking allow file for",user->pw_name);
+		in_allow = UserInFile(allowfile, user->pw_name);
+	}
+
+	if ( (in_allow && in_deny) ||
+		( allow_exists && !in_allow ) ||
+		( deny_exists && in_deny ) )
+	{
+		Log(user->pw_name, "-", "user/host not permitted");
+		MSG_Error_AccessControl(
+			"Script userid and/or remote host not permitted!",
+			NULL, NULL);
+	}
+}
 
 
 /*
@@ -897,11 +986,12 @@ void ChangeAuxGroups(struct passwd *user)
 
 		for ( j=0; j<i; j++ )
 		{
-printf("checking %d against %d\n", groups[j], CONF_MINIMUM_GID);
 			if ( groups[j] < CONF_MINIMUM_GID )
 			{
                 		Log(user->pw_name, "-", "supplementary gid less than minimum");
-                		MSG_Error_AccessControl("Supplementary GID of script userid less than configured minimum.",NULL);
+                		MSG_Error_AccessControl(
+					"Supplementary GID of script userid less than configured minimum.",
+					NULL, NULL);
 			}
 		}
 	}
@@ -1120,7 +1210,7 @@ void SetScriptName(char *userStr, char *scrStr )
 	char *buf;
 	char *name;
 
-#if defined(CONF_CHECK_REDIRECT_URL)
+#if defined(CONF_USE_REDIRECT_URL)
 	char *redurl = getenv("REDIRECT_URL");
 	int len;
 

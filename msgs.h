@@ -19,7 +19,7 @@ void MSG_Error_General(char *message);
 void MSG_Error_ServerUser(char *msg);
 void MSG_Error_ExecutionNotPermitted(char *path, char *reason);
 void MSG_Error_SystemError(char *when);
-void MSG_Error_AccessControl(char *why, char *controlfile);
+void MSG_Error_AccessControl(char *why, char *allowfile, char *denyfile);
 void MSG_Error_ExecFailed(void);
 void MSG_Error_NoSuchUser(char *user);
 void MSG_Error_NoScriptDir(void);

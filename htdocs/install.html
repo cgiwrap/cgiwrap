@@ -134,6 +134,9 @@ this is not recommended
 <DT>--with-check-shell
 <DD>enable check for a valid user shell
 
+<DT>--with-require-redirect-url
+<DD>require that REDIRECT_URL be set in calling environment
+
 <DT>--with-chroot=PATH
 <DD>chroots script to PATH prior to script execution, requires
 specific environment to be set up. See <A HREF="chroot.html">chroot docs</A>
@@ -210,6 +213,12 @@ for more details.
 
 <DT>--with-deny-file=FILE
 <DD>limit cgiwrap usage
+
+<DT>--with-vhost-allow-dir=DIR
+<DD>limit cgiwrap usage specific to each vhost, to restrict UnixTools.ORG, you would create the access file '<TT>DIR/unixtools.org</TT>'.
+
+<DT>--with-vhost-deny-dir=DIR
+<DD>limit cgiwrap usage specific to each vhost
 
 <DT>--with-host-checking
 <DD>allow specifying hosts in allow/deny files

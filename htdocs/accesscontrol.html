@@ -33,4 +33,12 @@ With host checking enabled, it is (i think):
 <P>
 where x is the network and y is the mask. Userid can be * to match all users
 at that network/mask.
+<P>
+<H3>VHost Access Control</H3>
+If the vhost based access control option is enabled, cgiwrap will check a
+per-vhost access control file for access. The files are placed in the vhost-allow-dir
+and vhost-deny-dir specified at configure time, and are named according to the all-lowercase
+value of HTTP_HOST.
+<P>
+If both global and vhost are enabled, both wil be checked.
   

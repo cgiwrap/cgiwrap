@@ -33,13 +33,29 @@ AC_ARG_WITH( perl,
 dnl
 dnl Check for REDIRECT_URL when building SCRIPT_NAME
 dnl
-AC_MSG_CHECKING(for check-redirect-url)
-AC_ARG_WITH( check-redirect-url,
-	[  --with-check-redirect-url]
+AC_MSG_CHECKING(for use-redirect-url)
+AC_ARG_WITH( use-redirect-url,
+	[  --with-use-redirect-url]
 	[  use REDIRECT_URL in building SCRIPT_NAME if available],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_CHECK_REDIRECT_URL)
+			AC_DEFINE(CONF_USE_REDIRECT_URL)
+			AC_MSG_RESULT([enabled])
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
+	])
+
+AC_MSG_CHECKING(for require-redirect-url)
+AC_ARG_WITH( require-redirect-url,
+	[  --with-require-redirect-url]
+	[  require REDIRECT_URL in environment, to force use of Action/Handlers],
+	[
+		if test "x$withval" != xno; then
+			AC_DEFINE(CONF_REQUIRE_REDIRECT_URL)
 			AC_MSG_RESULT([enabled])
 		else
 			AC_MSG_RESULT([disabled])
@@ -915,6 +931,47 @@ AC_ARG_WITH( deny-file,
 		if test "x$withval" != xno; then
 			AC_DEFINE_UNQUOTED(CONF_DENYFILE, "$withval")
 			AC_MSG_RESULT([enabled, file is "$withval"])
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
+	])
+
+
+dnl
+dnl Options for access control files
+dnl
+
+AC_MSG_CHECKING(for vhost-allow-dir)
+AC_ARG_WITH( vhost-allow-dir,
+	[  --with-vhost-allow-dir=FILE  (disabled)]
+	[  limit cgiwrap usage on vhosts],
+	[
+		if test "x$withval" = x; then
+			AC_MSG_RESULT([disabled])
+		elif test "x$withval" != xno; then
+			AC_DEFINE_UNQUOTED(CONF_VHOST_ALLOWDIR, "$withval")
+			AC_MSG_RESULT([enabled, dir is "$withval"])
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
+	])
+
+AC_MSG_CHECKING(for vhost-deny-dir)
+AC_ARG_WITH( vhost-deny-dir,
+	[  --with-vhost-deny-dir=FILE  (disabled)]
+	[  limit cgiwrap usage on vhosts],
+	[
+		if test "x$withval" = x; then
+			AC_MSG_RESULT([disabled])
+		elif test "x$withval" != xno; then
+			AC_DEFINE_UNQUOTED(CONF_VHOST_DENYDIR, "$withval")
+			AC_MSG_RESULT([enabled, dir is "$withval"])
 		else
 			AC_MSG_RESULT([disabled])
 		fi

@@ -114,7 +114,9 @@ int main (int argc, char *argv[])
 	DEBUG_Str("   Home Dir:", user->pw_dir);
 
 	/* Perform checks to make sure this user is allow to use CGI scripts */
-	CheckUser(user);
+	CheckUser(user); /* minuid/mingid/shell */
+	CheckUserAccess(user); /* global config files */
+	CheckVHostUserAccess(user); /* vhost config files */
 
 	/* Determine the base directory where this user's CGI scripts
 		are to be stored */
