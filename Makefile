@@ -16,25 +16,33 @@ INSTALLPERMS=4750
 INSTALLOWNER=root
 INSTALLGROUP=root
 
-VERSION=2.6
+VERSION=2.7
 
 #
-# Some options suggestion by users
+# CGIwrap Configuration Options - Overides config.h
 #
-# SunOS 4.1.4
-# 	CC=gcc
-# 	CCOPT= -O2 -fomit-frame-pointer -pipe
+LOGFILE=/home/local/testhttp.logs/cgiwrap.log
+CGIDIR=public_html/cgi-bin
+#CGIDIR=public_html/auth-cgi-bin
+HTTPD_USER=testhttp
+
 #
-# CDC 4680 EP/IX 2.1.1ad
-#	CC=cc
-#	CCOPT= -systype sysv -I/usr/include/bsd -lbsd
+# AFS libs - only needed if you're compiling with AFS pagsh support
 #
+AFSDIR = /usr/afsws
+AFSLDFLAGS = -L$(AFSDIR)/lib -L$(AFSDIR)/lib/afs
+AFSLIBS = -lkauth -lprot -lubik -lauth -lrxkad -lsys -ldes -lrx \
+	-llwp -lcom_err $(AFSDIR)/lib/afs/util.a -lBSD
+AFS_INC_FLAGS = -I$(AFSDIR)/include
+
 
 #
 # Other Compiler Flags
 #
 CC= gcc
-CCOPT= -O
+CCOPT= -O3
+LDOPT= -O3 #$(AFSLDFLAGS) $(AFSLIBS)
+
 
 #
 # Dependencies and rules
@@ -42,13 +50,17 @@ CCOPT= -O
 all: cgiwrap man
 
 cgiwrap.o: cgiwrap.c config.h Makefile
-	$(CC) $(CCOPT) -c cgiwrap.c 
+	$(CC) $(CCOPT) \
+		-DCGIDIR=\"$(CGIDIR)\" \
+		-DHTTPD_USER=\"$(HTTPD_USER)\" \
+		-DLOGFILE=\"$(LOGFILE)\" \
+		-c cgiwrap.c 
 
 debug.o: debug.c config.h Makefile
 	$(CC) $(CCOPT) -c debug.c
 
 cgiwrap: debug.o cgiwrap.o
-	$(CC) $(CCOPT) cgiwrap.o debug.o -o cgiwrap
+	$(CC) cgiwrap.o debug.o $(LDOPT) -o cgiwrap
 
 man: cgiwrap.1
 	nroff -man cgiwrap.1 > cgiwrap.cat

@@ -318,7 +318,10 @@ void main (int argc, char *argv[])
 	DEBUG = 1;
 #endif	
 
-	DEBUG_Msg("HTTP/1.0 200 Ok");
+	if ( !strncmp(argv[0], "nph-", 4) )
+	{
+		DEBUG_Msg("HTTP/1.0 200 Ok");
+	}
 	DEBUG_Msg("Content-Type: text/plain\n\n");
 
 /* Redirect stderr to stdout */
@@ -326,6 +329,22 @@ void main (int argc, char *argv[])
 	DEBUG_Msg("\nRedirecting STDERR to STDOUT");
 	dup2(1,2);
 #endif
+
+/* Check who is running this script */
+#ifdef CHECK_HTTPD_USER
+	if ( !(user = getpwnam(HTTPD_USER)) )
+	{
+		DoError("HTTPD_USER not found.");
+	}
+	else
+	{
+		if ( getuid() != user->pw_uid )
+		{
+			DoError("Real UID does not match HTTPD_USER.");
+		}
+	}
+#endif
+
 
 	/* Set CPU and other limits */
 	SetLimits();
@@ -382,7 +401,7 @@ void main (int argc, char *argv[])
 	
 	if ( !validRequest ) /* nothing at all found */
 	{
-		DoError("Couldn't find used and script name, check your URL.");
+		DoError("Couldn't find user and script name, check your URL.");
 	}
 
 	DEBUG_Msg("\nModified Environment Variables:");
@@ -604,10 +623,14 @@ void main (int argc, char *argv[])
 	/**   can start up perl and other things... */
 	/***/
 
-	DEBUG_Str("   Exec String: ", execStr);
+#ifdef AFS_SETPAG
+	DEBUG_Msg("\nSetting AFS PAG");
+	setpag();
+#endif
+
+	DEBUG_Str("\n   Exec String: ", execStr);
 	DEBUG_Msg("\n\nOutput of script follows:");
 	DEBUG_Msg("=====================================================");
-
 
 #ifdef USE_SYSTEM
 	scriptErr = system(execStr);

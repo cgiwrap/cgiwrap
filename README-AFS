@@ -8,3 +8,11 @@ The scripts need to be executable by the user
 
 If you are running httpd authenticated to AFS, you can replace the 
 system:anyuser above with that userid
+
+
+---
+
+If you are using this with AFS I'd suggest making sure to use the AFS PAG 
+support in the config file. This automatically creates a PAG for any 
+script that is launched, that way if the user klog's or something, it 
+won't affect the server or other scripts.

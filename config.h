@@ -8,9 +8,21 @@
 /**  CGIDIR  - directory for CGI's relative to users home dir  */
 /**/
 
-/* #define LOGFILE "cgiwrap.log" /**/
-#define LOGFILE "/home/local/testhttp.logs/cgiwrap.log" /**/
-#define CGIDIR  "public_html/cgi-bin"
+#ifndef LOGFILE
+	/* #define LOGFILE "cgiwrap.log" /**/
+	#define LOGFILE "/home/local/testhttp.logs/cgiwrap.log" /**/
+#endif
+
+#ifndef CGIDIR
+	/* #define CGIDIR  "public_html/cgi-bin" /**/
+	#define CGIDIR  "public_html/auth-cgi-bin" /**/
+#endif
+
+
+#ifndef HTTPD_USER
+	#define HTTPD_USER "testhttp"   /**/
+#endif
+
 
 /**/
 /**  CGIWrap Security and Compile Options      */
@@ -28,6 +40,14 @@
 #undef SETUID_SETEUID	/* Define if have set[ug]id() and sete[ug]id() */
 
 
+/**/
+/**  Define what user httpd will be running as, and whether you want
+/**  to check to make sure it is that user. This is necessary for
+/**  authenticated scripts if you make cgiwrap world executable.
+/**/
+#define CHECK_HTTPD_USER      /**/ 
+
+
 /* Security Checks performed to make sure the SET operations worked */
 #define CHECK_RUID	/* Double check to make sure real UID changed */
 #define CHECK_RGID	/* Double check to make sure real GID changed */
@@ -37,6 +57,8 @@
 /* Set auxilliary groups */
 #define SETGROUPS
 
+/* Create an afs process authentication group */
+/* #define AFS_SETPAG /**/
 
 /* Debugging Output Options*/
 /* Set what the name of the executable must end with to trigger */
@@ -55,7 +77,7 @@
 
 
 /* Do not allow subdirectories of cgi-bin dir */
-#define NO_SUB_DIRS
+#undef NO_SUB_DIRS
 
 
 /* Log all requests coming into this script */

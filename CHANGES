@@ -7,6 +7,12 @@
 /* are chosen in config.h                                         */
 /******************************************************************/
 
+Changes since 2.6:
+   Added HTTPD_USER and CHECK_HTTPD_USER to verify that cgiwrap is being
+   	called by the server. This is for (access to scripts) security, it 
+	doesn't affect system security any. 
+   Added AFS PAG support
+
 Changes since 2.5:
    Moved rlimit call into new subroutine SetLimits
    Changed exec call to an execv and passed argv to support argument passing
