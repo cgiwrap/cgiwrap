@@ -3,6 +3,7 @@
  **  Purpose: Prototypes and defines for routines in util.c
  **/ 
 
+char **CreateARGV( char *scrStr, int argc, char *argv[]);
 char *StripPrefix(char *, char *);
 void ChangeID(struct passwd *user);
 void ChangeAuxGroups(struct passwd *user);

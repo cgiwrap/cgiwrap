@@ -1,8 +1,5 @@
-?MAKE:d_conf_using_afs d_conf_afs_setpag afsccopts afsldopts afslibs: cat contains Setvar Myread Oldconfig 
+?MAKE:d_conf_afs_setpag afsccopts afsldopts afslibs: cat contains Setvar Myread Oldconfig afs
 ?MAKE:	-pick add $@ %<
-?S:d_conf_using_afs:
-?S:	Is AFS installed on this system
-?S:.
 ?S:d_conf_afs_setpag:
 ?S:	Should cgiwrap issue the AFS setpag() call?
 ?S:.
@@ -21,44 +18,22 @@
 ?H:#$d_conf_afs_setpag CONF_AFS_SETPAG		/**/
 ?H:.
 
+case "$afs" in
+true)
+
 $cat <<'EOM'
 
-The next few questions have to do with whether or not AFS is installed on 
-the webserver system. (AFS is the Andrew File System, if you don't know 
-what AFS is, or if you aren't sure if it is installed, answer the first 
-question 'no').
-
-If you answer yes, the questions following will ask you if you want to 
-set an AFS PAG for the script you run, and the locations of the AFS 
-libraries that will need to be linked in with CGIwrap.
+Since your system is running AFS, CGIwrap has an additional option. To 
+prevent user scripts that do anything with authentication from 
+conflicting with other scripts, and to prevent them from conflicting with 
+the authentication of the server (if it is running authenticated), 
+CGIwrap can automatically create a new PAG (Process Authentication Group) 
+for the script. I highly reccomend doing this if you are using AFS.
 
 EOM
-
-case "$d_conf_using_afs" in
-define) dflt='y' ;;
-undef) dflt='n' ;;
-*) dflt="n"
-esac
-
-rp="Is AFS installed on your system?"
-. ./myread
-
-case "$ans" in
-y|Y) val="$define" ;;
-*) val="$undef" ;;
-esac
-
-set d_conf_using_afs
-eval $setvar
-
-
-case "$d_conf_using_afs" in
-"define")
 	
 	case "$d_conf_afs_setpag" in
-	"") dflt='n' ;;
-	"define") dflt='y' ;;
-	"undef") dflt='n' ;;
+	define) dflt='y' ;;
 	*) dflt="n"
 	esac
 
@@ -83,16 +58,29 @@ case "$d_conf_using_afs" in
 esac
 
 
-
 case "$d_conf_afs_setpag" in
-"define")
+define)
+
+$cat <<'EOM'
+
+Ok, you have chosen to compile CGIwrap with AFS support. Since every 
+installation tends to be a little different, I need to know what 
+libraries need to be includes, what paths to search for includes and 
+libraries, etc. These are specific to AFS. If you have installed the AFS 
+client files in the /usr/afsws tree, the defaults should work ok.
+
+Some architectures require additional libraries for AFS support. For 
+example, on HP-UX, you need to include the BSD library. You can add those 
+libraries here if you wish.
+
+EOM
 	
 	case "$afsccopts" in
 	"") dflt='-I/usr/afsws/include' ;;
 	*) dflt="$afsccopts"
 	esac
 
-	rp="AFS include flags for CC?"
+	rp="AFS include flags, such as adding header file search paths?"
 	. ./myread
 	
 	afsccopts=$ans
@@ -104,7 +92,7 @@ case "$d_conf_afs_setpag" in
 	*) dflt="$afsldopts"
 	esac
 
-	rp="AFS ld flags?"
+	rp="AFS ld flags, such as adding library search paths?"
 	. ./myread
 	
 	afsldopts=$ans
@@ -116,7 +104,7 @@ case "$d_conf_afs_setpag" in
 	*) dflt="$afslibs"
 	esac
 
-	rp="AFS lib flags?"
+	rp="AFS lib flags to include necessary libraries?"
 	. ./myread
 	
 	afslibs=$ans

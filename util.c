@@ -5,6 +5,26 @@
 
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
 
+/*
+ * Build the ARGV array for passing to the called script
+ */
+char **CreateARGV( char *scrStr, int argc, char *argv[])
+{
+	char **temp;
+	int i;
+
+	temp = (char **) malloc( (argc+1) * sizeof(char *) );
+	
+	temp[0] = StripPathComponents( CountSubDirs(scrStr), scrStr );
+	temp[argc] = 0;
+
+	for (i=1; i<argc; i++)
+	{
+		temp[i] = argv[i];
+	}
+
+	return temp;
+}
 
 /*
  * Strip one string from the beginning of another string
@@ -137,6 +157,15 @@ void ChangeToCgiDir(struct passwd *user)
  */
 void CheckUser(struct passwd *user)
 {
+#if defined(CONF_ALLOWFILE) || defined(CONF_DENYFILE)
+#if defined(CONF_CHECKHOST)
+      if ( ( !getenv("REMOTE_ADDR") ) | (getenv("REMOTE_ADDR")[0] == '\0') )
+      {
+              Log(user->pw_name, "-", "no remote host");
+              DoError("Your host (null) is not allowed to run this");
+      }
+#endif
+#endif
 #if defined(CONF_ALLOWFILE)
 	if ( ! UserInFile(CONF_ALLOWFILE,user->pw_name) )
 	{
@@ -173,7 +202,7 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 	/* Check if script is in a subdirectory */
 	if ( CountSubDirs(scriptPath) > 0 )
 	{
-		Log(userStr, scrStr, "script in subdir not allowed");
+		Log(user->pw_name, scriptPath, "script in subdir not allowed");
 		DoError("Script is in sub-directory, that is not allowed.");
 	}
 #endif
@@ -382,7 +411,7 @@ void SetResourceLimits(void)
 
 #if defined(CONF_USE_RLIMIT_VMEM) && defined(RLIMIT_VMEM)
 	/* Virtual Memory Limit */
-	struct rimit vmemlim = { 2000000, 2500000 };
+	struct rlimit vmemlim = { 2000000, 2500000 };
 #endif
 
 #if defined(CONF_USE_RLIMIT_CPU) && defined(RLIMIT_CPU)
@@ -390,7 +419,7 @@ void SetResourceLimits(void)
 	setrlimit( RLIMIT_CPU, &cpulim );
 #endif
 
-#if defined(CONF_USE_RLIMIT_CPU) && defined(RLIMIT_VMEM)
+#if defined(CONF_USE_RLIMIT_VMEM) && defined(RLIMIT_VMEM)
 	DEBUG_Msg("Setting Limits (Virtual Memory)\n");
 	setrlimit( RLIMIT_VMEM, &vmemlim );
 #endif
@@ -473,12 +502,12 @@ void ChangeID ( struct passwd *user)
  */
 void ChangeAuxGroups(struct passwd *user)
 {
-#if defined(HAS_SETGROUPS)
+#if defined(HAS_SETGROUPS) & defined(CONF_SETGROUPS)
 	if ( setgroups(0, NULL) == -1 )
 		DoPError("setgroups() failed!");
 #endif
 
-#if defined(HAS_INITGROUPS) & defined(CONF_SETGROUPS)
+#if defined(HAS_INITGROUPS) & defined(CONF_INITGROUPS)
 	if ( initgroups( user->pw_name, user->pw_gid ) == -1 )
 		DoPError("initgroups() failed!");
 #endif
@@ -492,6 +521,21 @@ int UserInFile(char *filename, char *user)
 {
 	FILE *file;
 	char temp[200];
+#if defined(CONF_CHECKHOST)
+      int unlen,addr[4],mask[4],snet[4];
+      char *i;
+#endif
+
+#if defined(CONF_CHECKHOST)
+      unlen = strlen(user);
+      mask[0]=255; mask[1]=255; mask[2]=255; mask[3]=255;
+      if (sscanf(getenv("REMOTE_ADDR"),"%d.%d.%d.%d",
+              &addr[0],&addr[1],&addr[2],&addr[3]) != 4 )
+      {
+              Log(user, "-", "no remote host");
+              DoError("Your host (undetermined) is not allowed to run this");
+      }
+#endif
 
 	if ( (file=fopen(filename,"r")) == NULL )
 	{
@@ -506,6 +550,28 @@ int UserInFile(char *filename, char *user)
 			fclose(file);
 			return 1;
 		}
+#if defined(CONF_CHECKHOST)
+              else if (( !strncmp(temp,user,unlen) ) && (temp[unlen] == '@') )
+              {
+                      i = &temp[unlen];
+                      while (i != NULL)
+                      {
+                              i++;
+                              sscanf(i,"%d.%d.%d.%d/%d.%d.%d.%d",
+                              &snet[0],&snet[1],&snet[2],&snet[3],
+                              &mask[0],&mask[1],&mask[2],&mask[3]);
+
+                              if ((snet[0] == (mask[0] & addr[0])) &&
+                                  (snet[1] == (mask[1] & addr[1])) &&
+                                  (snet[2] == (mask[2] & addr[2])) &&
+                                  (snet[3] == (mask[3] & addr[3])))
+                              {
+                                      return 1;
+                              }
+                      i = strchr(i,',');
+                      }
+              }
+#endif
 	}
 	fclose(file);
 
@@ -533,22 +599,11 @@ void SendHeader(char *type)
  */
 void DoPError (char *msg)
 {
-	extern int errno;
-#if defined(HAS_SYS_ERRLIST)
-	extern char *sys_errlist[];
-#endif
-
 	SendHeader("text/plain");
 	printf("\n");
 
 	printf("CGIwrap Error: %s\n", msg);
-
-#if defined(HAS_SYS_ERRLIST)
-	printf("Error: %s (%d)\n", sys_errlist[errno], errno);
-#elif defined(HAS_STRERROR)
 	printf("Error: %s (%d)\n", strerror(errno), errno);
-#endif
-
 	exit(1);
 }
 

@@ -5,6 +5,8 @@
 #include <sys/stat.h>		/* For file stating */
 #include <signal.h>		/* For signals stuff */
 
+#include <errno.h>
+
 #if defined(I_STDLIB)
 #include <stdlib.h>	/* Standard library functions */
 #endif

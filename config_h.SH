@@ -22,8 +22,8 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
  * running Configure.
  *
  * Feel free to modify any of this as the need arises.  Note, however,
- * that running config.h.SH again will wipe out any changes you've made.
- * For a more permanent change edit config.sh and rerun config.h.SH.
+ * that running config_h.SH again will wipe out any changes you've made.
+ * For a more permanent change edit config.sh and rerun config_h.SH.
  *
  * \$Id$
  */
@@ -86,23 +86,12 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
  */
 #$d_setruid HAS_SETRUID		/**/
 
-/* HAS_STRERROR:
- *	This symbol, if defined, indicates that the strerror routine is
- *	available to translate error numbers to strings.
+/* HAS_STRDUP:
+ *	This symbol, if defined, indicates that the strdup routine is
+ *	available to duplicate strings in memory. Otherwise, roll up
+ *	your own...
  */
-/* HAS_SYS_ERRLIST:
- *	This symbol, if defined, indicates that the sys_errlist array is
- *	available to translate error numbers to strings. The extern int
- *	sys_nerr gives the size of that table.
- */
-/* strerror:
- *	This preprocessor symbol is defined as a macro if strerror() is
- *	not available to translate error numbers to strings but sys_errlist[]
- *	array is there.
- */
-#$d_strerror HAS_STRERROR		/**/
-#$d_syserrlst HAS_SYS_ERRLIST	/**/
-#$d_strerrm strerror(e) ((e)<0||(e)>=sys_nerr?"unknown":sys_errlist[e]) /**/
+#$d_strdup HAS_STRDUP		/**/
 
 /* HAS_SYSTEM:
  *	This symbol, if defined, indicates that the system routine is
@@ -197,8 +186,24 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
  *	Defined to be the filename that cgiwrap checks to see what users are
  *	not allowed to use cgiwrap scripts.
  */
+/* CONF_CHECKHOST:
+ *	Defined if you have enabled host address checking in the allow/deny
+ *	files.
+ */
 #$d_conf_allowfile CONF_ALLOWFILE "$allowfile"		/**/
 #$d_conf_denyfile CONF_DENYFILE "$denyfile"		/**/
+#$d_conf_checkhost CONF_CHECKHOST	/**/
+
+/* CONF_SETGROUPS:
+ *	Defined if you want cgiwrap to clear the auxilliary groups for the 
+ *	script process.
+ */
+/* CONF_INITGROUPS:
+ *	Defined if you want cgiwrap to set the auxilliary groups for the 
+ *	script process.
+ */
+#$d_conf_setgroups CONF_SETGROUPS		/**/
+#$d_conf_initgroups CONF_INITGROUPS		/**/
 
 /* CONF_CGIDIR:
  *	Relative path from the users home dir to their cgi directory, 
@@ -254,12 +259,6 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
  */
 #$d_conf_redir_stderr CONF_REDIR_STDERR		/**/
 
-/* CONF_SETGROUPS:
- *	Defined if you want cgiwrap to set the auxilliary groups for the 
- *	script process.
- */
-#$d_conf_setgroups CONF_SETGROUPS		/**/
-
 /* CONF_USESET:
  *	Defined if you want cgiwrap to use the set_ calls.
  */
@@ -308,10 +307,6 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
  *	This symbol, if defined, indicates that the sigset routine is available.
  */
 #$d_sigset HAS_SIGSET		/**/
-
-/* HAS_STRDUP:
- */
-#$d_strdup HAS_STRDUP		/**/
 
 #endif
 !GROK!THIS!

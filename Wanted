@@ -1,6 +1,7 @@
 >CONF_AFS_SETPAG
 >CONF_ALLOWFILE
 >CONF_CGIDIR
+>CONF_CHECKHOST
 >CONF_CHECK_HTTPD_USER
 >CONF_CHECK_SCRGID
 >CONF_CHECK_SCRSGID
@@ -8,6 +9,7 @@
 >CONF_CHECK_SCRUID
 >CONF_DENYFILE
 >CONF_HTTPD_USER
+>CONF_INITGROUPS
 >CONF_LOGFILE
 >CONF_LOG_REQUESTS
 >CONF_REDIR_STDERR
@@ -31,9 +33,7 @@
 >HAS_SETUID
 >HAS_SIGSET
 >HAS_STRDUP
->HAS_STRERROR
 >HAS_SYSTEM
->HAS_SYS_ERRLIST
 >I_LIMITS
 >I_PWD
 >I_STDLIB
@@ -42,7 +42,6 @@
 >I_SYS_TIME
 >I_SYS_TYPES
 >I_UNISTD
->strerror
 >void
 afsccopts
 afsldopts
@@ -58,7 +57,9 @@ d_conf_check_scrgid
 d_conf_check_scrsgid
 d_conf_check_scrsuid
 d_conf_check_scruid
+d_conf_checkhost
 d_conf_denyfile
+d_conf_initgroups
 d_conf_redir_stderr
 d_conf_setgroups
 d_conf_subdirs
@@ -81,9 +82,6 @@ d_setruid
 d_setuid
 d_sigset
 d_strdup
-d_strerrm
-d_strerror
-d_syserrlst
 d_system
 date
 denyfile

@@ -1,4 +1,4 @@
-?MAKE:d_conf_subdirs: cat contains Setvar Myread Oldconfig 
+?MAKE:d_conf_subdirs: cat contains Setvar Myread Oldconfig conf_cgidir
 ?MAKE:	-pick add $@ %<
 ?S:d_conf_subdirs:
 ?S:	Defined if you want to allow users to store cgi scripts

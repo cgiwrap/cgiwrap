@@ -1,11 +1,25 @@
 Log of Changes to CGIwrap:
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+Changes since 3.22:
+   Setgroups was being used no matter what you said in configure - fixed
+   Problem with undefined variables in Log call for subdirectories - fixed
+   Removed declaration of sys_errlist, and errno in util.c, since I don't 
+think they were necessary. And they were causing problems on some 
+architectures.
+   Added in user contributed host address checking code
+   Upgraded to using dist-3.0 PL60 for building the Configure script.
+   Separated initgroups() and setgroups() checks into two separate 
+defines, and improved documentation in configure script for these options.
+
+Changes since 3.21:
+   argv[0] is now automatically changed to the name of the script that is
+being executed
+
 Changes since 3.2:
    Rlimit defines weren't set properly when rlimit not available - fixed
    The optimizer/debugger flag wasn't being used in the makefile -- fixed
    Defaults for checks (y/n) were not being set - fixed
    
-
 Changes since 3.11:
    MAJOR code cleanup and simplification. The code should be ALOT easier to 
 read and understand.

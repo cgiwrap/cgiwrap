@@ -115,7 +115,7 @@ void main (int argc, char *argv[])
 	DoError("Configuration Error: system() call not available");
 #endif
 #else
-	execv(scriptPath, argv);
+	execv(scriptPath, CreateARGV(scrStr, argc,argv));
 #endif
 
 }

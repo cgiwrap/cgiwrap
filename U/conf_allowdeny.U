@@ -1,4 +1,4 @@
-?MAKE:d_conf_allowfile allowfile d_conf_denyfile denyfile : cat contains Setvar Myread Oldconfig 
+?MAKE:d_conf_allowfile allowfile d_conf_denyfile denyfile d_conf_checkhost : cat contains Setvar Myread Oldconfig 
 ?MAKE:	-pick add $@ %<
 ?S:d_conf_allowfile:
 ?S:	Should we check an allow file
@@ -12,6 +12,9 @@
 ?S:denyfile:
 ?S:	Shell sym for denyfile filename
 ?S:.
+?S:d_conf_checkhost:
+?S:	Defined if you enabled host address checking
+?S:.
 ?C:CONF_ALLOWFILE:
 ?C:	Defined to be the filename that cgiwrap checks to see what users are
 ?C:	allowed to use cgiwrap scripts.
@@ -20,9 +23,16 @@
 ?C:	Defined to be the filename that cgiwrap checks to see what users are
 ?C:	not allowed to use cgiwrap scripts.
 ?C:.
+?C:CONF_CHECKHOST:
+?C:	Defined if you have enabled host address checking in the allow/deny
+?C:	files.
+?C:.
 ?H:#$d_conf_allowfile CONF_ALLOWFILE "$allowfile"		/**/
 ?H:#$d_conf_denyfile CONF_DENYFILE "$denyfile"		/**/
+?H:#$d_conf_checkhost CONF_CHECKHOST	/**/
 ?H:.
+
+
 $cat <<'EOM'
 
 The next question(s) deal with whether you want CGIwrap to restrict it's 
@@ -35,9 +45,13 @@ There are two optional files, an allow file or a deny file. If you enable
 the option to check the allow file, only users listed in the allow file 
 will be allowed to use CGIwrap. If you enable the option to check the 
 deny file, all userids except those that are listed in the deny file will be
-allowed to use CGIwrap.
+allowed to use CGIwrap. 
 
-The file format is one userid per line.
+An option for restricting access further includes checking the remote host
+address against a range of IP addresses. This allows you to restrict cgi 
+usage by a particular user to only certain hosts.
+
+The file format is one userid per line, unless you enable host checking.
 
 EOM
 
@@ -97,9 +111,7 @@ case "$d_conf_allowfile" in
 undef)
 
 	case "$d_conf_denyfile" in
-	'')       dflt='n' ;;
 	define)   dflt='y' ;;
-	undef)    dflt='n' ;;
 	*)        dflt='n'
 	esac
 
@@ -127,12 +139,6 @@ denied use of CGIwrap.
 
 EOM
 
-
-
-#
-# Get the log file name
-#
-
 		case "$denyfile" in
 		'')	dflt="/usr/adm/cgiwrap.deny" ;;
 		*)	dflt="$denyfile" ;;
@@ -154,3 +160,45 @@ EOM
 esac
 
 
+case "$d_conf_allowfile$d_conf_denyfile" in
+undefdefine|defineundef|definedefine)
+
+$cat <<'EOM'
+
+If you want to enable checking the remote host against a list of specified
+host addresses, answer yes to the following question. If you do enable
+this, the formats allowed by the allow/deny files are: 
+
+username
+ or
+username@subnet/mask
+ or
+username@subnet1/mask1,subnet2/mask2,...,subnetn/maskn
+
+e.g
+myuser@1.2.3.4/255.255.255.255,2.3.0.0/255.255.0.0
+
+would allow myuser's CGI scripts to run from the host 1.2.3.4 or any hosts
+whose IP address starts 2.3. (e.g. 2.3.56.78) if in the allow file or deny
+access from those hosts if in the deny file.
+
+EOM
+
+	case "$d_conf_checkhost" in
+	define)   dflt='y' ;;
+	*)        dflt='n'
+	esac
+
+	rp="Check Host Address?"
+	. ./myread
+
+	case "$ans" in
+	y|Y) val="$define" ;;
+	*) val="$undef" ;;
+	esac
+	
+	set d_conf_checkhost
+	eval $setvar
+	
+	;;
+esac
