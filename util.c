@@ -740,7 +740,7 @@ int UserInFile(char *filename, char *user)
 	while ( !feof(file) )
 	{
 		temp[0] = 0;
-		if ( fgets(temp, HUGE_STRING_LEN, file) <= 0 )
+		if ( !fgets(temp, HUGE_STRING_LEN, file) )
 		{
 			fclose(file);
 			return 0;
@@ -807,7 +807,7 @@ void LogInit (void)
 #if defined(CONF_LOG_USEFILE)
 	logfd = open(CONF_LOG_LOGFILE, O_WRONLY | O_CREAT | O_APPEND, 
 		S_IRUSR | S_IWUSR);
-	if ( !logfd )
+	if ( logfd == -1 )
 	{
 		MSG_Error_SystemError("Could not open log file for appending!");
 	}
