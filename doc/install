@@ -11,7 +11,7 @@
           options. You will need to specify some of them. At the very
           least, you will want to specify "--with-httpd-user=USERID".
           
-   Type "./configure -options-".
+   Type "./configure <options>" with whatever options you need..
           
    Type "make"
           

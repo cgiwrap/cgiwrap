@@ -17,7 +17,7 @@ CC=@CC@
 CFLAGS=@GCC_WALL_OPT@ @CFLAGS@ @CPPFLAGS@
 LDFLAGS=@LDFLAGS@ @AFSLDFLAGS@
 LIBS=@AFSLIBS@ @LIBS@
-OBJS=cgiwrap.o debug.o util.o fetch.o stdutil.o msgs.o
+OBJS=cgiwrap.o debug.o util.o fetch.o stdutil.o msgs.o @GETUSERSHELL@
 
 #
 # Dependencies for building cgiwrap
@@ -104,7 +104,7 @@ tardistpgp: tardist
 	pgp -sba ../cgiwrap-$(VERSION).tar.gz
 	rm -f ../cgiwrap-$(VERSION).tar.gz.sig
 	mv ../cgiwrap-$(VERSION).tar.gz.asc ../cgiwrap-$(VERSION).tar.gz.sig
-	
+
 commit: configure config.h.in docs
 	cvs commit -m "" .
 

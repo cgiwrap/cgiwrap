@@ -268,6 +268,28 @@ void CheckUser(struct passwd *user)
 		MSG_Error_AccessControl("UID of script userid less than configured minimum.");
 	}
 #endif
+
+#if defined(CONF_CHECKSHELL)
+	{
+	char *sh, *getusershell();
+	int found = 0;
+
+	while ( sh = getusershell() )
+	{
+		if (0 == strcmp( sh, user->pw_shell ))
+		{
+		 	found = 1;
+			break;
+		}
+	}
+	if (found == 0)
+	{
+	  Log(user->pw_name, "-", "restricted login shell");
+	  MSG_Error_AccessControl("Restricted login shell, permission denied.");
+	}
+	}
+#endif
+
 }
 
 

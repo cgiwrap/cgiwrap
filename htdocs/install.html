@@ -13,7 +13,7 @@ there are any hints for your platform.
 configuration options. You will need to specify some of them. At 
 the very least, you will want to specify "--with-httpd-user=USERID".
 
-	<P><DT>Type "./configure -options-".
+	<P><DT>Type "./configure &lt;options&gt;" with whatever options you need..
 
 	<P><DT>Type "make"
 
@@ -39,9 +39,13 @@ cgiwrap in the cgi-bin directory.
 4750) But if you do this, make sure that the group of cgiwrap is the same 
 as the group that the server runs as.
 
-	<P><DT>*VERY IMPORTANT* - Do NOT allow any user to run scripts 
-directly out of the main cgi-bin directory, as this will allow them to use
-cgiwrap to run any of the other users scripts.
+	<P><DT>*VERY IMPORTANT* - Do NOT allow any non-trusted user to run 
+scripts directly out of the main cgi-bin directory, as this will allow them to use
+cgiwrap to run any of the other users scripts. The reason for this is that 
+if they can run scripts as the same userid as the web server, they can
+subvert some of cgiwrap's security checks to allow them to run other users 
+scripts. I recommend not running ANY scripts on the web server directly, once
+you have cgiwrap installed.
 
 </DL>
 
@@ -120,8 +124,11 @@ this is not recommended
 <DT>--without-check-symlink
 <DD>disable check for symlinked script
 
+<DT>--with-check-shell
+<DD>enable check for a valid user shell
+
 <DT>--with-minimum-uid=UID
-<D>Set the minimum uid of user that can use cgiwrap.
+<D>set the minimum uid of user that can use cgiwrap
 
 <DT>--with-logging-syslog=LABEL
 <DD>enable logging script execution to syslog
@@ -145,7 +152,7 @@ this is not recommended
 <DD>use a file to rewrite user directories
 
 <DT>--without-fixed-path-translated
-<DD>Don't fix the PATH_TRANSLATED variable (pre 3.5 behavior)
+<DD>don't fix the PATH_TRANSLATED variable (pre 3.5 behavior)
 
 <DT>--with-setenv-path=STRING
 <DD>set PATH environment variable to STRING

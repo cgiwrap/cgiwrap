@@ -780,6 +780,33 @@ AC_ARG_WITH( host-checking,
 		AC_MSG_RESULT([disabled])
 	])
 
+AC_MSG_CHECKING(for shell checking)
+AC_ARG_WITH( check-shell,
+	[  --with-check-shell]
+	[  user shell must be in system shells list ],
+	[
+		if test "x$withval" != xno; then
+			AC_DEFINE(CONF_CHECKSHELL)
+			AC_MSG_RESULT([enabled])
+			AC_CHECK_FUNC(getusershell, , [GETUSERSHELL="getusershell.o"])
+			AC_MSG_CHECKING(for OS specific getusershell support)
+			os_specific_msg="none needed"
+			case $target_os in
+			aix* )	
+				LIBS="$LIBS -ls"
+				os_specific_msg="-ls"
+				;;
+			esac
+			AC_MSG_RESULT([$os_specific_msg])
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
+	])
+AC_SUBST(GETUSERSHELL)
+
 dnl
 dnl Options for AFS PAG support
 dnl
