@@ -5,8 +5,10 @@
    version to version.
      _________________________________________________________________
    
-  New since version 3.6.3:
+  New in version 3.6.4:
   
+     Changed license to GPL finally.
+   
      Fixed netmask comparison
    
      Added anonymous CVS server info
