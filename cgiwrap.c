@@ -30,6 +30,9 @@
 * Changes since 2.1:
 *   More debug outpt for environment variables
 *   Option to check exec bit on script and error msg if not set
+* Changes since 2.2:
+*   Fixed location of setgroups() call
+*   Added INSTALL file and fixed PROMO that was old.
 ******************************************************************/
 
 
@@ -39,8 +42,10 @@
 #include <unistd.h>    /* Stuff for setting uid      */
 #include <sys/types.h> /* Types for uid and stuff */
 #include <limits.h>   /* Limit on directory length and stuff */
+
 #include <string.h>     /* String stuff */
 #include <strings.h>    /* String stuff */
+
 #include <sys/stat.h>  /* For file stating */
 #include <sys/time.h>  /* Time for logging stuff */
 #include <ctype.h> 
@@ -412,6 +417,11 @@ void main (int argc, char *argv[])
 	/***/
 	/**   Change real&effective UIDs to match username and group of that user */
 	/***/
+#ifdef SETGROUPS
+	if ( setgroups(0, NULL) == -1 )
+		DoError("setgroups() failed!");
+#endif
+
 #ifdef SETUID
 	setgid( user->pw_gid );
 	setuid( user->pw_uid );
@@ -427,10 +437,6 @@ void main (int argc, char *argv[])
 	setresuid( user->pw_uid, user->pw_uid, user->pw_uid );
 #endif
 
-#ifdef SETGROUPS
-	if ( setgroups(0, NULL) == -1 )
-		DoError("setgroups() failed!");
-#endif
 
 	DEBUG_Msg("\nUIDs/GIDs Changed To:");
 	DEBUG_Int("   RUID:", getuid());

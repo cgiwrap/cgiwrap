@@ -85,7 +85,7 @@ Configurable Options:
         
 Installation requirements:
 ==========================
-    HTTP server must be run as root to enable 'cgiwrap' to change the
+    The cgiwrap binaries must be setid root to enable 'cgiwrap' to change the
     UID and GID when executing user's scripts.
         
         

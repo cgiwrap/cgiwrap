@@ -19,39 +19,33 @@
 
 
 /* Choose which method to run CGI wrap */
-#undef SETUID    	/* Server run as root */
-#define SETREUID  	/* Server run as other, cgiwrap suid root, A/UX */
-#undef SETRESUID	/* Server run as other, cgiwrap suid root, HPUX */
+#undef SETUID    	/* Server run as root - not reccomended*/
+#define SETREUID  	/* Server run as other, cgiwrap suid root */
+#undef SETRESUID	/* Server run as other, cgiwrap suid root */
+
+/* Security Checks performed to make sure the SET operations worked */
+#define CHECK_RUID	/* Double check to make sure UID changed */
+#define CHECK_RGID	/* Double check to make sure GID changed */
+
+/* Set auxilliary groups */
+#define SETGROUPS
 
 
 /* Debugging Output */
 #undef FORCE_DEBUG     /* Force debugging output on */
 #define DEBUG_BY_NAME  /* Debugging output on if correct name */
 
-
 /* Set what the name of the executable must end with to trigger */
 /* debugging output if DEBUG_BY_NAME is defined */
 #define DEBUG_EXTENSION "d"
 
 
-/* Error if user UID <> script owner ID */
-#define CHECK_UID
-
-
-/* Error if user GID <> script group ID */
-#define CHECK_GID
-
-
-/* Error if SUID bit of script is set */
-#define CHECK_SUID
-
-
-/* Error if SGID bit of script is set */
-#define CHECK_SGID
-
-
-/* Check user exec bit on script */
-#define CHECK_MODE
+/* Security Checks Performed on Script Itself */
+#define CHECK_UID	/* Error if user UID <> script owner ID */
+#define CHECK_GID	/* Error if user GID <> script group ID */
+#define CHECK_SUID	/* Error if SUID bit of script is set */
+#define CHECK_SGID	/* Error if SGID bit of script is set */
+#define CHECK_MODE	/* Check user exec bit on script */
 
 
 /* Do not allow subdirectories of cgi-bin dir */
@@ -66,16 +60,8 @@
 #define SANITIZE
 
 
-/* Double check to make sure UID changed */
-#define CHECK_RUID
-
-
-/* Double check to make sure GID changed */
-#define CHECK_RGID
-
-
 /* Use system() call instead of exec to run script */
-#undef USE_SYSTEM
+#define USE_SYSTEM
 
 
 /* Redirect STDERR to STDOUT before executing script - this way, 
@@ -87,9 +73,3 @@
 /* Set rlimit to limit CPU usage */
 #undef USE_RLIMIT
 #define RLIMIT_SETTING { 9, 10 }
-
-
-/* Set auxilliary groups */
-#undef SETGROUPS
-
-

@@ -1,0 +1,17 @@
+Installation Instructions:
+-------------------------
+
+Look at PORTING to see if there are any hints for your platform.
+
+Edit "config.h" to set which "SET" method you will be using.
+
+Edit "cgiwrap.c" to set which #include files are needed for your platform.
+
+Make
+
+Copy cgiwrap executable to your servers cgi-bin directory
+
+Make cgiwrap owned by root, executable by all, and setuid.
+
+Hardlink or symlink nph-cgiwrap, nph-cgiwrapd, cgiwrapd to cgiwrap in the 
+ cgi-bin directory.
