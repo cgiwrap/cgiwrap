@@ -25,6 +25,10 @@
      Slight changes to aux groups code just in case setgroups() doesn't
    support a empty list.
    
+     Added some extra info to server userid error message.
+   
+     Added some info to the FAQ.
+   
   New in version 3.6.3:
   
      * Added support for checking if user has a valid shell, similar to

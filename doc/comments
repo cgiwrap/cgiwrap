@@ -38,10 +38,9 @@ Nathan:
    
 It is inherently impossible to provide _total_ protection, but there
 is a nifty little utility called cgiwrap that can help.  Check out
-the URLs:
+the URL:
 
-http://www.umr.edu/~cgiwrap/
-ftp://ftp.cc.umr.edu/pub/cgi/cgiwrap/
+http://www.unixtools.org/cgiwrap/
 
 This method has several advantages:
 
