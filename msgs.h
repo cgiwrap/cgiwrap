@@ -17,7 +17,7 @@ void MSG_Plain_Header(char *title, char *msg);
 void MSG_Plain_Footer(void);
 void MSG_Error_General(char *message);
 void MSG_Error_ServerUser(char *msg);
-void MSG_Error_ExecutionNotPermitted(char *reason);
+void MSG_Error_ExecutionNotPermitted(char *path, char *reason);
 void MSG_Error_SystemError(char *when);
 void MSG_Error_AccessControl(char *why);
 void MSG_Error_ExecFailed(void);

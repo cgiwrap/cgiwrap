@@ -21,8 +21,8 @@
      * mkdir public_html/cgi-bin
        
    If you are using AFS, you will need to set the AFS permissions on the
-   directories. See [1]Use of CGIwrap with AFS for details on the
-   necessary permissions.
+   directories. See Use of CGIwrap with AFS for details on the necessary
+   permissions.
    
    Install the script into the cgi-bin directory, and set the proper
    execution permissions on the file.
@@ -40,7 +40,3 @@
    the following URL's:
      * http://www.domain.com/cgi-bin/nph-cgiwrap/joe/script.pl
      * http://www.domain.com/cgi-bin/nph-cgiwrapd/joe/script.pl
-
-References
-
-   1. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/afs.html

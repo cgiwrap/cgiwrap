@@ -3,9 +3,9 @@
                                       
      _________________________________________________________________
                                       
-  Basic Installation
+  Quick Installation
   
-   Look at the [1]notes to see if there are any hints for your platform.
+   Look at the notes to see if there are any hints for your platform.
           
    Type "./Configure" and answer the questions.
           
@@ -31,6 +31,121 @@
    You can, if you wish, install it with less permissive permissions.
           (Eg. 4750) But if you do this, make sure that the group of
           cgiwrap is the same as the group that the server runs as.
+          
+   --with-perl=PATH
+          path to perl executable to use
+          
+   --with-install-group=GROUP (root)
+          group to install cgiwrap as
+          
+   --with-install-dir=PATH
+          path to installation directory
+          
+   --with-cgi-dir=PATH (public_html/cgi-bin)
+          path relative to home dir for cgi scripts
+          
+   --with-httpd-user=USER (http)
+          define what userid the web server is running as
+          
+   --with-check-httpd-user
+          dont't check to make sure cgiwrap is being run by server userid
+          
+   --without-check-owner
+          disable check for matching owner
+          
+   --without-check-group
+          disable check for matching group
+          
+   --without-check-setuid
+          disable check for setuid script
+          
+   --without-check-setgid
+          disable check for setgid script
+          
+   --without-check-group-writable
+          disable check for group writable script
+          
+   --without-check-world-writable
+          disable check for world writable script
+          
+   --without-check-symlink
+          disable check for symlinked script
+          
+   --with-logging-syslog=LABEL
+          enable logging script execution to syslog
+          
+   --with-logging-file=FILE (/usr/adm/cgiwrap.log)
+          enable logging script execution to file
+          
+   --without-script-subdirs
+          prevent users from storing scripts in subdirs
+          
+   --without-redirect-stderr
+          don't redirect stderr to stdout in scripts
+          
+   --without-initgroups
+          disable use of initgroups() to clear non-userid auxilliary
+          groups
+          
+   --without-setgroups
+          disable use of setgroups() to add userid's auxilliary groups
+          
+   --with-rewrite=FILE
+          use a file to rewrite user directories
+          
+   --without-fixed-path-translated
+          Don't fix the PATH_TRANSLATED variable (pre 3.5 behavior)
+          
+   --with-setenv-path=STRING
+          set PATH environment variable to STRING
+          
+   --with-setenv-tz=STRING
+          set TZ environment variable to STRING
+          
+   --with-rlimit-cpu=SECONDS (10)
+          limit cpu time with setrlimit
+          
+   --with-rlimit-vmem=BYTES (2500000)
+          limit total virtual memory with setrlimit
+          
+   --with-rlimit-as=BYTES (2500000)
+          limit total available memory with setrlimit
+          
+   --with-rlimit-fsize=BYTES (2500000)
+          limit writable file size with setrlimit
+          
+   --with-rlimit-data=BYTES (2500000)
+          limit data segment size with setrlimit
+          
+   --with-rlimit-stack=BYTES (2500000)
+          limit stack segment size with setrlimit
+          
+   --with-rlimit-core=BYTES (2500000)
+          limit core file size with setrlimit
+          
+   --with-rlimit-rss=BYTES (2500000)
+          limit resident set size with setrlimit
+          
+   --with-rlimit-nproc=COUNT (32)
+          limit number of processes with setrlimit
+          
+   --with-rlimit-nofile=COUNT (32)
+          limit number of open files with setrlimit
+          
+   --with-rlimit-memlock=BYTES (2500000)
+          limit lockable memory with setrlimit
+          
+   --with-allow-file=FILE (/usr/adm/cgiwrap.allow)
+          limit cgiwrap usage
+          
+   --with-deny-file=FILE (/usr/adm/cgiwrap.deny)
+          limit cgiwrap usage
+          
+   --with-host-checking
+          allow specifying hosts in allow/deny files
+          
+   --with-afs=DIR (/usr/afsws)
+          enable afs setpag() support
           
      _________________________________________________________________
                                       
@@ -72,7 +187,3 @@
    
    If you enabled the user directory rewriting feature, you need to
    create the configuration file that you specified in the Configure run.
-
-References
-
-   1. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/notes.html

@@ -39,3 +39,31 @@ Joe Hourcle
 Web Development Staff
 Computer and Information Resource Center
 The George Washington University
+
+     _________________________________________________________________
+                                      
+From: Seth Chaiklin
+
+cgiwrapd and nph-cgiwrapd provide information about the installation of
+your web-server that you might not want to make generally available.
+
+Using the  directive under Apache 1.1 (or greater) it
+is possible to restrict who is allowed to use these two debugging
+versions of cgiwrap.
+
+For example:
+<Location /cgi-bin/cgiwrapd>
+Order deny,allow
+Deny from all
+Allow from <your ip number here>
+</Location>
+
+<Location /cgi-bin/nph-cgiwrapd>
+Order deny,allow
+Deny from all
+Allow from >your ip number here>
+</Location>
+
+Depending on what value you place for allow from, you can control how
+widely these debugging versions
+are available.

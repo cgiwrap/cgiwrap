@@ -31,6 +31,8 @@
    
      * http://SERVER/cgi-bin/cgiwrap/USER/SCRIPT
      * http://SERVER/cgi-bin/cgiwrap/~USER/SCRIPT
+       
+   Or the old deprecated syntax of:
      * http://SERVER/cgi-bin/cgiwrap?user=USER&script=SCRIPT
        
   Password Protected Installation of CGIWrap
@@ -39,8 +41,24 @@
    
      * http://SERVER/auth-cgi-bin/cgiwrap/USER/SCRIPT
      * http://SERVER/auth-cgi-bin/cgiwrap/~USER/SCRIPT
+       
+   Or the old deprecated syntax of:
      * http://SERVER/auth-cgi-bin/cgiwrap?user=USER&script=SCRIPT
        
+  Other Options
+  
+   With certain other web servers, the above syntax can sometimes be
+   shortened depending on how the local administrator has set up the
+   server. For example, some site support a URL syntax similar some of
+   the following:
+     * http://SERVER/~USER/SCRIPT.cgi
+     * http://SERVER/cgi-bin/~USER/SCRIPT
+     * http://SERVER/cgiwrap/~USER/SCRIPT
+     * http://SERVER/~USER/cgi-bin/SCRIPT.cgi
+       
+   The administrator can look at the tricks document for some ideas on
+   configuring the server.
+   
   Notes
   
    The syntax examples above using user= and script= are carryovers from

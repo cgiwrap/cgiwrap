@@ -231,6 +231,13 @@ void CheckUser(struct passwd *user)
 		MSG_Error_AccessControl("User in deny file!");
 	}
 #endif
+#if defined(CONF_MINIMUM_UID)
+	if ( user->pw_uid < CONF_MINIMUM_UID )
+	{
+		Log(user->pw_name, "-", "uid less than minimum");
+		MSG_Error_AccessControl("UID of user less than configured minimum.");
+	}
+#endif
 }
 
 
@@ -246,7 +253,8 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 
 	if ( CheckPath(scriptPath) )
 	{
-		MSG_Error_ExecutionNotPermitted("Script path contains illegal components");
+		MSG_Error_ExecutionNotPermitted(scriptPath,
+			"Script path contains illegal components");
 	}
 	
 #if !defined(CONF_SUBDIRS)
@@ -254,43 +262,49 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 	if ( CountSubDirs(scriptPath) > 0 )
 	{
 		Log(user->pw_name, scriptPath, "script in subdir not allowed");
-		MSG_Error_ExecutionNotPermitted("Scripts in subdirectories are not allowed");
+		MSG_Error_ExecutionNotPermitted(scriptPath,
+			"Scripts in subdirectories are not allowed");
 	}
 #endif
 
 	if ( stat(scriptPath, &fileStat) )
 	{
-		MSG_Error_ExecutionNotPermitted("Script file not found.");
+		MSG_Error_ExecutionNotPermitted(scriptPath,
+			"Script file not found.");
 	}
 
 #if defined(CONF_CHECK_SYMLINK)
 	if ( lstat(scriptPath, &fileLStat) )
 	{
-		MSG_Error_ExecutionNotPermitted("Script file not found.");
+		MSG_Error_ExecutionNotPermitted(scriptPath,
+			"Script file not found.");
 	}
 
 	if ( S_ISLNK(fileLStat.st_mode) )
 	{
-		MSG_Error_ExecutionNotPermitted("Script is a symbolic link");
+		MSG_Error_ExecutionNotPermitted(scriptPath,
+			"Script is a symbolic link");
 	}
 #endif		
 	
 	if ( !S_ISREG(fileStat.st_mode) )
 	{
-		MSG_Error_ExecutionNotPermitted("Script is not a regular file");
+		MSG_Error_ExecutionNotPermitted(scriptPath,
+			"Script is not a regular file");
 	}
 
 	if (!(fileStat.st_mode & S_IXUSR))
 	{
-		sprintf(tempErrString, "Script is not executable. Issue chmod 755 %s", scriptPath);
-		MSG_Error_ExecutionNotPermitted(tempErrString);
+		MSG_Error_ExecutionNotPermitted(scriptPath,
+			"Script is not executable. Issue 'chmod 755 filename'");
 	}
 
 
 #if defined(CONF_CHECK_SCRUID)
 	if (fileStat.st_uid != user->pw_uid)
 	{
-		MSG_Error_ExecutionNotPermitted("Script does not have same UID");
+		MSG_Error_ExecutionNotPermitted(scriptPath,
+			"Script does not have same UID");
 	}
 #endif
 
@@ -298,7 +312,8 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 #if defined(CONF_CHECK_SCRGID)
 	if (fileStat.st_gid != user->pw_gid)
 	{
-		MSG_Error_ExecutionNotPermitted("Script does not have same GID");
+		MSG_Error_ExecutionNotPermitted(scriptPath,
+			"Script does not have same GID");
 	}
 #endif
 
@@ -306,7 +321,8 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 #if defined(CONF_CHECK_SCRSUID)
 	if (fileStat.st_mode & S_ISUID)
 	{
-		MSG_Error_ExecutionNotPermitted("Script is setuid");
+		MSG_Error_ExecutionNotPermitted(scriptPath,
+			"Script is setuid");
 	}
 #endif
 
@@ -314,21 +330,24 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 #if defined(CONF_CHECK_SCRSGID)
 	if (fileStat.st_mode & S_ISGID)
 	{
-		MSG_Error_ExecutionNotPermitted("Script is setgid");
+		MSG_Error_ExecutionNotPermitted(scriptPath,
+			"Script is setgid");
 	}
 #endif
 
 #if defined(CONF_CHECK_SCRGWRITE)
 	if (fileStat.st_mode & S_IWGRP)
 	{
-		MSG_Error_ExecutionNotPermitted("Script is group writable.");
+		MSG_Error_ExecutionNotPermitted(scriptPath,
+			"Script is group writable.");
 	}
 #endif
 
 #if defined(CONF_CHECK_SCROWRITE)
 	if (fileStat.st_mode & S_IWOTH)
 	{
-		MSG_Error_ExecutionNotPermitted("Script is world writable.");
+		MSG_Error_ExecutionNotPermitted(scriptPath,
+			"Script is world writable.");
 	}
 #endif
 }

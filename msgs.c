@@ -157,12 +157,19 @@ void MSG_Error_ServerUserNotFound(void)
 }
 
 
-void MSG_Error_ExecutionNotPermitted(char *reason)
+void MSG_Error_ExecutionNotPermitted(char *path, char *reason)
 {
 	MSG_Header("CGIWrap Error", "Execution of this script not permitted");
 
-	printf("Execution of this script is not permitted for the following\n");
-	printf("reason:\n\n%s\n", reason);
+	if ( path )
+	{
+		printf("Execution of (%s) is not permitted\n",path);
+	}
+	else
+	{
+		printf("Execution of that script is not permitted\n");
+	}
+	printf("for the following reason:\n\n%s\n", reason);
 
 	MSG_Footer();
 	exit(1);

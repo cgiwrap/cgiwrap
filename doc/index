@@ -7,65 +7,44 @@
                                       
   General Information
   
-        [1]Introduction
+        Introduction
                 
-        [2]Frequently Asked Questions
+        Frequently Asked Questions
                 
-        [3]Mailing List Info
+        Mailing List Info
                 
-        [4]How to get CGIWrap
+        How to get CGIWrap
                 
-        [5]Source Code Change Log
+        Source Code Change Log
                 
-        [6]Stuff still to be done
+        Stuff still to be done
                 
-        [7]Acknowledgements
+        Acknowledgements
                 
-        [8]Publications mentioning CGIwrap
+        Publications mentioning CGIwrap
                 
-        [9]Comments
+        Comments
                 
-        [10]Author's Home Page
+        Author's Home Page
                 
   Compilation, Installation, and Administration
   
-        [11]Installation and Configuration
+        Installation and Configuration
                 
-        [12]Compilation Notes
+        Compilation Notes
                 
-        [13]Use of CGIWrap with AFS
+        Use of CGIWrap with AFS
                 
-        [14]Tips and Tricks
+        Tips and Tricks
                 
   User CGI Execution
   
-        [15]Account Setup
+        Account Setup
                 
-        [16]Quick Reference to URLs
+        Quick Reference to URLs
                 
      _________________________________________________________________
                                       
-   If you have any questions about CGIwrap, please direct them to [17]the
-   mailing list (you have to subscribe first though) or to the
-   author,[18]Nathan Neulinger <nneul@umr.edu>
-
-References
-
-   1. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/intro.html
-   2. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/faq.html
-   3. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/maillist.html
-   4. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/download.html
-   5. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/changes.html
-   6. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/todo.html
-   7. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/thanks.html
-   8. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/pubs.html
-   9. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/comments.html
-  10. http://www.umr.edu/~nneul/
-  11. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/install.html
-  12. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/notes.html
-  13. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/afs.html
-  14. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/tricks.html
-  15. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/setup.html
-  16. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/quickref.html
-  17. mailto:cgiwrap@rollanet.org
-  18. mailto:nneul@umr.edu
+   If you have any questions about CGIwrap, please direct them to the
+   mailing list (you have to subscribe first though) or to the author,
+   Nathan Neulinger <nneul@umr.edu>

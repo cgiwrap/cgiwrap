@@ -2,7 +2,9 @@
 <CENTER><H2>CGIWrap - Installation Instructions</H2></CENTER>
 <HR><P>
 
-<H3>Basic Installation</H3>
+
+
+<H3>Quick Installation</H3>
 <DL>
 	<P><DT>Look at the <A HREF="notes.html">notes</A> to see if 
 there are any hints for your platform.
@@ -30,6 +32,85 @@ cgiwrap in the cgi-bin directory.
 4750) But if you do this, make sure that the group of cgiwrap is the same 
 as the group that the server runs as.
 
+</DL>
+
+<DL>
+<DT>--with-perl=PATH
+<DD>path to perl executable to use
+<DT>--with-install-group=GROUP  (root)
+<DD>group to install cgiwrap as
+<DT>--with-install-dir=PATH
+<DD>path to installation directory
+<DT>--with-cgi-dir=PATH  (public_html/cgi-bin)
+<DD>path relative to home dir for cgi scripts
+<DT>--with-httpd-user=USER  (http)
+<DD>define what userid the web server is running as
+<DT>--with-check-httpd-user
+<DD>dont't check to make sure cgiwrap is being run by server userid
+<DT>--without-check-owner
+<DD>disable check for matching owner
+<DT>--without-check-group
+<DD>disable check for matching group
+<DT>--without-check-setuid
+<DD>disable check for setuid script
+<DT>--without-check-setgid
+<DD>disable check for setgid script
+<DT>--without-check-group-writable
+<DD>disable check for group writable script
+<DT>--without-check-world-writable
+<DD>disable check for world writable script
+<DT>--without-check-symlink
+<DD>disable check for symlinked script
+<DT>--with-logging-syslog=LABEL
+<DD>enable logging script execution to syslog
+<DT>--with-logging-file=FILE  (/usr/adm/cgiwrap.log)
+<DD>enable logging script execution to file
+<DT>--without-script-subdirs
+<DD>prevent users from storing scripts in subdirs
+<DT>--without-redirect-stderr
+<DD>don't redirect stderr to stdout in scripts
+<DT>--without-initgroups
+<DD>disable use of initgroups() to clear non-userid auxilliary groups
+<DT>--without-setgroups
+<DD>disable use of setgroups() to add userid's auxilliary groups
+<DT>--with-rewrite=FILE
+<DD>use a file to rewrite user directories
+<DT>--without-fixed-path-translated
+<DD>Don't fix the PATH_TRANSLATED variable (pre 3.5 behavior)
+<DT>--with-setenv-path=STRING
+<DD>set PATH environment variable to STRING
+<DT>--with-setenv-tz=STRING
+<DD>set TZ environment variable to STRING
+<DT>--with-rlimit-cpu=SECONDS  (10)
+<DD>limit cpu time with setrlimit
+<DT>--with-rlimit-vmem=BYTES  (2500000)
+<DD>limit total virtual memory with setrlimit
+<DT>--with-rlimit-as=BYTES  (2500000)
+<DD>limit total available memory with setrlimit
+<DT>--with-rlimit-fsize=BYTES  (2500000)
+<DD>limit writable file size with setrlimit
+<DT>--with-rlimit-data=BYTES  (2500000)
+<DD>limit data segment size with setrlimit
+<DT>--with-rlimit-stack=BYTES  (2500000)
+<DD>limit stack segment size with setrlimit
+<DT>--with-rlimit-core=BYTES  (2500000)
+<DD>limit core file size with setrlimit
+<DT>--with-rlimit-rss=BYTES  (2500000)
+<DD>limit resident set size with setrlimit
+<DT>--with-rlimit-nproc=COUNT  (32)
+<DD>limit number of processes with setrlimit
+<DT>--with-rlimit-nofile=COUNT  (32)
+<DD>limit number of open files with setrlimit
+<DT>--with-rlimit-memlock=BYTES  (2500000)
+<DD>limit lockable memory with setrlimit
+<DT>--with-allow-file=FILE  (/usr/adm/cgiwrap.allow)
+<DD>limit cgiwrap usage
+<DT>--with-deny-file=FILE  (/usr/adm/cgiwrap.deny)
+<DD>limit cgiwrap usage
+<DT>--with-host-checking
+<DD>allow specifying hosts in allow/deny files
+<DT>--with-afs=DIR  (/usr/afsws)
+<DD>enable afs setpag() support
 </DL>
 
 <P><HR>

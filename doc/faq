@@ -7,23 +7,23 @@
   
    How do I subscribe/unsubscribe from the CGIWrap mailing list?
           To subscribe, send a note containing "subscribe cgiwrap
-          FirstName LastName" to _[1]listserv@rollanet.org_.
+          FirstName LastName" to _listserv@rollanet.org_.
           
           
           To unsubscribe, send a note containing "unsubscribe cgiwrap" to
-          _[2]listserv@rollanet.org_ from the account that is subscribed
-          to the list.
+          _listserv@rollanet.org_ from the account that is subscribed to
+          the list.
           
           
           If you are unable to subscribe or unsubscribe, send a note to
-          me at [3]nneul@umr.edu. _Please_ do not send
-          subscribe/unsubscribe messages to the list.
+          me at nneul@umr.edu. _Please_ do not send subscribe/unsubscribe
+          messages to the list.
           
           
-          More information on the mailing list is available [4]here.
+          More information on the mailing list is available here.
           
    How do I send a message to the mailing list?
-          Any mail sent to [5]cgiwrap@rollanet.org will be send to the
+          Any mail sent to cgiwrap@rollanet.org will be send to the
           mailing list, even if you are not a subscriber.
           
    What is on topic for the mailing list?
@@ -70,11 +70,3 @@
           CGIwrap supports a debugging mode which can help to debug
           scripts. To use it, call CGIwrap via the URL
           http://.../cgiwrapd/... instead of http://.../cgiwrap/....
-
-References
-
-   1. mailto:listserv@rollanet.org
-   2. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/listserv@rollanet.org
-   3. mailto:nneul@umr.edu
-   4. file://localhost/afs/umr.edu/software/cgiwrap/cgiwrap/htdocs/maillist.html
-   5. mailto:cgiwrap@rollanet.org

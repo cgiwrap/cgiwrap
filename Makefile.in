@@ -81,7 +81,7 @@ config.h: config.h.in
 
 docs: Makefile
 	for p in htdocs/*.html; do \
-		lynx -dump $$p > doc/`basename $$p .html`; \
+		lynx -nolist -dump $$p > doc/`basename $$p .html`; \
 	done
 
 dist:

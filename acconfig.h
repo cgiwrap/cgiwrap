@@ -56,6 +56,7 @@
 /*
  * Various options
  */
+#undef CONF_MINIMUM_UID
 #undef CONF_FIXED_PATHTRANS
 #undef CONF_REDIR_STDERR
 #undef CONF_SUBDIRS

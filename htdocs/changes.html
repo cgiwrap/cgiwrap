@@ -31,6 +31,9 @@ not really needed for anything, and just slows things down.
 	<LI>Fixed malloc() error check in GetUserDir routines
 	<LI>Fixed race condition with permissions and opening of log file
 	<LI>initgroups() and setgroups() support now enabled by default
+	<LI>Eliminated buffer overrun in error message about chmod'ing 
+script. Thanks to Duncan Simpson (dps@io.stargate.co.uk)
+	<LI>Added --with-minimum-uid option
 </UL>
 
 <P><H3>New in version 3.5:</H3><UL>

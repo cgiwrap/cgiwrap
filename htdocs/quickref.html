@@ -31,6 +31,10 @@ Place your scripts in your ~/public_html/cgi-bin/ directory
 <UL>
 	<LI>http://SERVER/cgi-bin/cgiwrap/USER/SCRIPT
 	<LI>http://SERVER/cgi-bin/cgiwrap/~USER/SCRIPT
+</UL>
+<P>
+Or the old deprecated syntax of:
+<UL>
 	<LI>http://SERVER/cgi-bin/cgiwrap?user=USER&script=SCRIPT
 </UL>
 
@@ -40,9 +44,26 @@ Place your scripts in your ~/public_html/auth-cgi-bin/ directory
 <UL>
 	<LI>http://SERVER/auth-cgi-bin/cgiwrap/USER/SCRIPT
 	<LI>http://SERVER/auth-cgi-bin/cgiwrap/~USER/SCRIPT
+</UL>
+<P>
+Or the old deprecated syntax of:
+<UL>
 	<LI>http://SERVER/auth-cgi-bin/cgiwrap?user=USER&script=SCRIPT
 </UL>
 
+<H3>Other Options</H3>
+With certain other web servers, the above syntax can sometimes be 
+shortened depending on how the local administrator has set up the server. 
+For example, some site support a URL syntax similar some of the following:
+<UL>
+	<LI>http://SERVER/~USER/SCRIPT.cgi
+	<LI>http://SERVER/cgi-bin/~USER/SCRIPT
+	<LI>http://SERVER/cgiwrap/~USER/SCRIPT
+	<LI>http://SERVER/~USER/cgi-bin/SCRIPT.cgi
+</UL>
+The administrator can look at the <A HREF="tricks.html">tricks</A> 
+document for some ideas on configuring the server.
+<P>
 <H3>Notes</H3>
 The syntax examples above using <TT>user=</TT> and <TT>script=</TT> are 
 carryovers from the original versions of CGIwrap, and are not really 

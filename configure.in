@@ -282,6 +282,26 @@ AC_ARG_WITH( check-symlink,
 		AC_DEFINE(CONF_CHECK_SYMLINK)
 	])
 
+dnl
+dnl Check for minimum uid
+dnl
+AC_MSG_CHECKING(for minimum uid)
+AC_ARG_WITH( minimum-uid, 
+	[  --with-minimum-uid=UID  (10)]
+	[  minimum uid to allow script execution], 
+	[
+		if test x$withval != xno; then
+			AC_DEFINE_UNQUOTED(CONF_MINIMUM_UID, ${withval})
+			AC_MSG_RESULT([$withval])
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([10])
+		AC_DEFINE_UNQUOTED(CONF_MINIMUM_UID,10)
+	])
+
 
 dnl
 dnl Options for logging script execution
