@@ -5,6 +5,13 @@
    version to version.
      _________________________________________________________________
 
+  Changed since version 3.9:
+
+     * Fixed setting of LD_LIBRARY_PATH when configured to do so.
+     * Fixed setting of ARGV for both regular and interpreted scripts
+       when script is in a subdir. Clean up code related to this based on
+       a patch from Jack .
+
   New in version 3.9:
 
      * Fixed a minor typo preventing allow files from working
@@ -333,7 +340,7 @@
 
      * Fixed incorrect exec call, added null at end.
 
-  New in versoin 2.3:
+  New in version 2.3:
 
      * Fixed location of setgroups() call
      * Added INSTALL file and fixed PROMO that was old.
