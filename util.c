@@ -792,7 +792,8 @@ void LogInit (void)
 	DEBUG_Msg("Initializing Logging");
 
 #if defined(CONF_LOG_USEFILE)
-	logfd = open(CONF_LOG_LOGFILE, O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
+	logfd = open(CONF_LOG_LOGFILE, O_WRONLY | O_CREAT | O_APPEND, 
+		S_IRUSR | S_IWUSR);
 	if ( !logfd )
 	{
 		MSG_Error_SystemError("Could not open log file for appending!");
@@ -817,10 +818,6 @@ void Log (char *user, char *script, char *msg)
 {
 	time_t timevar;
 	char *timeString;
-#if defined(CONF_LOG_USEFILE)
-	FILE *logFile;
-	int logfd;
-#endif
 
 	time(&timevar);
 	timeString = ctime(&timevar);
@@ -830,7 +827,7 @@ void Log (char *user, char *script, char *msg)
 #if defined(CONF_LOG_USEFILE)
 	DEBUG_Msg("Logging Request (File)");
 
-	fprintf(logFile, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+	fprintf(Context.logFile, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
 		NullCheck( user ),
 		NullCheck( script ),
 		NullCheck( getenv("REMOTE_HOST") ),
@@ -838,10 +835,7 @@ void Log (char *user, char *script, char *msg)
 		NullCheck( getenv("REMOTE_USER") ),
 		NullCheck( msg ),
 		NullCheck( timeString ) );
-	fflush(logFile);
-
-	fclose(logFile);
-	close(logfd);
+	fflush(Context.logFile);
 #endif
 #if defined(CONF_LOG_USESYSLOG) && defined(HAS_SYSLOG)
 	DEBUG_Msg("Logging Request (syslog)");
@@ -859,6 +853,18 @@ void Log (char *user, char *script, char *msg)
 #endif
 }
 
+/*
+ * Terminate logging
+ */
+void LogEnd(void)
+{
+#if defined(CONF_LOG_USEFILE)
+	if ( Context.logFile )
+	{
+		fclose(Context.logFile);
+	}
+#endif
+}
 
 /*
  * Set the correct SCRIPT_NAME environment variable

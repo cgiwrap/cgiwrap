@@ -58,7 +58,7 @@
 #include <syslog.h>
 #endif
 
-#if defined(HAVE_FCNTL)
+#if defined(HAVE_FCNTL_H)
 #include <fcntl.h>
 #endif
 

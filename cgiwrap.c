@@ -135,6 +135,10 @@ void main (int argc, char *argv[])
 	/* Perform any AFS related tasks before executing script */
 	Create_AFS_PAG();
 	
+	/* Close the log files - some thought to doing this below 
+		so could log failure */	
+	LogEnd();
+
 	/* Execute the script */
 	DEBUG_Msg("\n\n");
 	DEBUG_Msg("Output of script follows:");

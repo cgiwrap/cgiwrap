@@ -15,15 +15,15 @@ AC_ARG_WITH( local-contact-name,
 	[  --with-local-contact-name=NAME]
 	[  define name of local contact], 
 	[ 
-		if test x"$withval" = xyes; then
+		if test "x$withval" = xyes; then
 			AC_MSG_RESULT([disabled, must specify value])
-		elif test x"$withval" = xno; then
+		elif test "x$withval" = xno; then
 			AC_MSG_RESULT([disabled, must specify value])
-		elif test x"$withval" = x; then
+		elif test "x$withval" = x; then
 			AC_MSG_RESULT([disabled, must specify value])
 		else
-			AC_MSG_RESULT([${withval}])
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_NAME,"${withval}")
+			AC_MSG_RESULT($withval)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_NAME,"$withval")
 		fi
 	],
 	[ 
@@ -35,15 +35,15 @@ AC_ARG_WITH( local-contact-email,
 	[  --with-local-contact-email=ADDRESS]
 	[  define email address of local contact], 
 	[ 
-		if test x"$withval" = xyes; then
+		if test "x$withval" = xyes; then
 			AC_MSG_RESULT([disabled, must specify value])
-		elif test x"$withval" = xno; then
+		elif test "x$withval" = xno; then
 			AC_MSG_RESULT([disabled, must specify value])
-		elif test x"$withval" = x; then
+		elif test "x$withval" = x; then
 			AC_MSG_RESULT([disabled, must specify value])
 		else
-			AC_MSG_RESULT([${withval}])
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_EMAIL,"${withval}")
+			AC_MSG_RESULT($withval)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_EMAIL,"$withval")
 		fi
 	],
 	[ 
@@ -55,15 +55,15 @@ AC_ARG_WITH( local-contact-phone,
 	[  --with-local-contact-phone=PHONE]
 	[  define phone number of local contact], 
 	[ 
-		if test x"$withval" = xyes; then
+		if test "x$withval" = xyes; then
 			AC_MSG_RESULT([disabled, must specify value])
-		elif test x"$withval" = xno; then
+		elif test "x$withval" = xno; then
 			AC_MSG_RESULT([disabled, must specify value])
-		elif test x"$withval" = x; then
+		elif test "x$withval" = x; then
 			AC_MSG_RESULT([disabled, must specify value])
 		else
-			AC_MSG_RESULT([${withval}])
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_PHONE,"${withval}")
+			AC_MSG_RESULT($withval)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_PHONE,"$withval")
 		fi
 	],
 	[ 
@@ -75,15 +75,15 @@ AC_ARG_WITH( local-contact-url,
 	[  --with-local-contact-url=URL]
 	[  define url of local contact], 
 	[ 
-		if test x"$withval" = xyes; then
+		if test "x$withval" = xyes; then
 			AC_MSG_RESULT([disabled, must specify value])
-		elif test x"$withval" = xno; then
+		elif test "x$withval" = xno; then
 			AC_MSG_RESULT([disabled, must specify value])
-		elif test x"$withval" = x; then
+		elif test "x$withval" = x; then
 			AC_MSG_RESULT([disabled, must specify value])
 		else
-			AC_MSG_RESULT([${withval}])
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_URL,"${withval}")
+			AC_MSG_RESULT($withval)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_URL,"$withval")
 		fi
 	],
 	[ 
@@ -95,15 +95,15 @@ AC_ARG_WITH( local-site-url,
 	[  --with-local-site-url=URL]
 	[  define url of local site], 
 	[ 
-		if test x"$withval" = xyes; then
+		if test "x$withval" = xyes; then
 			AC_MSG_RESULT([disabled, must specify value])
-		elif test x"$withval" = xno; then
+		elif test "x$withval" = xno; then
 			AC_MSG_RESULT([disabled, must specify value])
-		elif test x"$withval" = x; then
+		elif test "x$withval" = x; then
 			AC_MSG_RESULT([disabled, must specify value])
 		else
-			AC_MSG_RESULT([${withval}])
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_SITE_URL,"${withval}")
+			AC_MSG_RESULT($withval)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_SITE_URL,"$withval")
 		fi
 	],
 	[ 
@@ -115,15 +115,15 @@ AC_ARG_WITH( local-doc-url,
 	[  --with-local-doc-url=URL]
 	[  define url of local cgiwrap documentation], 
 	[ 
-		if test x"$withval" = xyes; then
+		if test "x$withval" = xyes; then
 			AC_MSG_RESULT([disabled, must specify value])
-		elif test x"$withval" = xno; then
+		elif test "x$withval" = xno; then
 			AC_MSG_RESULT([disabled, must specify value])
-		elif test x"$withval" = x; then
+		elif test "x$withval" = x; then
 			AC_MSG_RESULT([disabled, must specify value])
 		else
-			AC_MSG_RESULT([${withval}])
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_DOC_URL,"${withval}")
+			AC_MSG_RESULT($withval)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_DOC_URL,"$withval")
 		fi
 	],
 	[ 
@@ -139,8 +139,8 @@ AC_ARG_WITH( perl,
 	[  path to perl executable to use], 
 	[
 		AC_MSG_CHECKING(for perl)
-		if test x$withval != x; then
-			PATH_PROG_PERL=$withval
+		if test "x$withval" != x; then
+			PATH_PROG_PERL="$withval"
 			AC_MSG_RESULT($withval)
 		else
 			AC_MSG_RESULT(not found)
@@ -184,21 +184,21 @@ AC_ARG_WITH( install-group,
 	[  --with-install-group=GROUP  (root)]
 	[  group to install cgiwrap as],
 	[
-		if test x$withval = xyes; then
+		if test "x$withval" = xyes; then
 			withval=root
 		fi
-		if test x$withval = xno; then
+		if test "x$withval" = xno; then
 			withval=root
 		fi
-		if test x$withval = x; then
+		if test "x$withval" = x; then
 			withval=root
 		fi
 
-		INSTALLGROUP=$withval
+		INSTALLGROUP="$withval"
 	],
 	[
 		withval=root
-		INSTALLGROUP=$withval
+		INSTALLGROUP="$withval"
 	])
 AC_MSG_RESULT($withval)
 AC_SUBST(INSTALLGROUP)
@@ -208,8 +208,8 @@ AC_ARG_WITH( install-dir,
 	[  --with-install-dir=PATH]
 	[  path to installation directory],
 	[
-		if test x$withval != x; then
-			INSTALLDIR=$withval
+		if test "x$withval" != x; then
+			INSTALLDIR="$withval"
 			DOINSTALL=""
 			AC_MSG_RESULT($withval)
 		else
@@ -229,9 +229,9 @@ AC_ARG_WITH( cgi-dir,
 	[  --with-cgi-dir=PATH  (public_html/cgi-bin)]
 	[  path relative to home dir for cgi scripts], 
 	[
-		if test x$withval != xno; then
-			AC_DEFINE_UNQUOTED(CONF_CGIDIR, "${withval}")
-			AC_MSG_RESULT([$withval])
+		if test "x$withval" != xno; then
+			AC_DEFINE_UNQUOTED(CONF_CGIDIR, "$withval")
+			AC_MSG_RESULT($withval)
 		else
 			AC_MSG_ERROR([must be defined])
 		fi
@@ -250,21 +250,21 @@ AC_ARG_WITH( httpd-user,
 	[  --with-httpd-user=USER  (http)]
 	[  define what userid the web server is running as], 
 	[ 
-		if test x$withval = xyes; then
+		if test "x$withval" = xyes; then
 			withval=http
 		fi
-		if test x$withval = xno; then
+		if test "x$withval" = xno; then
 			withval=http
 		fi
-		if test x$withval = x; then
+		if test "x$withval" = x; then
 			withval=http
 		fi
 	],
 	[ 
 		withval=http
 	])
-AC_DEFINE_UNQUOTED(CONF_HTTPD_USER, "${withval}")
-AC_MSG_RESULT([server running as "${withval}"])
+AC_DEFINE_UNQUOTED(CONF_HTTPD_USER, "$withval")
+AC_MSG_RESULT([server running as "$withval"])
 
 
 AC_MSG_CHECKING(for check-httpd-user)
@@ -292,7 +292,7 @@ AC_ARG_WITH( check-owner,
 	[  --without-check-owner]
 	[  disable check for matching owner],
 	[
-		if test x$withval != xno; then
+		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_CHECK_SCRUID)
 			AC_MSG_RESULT([enabled, owner of script must match])
 		else
@@ -309,7 +309,7 @@ AC_ARG_WITH( check-group,
 	[  --without-check-group]
 	[  disable check for matching group],
 	[
-		if test x$withval != xno; then
+		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_CHECK_SCRGID)
 			AC_MSG_RESULT([enabled, group of script must match])
 		else
@@ -326,7 +326,7 @@ AC_ARG_WITH( check-setuid,
 	[  --without-check-setuid]
 	[  disable check for setuid script],
 	[
-		if test x$withval != xno; then
+		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_CHECK_SCRSUID)
 			AC_MSG_RESULT([enabled, script cannot be setuid])
 		else
@@ -343,7 +343,7 @@ AC_ARG_WITH( check-setgid,
 	[  --without-check-setgid]
 	[  disable check for setgid script],
 	[
-		if test x$withval != xno; then
+		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_CHECK_SCRSGID)
 			AC_MSG_RESULT([enabled, script cannot be setuid])
 		else
@@ -360,7 +360,7 @@ AC_ARG_WITH( check-group-writable,
 	[  --without-check-group-writable]
 	[  disable check for group writable script],
 	[
-		if test x$withval != xno; then
+		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_CHECK_SCRGWRITE)
 			AC_MSG_RESULT([enabled, script cannot be group writable])
 		else
@@ -377,7 +377,7 @@ AC_ARG_WITH( check-world-writable,
 	[  --without-check-world-writable]
 	[  disable check for world writable script],
 	[
-		if test x$withval != xno; then
+		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_CHECK_SCROWRITE)
 			AC_MSG_RESULT([enabled, script cannot be world writable])
 		else
@@ -394,7 +394,7 @@ AC_ARG_WITH( check-symlink,
 	[  --without-check-symlink]
 	[  disable check for symlinked script],
 	[
-		if test x$withval != xno; then
+		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_CHECK_SYMLINK)
 			AC_MSG_RESULT([enabled, script cannot be a symlink])
 		else
@@ -414,9 +414,9 @@ AC_ARG_WITH( minimum-uid,
 	[  --with-minimum-uid=UID  (10)]
 	[  minimum uid to allow script execution], 
 	[
-		if test x$withval != xno; then
-			AC_DEFINE_UNQUOTED(CONF_MINIMUM_UID, ${withval})
-			AC_MSG_RESULT([$withval])
+		if test "x$withval" != xno; then
+			AC_DEFINE_UNQUOTED(CONF_MINIMUM_UID, "$withval")
+			AC_MSG_RESULT($withval)
 		else
 			AC_MSG_RESULT([disabled])
 		fi
@@ -435,9 +435,9 @@ AC_ARG_WITH( logging-syslog,
 	[  --with-logging-syslog=LABEL]
 	[  enable logging script execution to syslog],
 	[
-		if test x$withval != xno; then
+		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_LOG_USESYSLOG)
-			AC_DEFINE_UNQUOTED(CONF_LOG_LABEL, "${withval}")
+			AC_DEFINE_UNQUOTED(CONF_LOG_LABEL, "$withval")
 			AC_MSG_RESULT([enabled, label is '${withval}'])
 		else
 			AC_MSG_RESULT([disabled])
@@ -452,11 +452,14 @@ AC_ARG_WITH( logging-file,
 	[  --with-logging-file=FILE  (/usr/adm/cgiwrap.log)]
 	[  enable logging script execution to file],
 	[
-		AC_DEFINE_UNQUOTED(CONF_LOG_LOGFILE, "/usr/adm/cgiwrap.log")
-		if test x$withval != xno; then
+		if test "x$withval" = x; then
+			withval="/usr/adm/cgiwrap.log"
+		fi
+
+		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_LOG_USEFILE)
-			AC_DEFINE_UNQUOTED(CONF_LOG_LOGFILE, "${withval}")
-			AC_MSG_RESULT([enabled, logging to file ${withval}])
+			AC_DEFINE_UNQUOTED(CONF_LOG_LOGFILE, "$withval")
+			AC_MSG_RESULT([enabled, logging to file '${withval}'])
 		else
 			AC_MSG_RESULT(disabled)
 		fi
@@ -474,7 +477,7 @@ AC_ARG_WITH( script-subdirs,
 	[  --without-script-subdirs]
 	[  prevent users from storing scripts in subdirs],
 	[
-		if test x$withval != xno; then
+		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_SUBDIRS)
 			AC_MSG_RESULT([enabled, scripts allowed in subdirectories])
 		else
@@ -495,7 +498,7 @@ AC_ARG_WITH( redirect-stderr,
 	[  --without-redirect-stderr]
 	[  don't redirect stderr to stdout in scripts],
 	[
-		if test x$withval != xno; then
+		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_REDIR_STDERR)
 			AC_MSG_RESULT([enabled, stderr output will go to stdout])
 		else
@@ -516,7 +519,7 @@ AC_ARG_WITH( initgroups,
 	[  --without-initgroups]
 	[  disable use of initgroups() to clear non-userid auxilliary groups],
 	[
-		if test x$withval != xno; then
+		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_INITGROUPS)
 			AC_MSG_RESULT([enabled, aux groups will be cleared])
 		else
@@ -533,7 +536,7 @@ AC_ARG_WITH( setgroups,
 	[  --without-setgroups]
 	[  disable use of setgroups() to add userid's auxilliary groups],
 	[
-		if test x$withval != xno; then
+		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_SETGROUPS)
 			AC_MSG_RESULT([enabled, aux groups will be set])
 		else
@@ -554,9 +557,9 @@ AC_ARG_WITH( rewrite,
 	[  --with-rewrite=FILE]
 	[  use a file to rewrite user directories],
 	[
-		if test x$withval != xno; then
-			AC_DEFINE_UNQUOTED(CONF_USERDIRFILE, "${withval}")
-			AC_MSG_RESULT([enabled, rewrite file is ${withval}])
+		if test "x$withval" != xno; then
+			AC_DEFINE_UNQUOTED(CONF_USERDIRFILE, "$withval")
+			AC_MSG_RESULT([enabled, rewrite file is "$withval"])
 		else
 			AC_MSG_RESULT([disabled, no rewrite file will be used])
 		fi
@@ -575,7 +578,7 @@ AC_ARG_WITH( fixed-path-translated,
 	[  --without-fixed-path-translated]
 	[  Don't fix the PATH_TRANSLATED variable (pre 3.5 behavior)],
 	[
-		if test x$withval != xno; then
+		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_FIXED_PATHTRANS)
 			AC_MSG_RESULT([enabled, PATH_TRANSLATED will be set correctly])
 		else
@@ -598,16 +601,16 @@ AC_DEFUN(CGIWRAP_SETENV,[
 	[  --with-setenv-$1=$3]
         [  set $2 environment variable to $3],
 	[
-		if test x$withval = xyes; then
+		if test "x$withval" = xyes; then
 			AC_MSG_RESULT([no value specified])
-		elif test x$withval = x; then
+		elif test "x$withval" = x; then
 			AC_MSG_RESULT([no value specified])
-		elif test x$withval = xno; then
+		elif test "x$withval" = xno; then
 			AC_MSG_RESULT([disabled])
 		else
 			AC_DEFINE(CONF_SETENV_ANY)
-			AC_DEFINE_UNQUOTED(CONF_SETENV_$2, "${withval}")
-			AC_MSG_RESULT([enabled, set to (${withval})])
+			AC_DEFINE_UNQUOTED(CONF_SETENV_$2, "$withval")
+			AC_MSG_RESULT([enabled, set to ("$withval")])
 		fi
 	],
 	[
@@ -630,16 +633,16 @@ AC_DEFUN(CGIWRAP_RLIMIT,[
 	[  --with-rlimit-$1=$3  ($5)]
         [  limit $6 with setrlimit],
 	[
-		if test x$withval = xyes; then
+		if test "x$withval" = xyes; then
 			withval=$5
 		fi
-		if test x$withval = x; then
+		if test "x$withval" = x; then
 			withval=$5
 		fi
-		if test x$withval != xno; then
+		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_USE_RLIMIT_ANY)
-			AC_DEFINE_UNQUOTED(CONF_USE_RLIMIT_$2, ${withval})
-			AC_MSG_RESULT([${withval} $4])
+			AC_DEFINE_UNQUOTED(CONF_USE_RLIMIT_$2, "$withval")
+			AC_MSG_RESULT(["$withval" $4])
 		else
 			AC_MSG_RESULT([none])
 		fi
@@ -673,12 +676,12 @@ AC_ARG_WITH( allow-file,
 	[  --with-allow-file=FILE  (/usr/adm/cgiwrap.allow)]
 	[  limit cgiwrap usage],
 	[
-		if test x$withval = x; then
+		if test "x$withval" = x; then
 			withval="/usr/adm/cgiwrap.allow"
 		fi
-		if test x$withval != xno; then
-			AC_DEFINE_UNQUOTED(CONF_ALLOWFILE, "${withval}")
-			AC_MSG_RESULT([enabled, file is ${withval}])
+		if test "x$withval" != xno; then
+			AC_DEFINE_UNQUOTED(CONF_ALLOWFILE, "$withval")
+			AC_MSG_RESULT([enabled, file is "$withval"])
 		else
 			AC_MSG_RESULT([disabled])
 		fi
@@ -692,12 +695,12 @@ AC_ARG_WITH( deny-file,
 	[  --with-deny-file=FILE  (/usr/adm/cgiwrap.deny)]
 	[  limit cgiwrap usage],
 	[
-		if test x$withval = x; then
+		if test "x$withval" = x; then
 			withval="/usr/adm/cgiwrap.deny"
 		fi
-		if test x$withval != xno; then
-			AC_DEFINE_UNQUOTED(CONF_DENYFILE, "${withval}")
-			AC_MSG_RESULT([enabled, file is ${withval}])
+		if test "x$withval" != xno; then
+			AC_DEFINE_UNQUOTED(CONF_DENYFILE, "$withval")
+			AC_MSG_RESULT([enabled, file is "$withval"])
 		else
 			AC_MSG_RESULT([disabled])
 		fi
@@ -711,8 +714,8 @@ AC_ARG_WITH( host-checking,
 	[  --with-host-checking]
 	[  allow specifying hosts in allow/deny files],
 	[
-		if test x$withval != xno; then
-			AC_DEFINE_UNQUOTED(CONF_CHECKHOST, ${withval})
+		if test "x$withval" != xno; then
+			AC_DEFINE_UNQUOTED(CONF_CHECKHOST, "$withval")
 			AC_MSG_RESULT([enabled])
 		else
 			AC_MSG_RESULT([disabled])
@@ -730,21 +733,21 @@ AC_ARG_WITH( afs,
 	[  --with-afs=DIR  (/usr/afsws)]
 	[  enable afs setpag() support],
 	[
-		if test x$withval = xno; then
+		if test "x$withval" = xno; then
 			AC_MSG_RESULT([disabled])
 		else
-			if test x$withval = x; then
+			if test "x$withval" = x; then
 				withval="/usr/afsws"
 			fi
-			if test x$withval = xyes; then
+			if test "x$withval" = xyes; then
 				withval="/usr/afsws"
 			fi
-			AFSDIR=$withval
+			AFSDIR="$withval"
 			AFSCFLAGS="-I${AFSDIR}/include"
 			AFSLDFLAGS="-L${AFSDIR}/lib -L${AFSDIR}/lib/afs"
 			AFSLIBS="-lsys -lrx -llwp ${AFSDIR}/lib/afs/util.a"
 			AC_DEFINE(CONF_AFS_SETPAG)
-			AC_MSG_RESULT([enabled, afs dir is $withval])
+			AC_MSG_RESULT([enabled, afs dir is "$withval"])
 		fi
 	],
 	[
@@ -775,6 +778,5 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(limits.h stdlib.h pwd.h string.h strings.h)
 AC_CHECK_HEADERS(sys/resource.h sys/types.h sys/time.h unistd.h)
 AC_CHECK_HEADERS(syslog.h fcntl.h sys/stat.h signal.h ctype.h)
-
 
 AC_OUTPUT(Makefile unsup/loganalyze.pl)

@@ -41,3 +41,4 @@ char *GetBaseDirectory(struct passwd *user);
 int FileExists(char *path);
 int DirExists(char *path);
 void LogInit (void);
+void LogEnd (void);

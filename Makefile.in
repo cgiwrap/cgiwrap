@@ -101,4 +101,5 @@ tardist: dist
 	rm -f ../cgiwrap-$(VERSION).tar.gz.sig
 	#mv ../cgiwrap-$(VERSION).tar.gz.asc ../cgiwrap-$(VERSION).tar.gz.sig
 	
-
+commit: configure config.h.in docs
+	cvs commit -m "" .

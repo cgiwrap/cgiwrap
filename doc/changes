@@ -51,6 +51,8 @@
      * Added fcntl.h include, needed by open(). Problem reported by Seth
        Chaiklin . Also fixed quoting in the configure.in related to log
        file.
+     * Finished splitting up logging functions and changes to use the
+       Context structure.
        
   New in version 3.5:
   
