@@ -20,7 +20,7 @@
 
 # $Id$
 #
-# Generated on Thu Dec  5 19:58:22 CST 1996 [metaconfig 3.0 PL60]
+# Generated on Thu Dec  5 21:03:27 CST 1996 [metaconfig 3.0 PL60]
 
 cat >/tmp/c1$$ <<EOF
 ARGGGHHHH!!!!!
@@ -226,6 +226,7 @@ d_conf_check_scrowrite=''
 d_conf_check_scrsgid=''
 d_conf_check_scrsuid=''
 d_conf_check_scruid=''
+d_conf_check_symlink=''
 d_conf_fixed_pathtrans=''
 d_check_httpd_user=''
 d_httpd_user=''
@@ -1853,6 +1854,24 @@ y|Y) val="$define" ;;
 esac
 
 set d_conf_check_scrowrite
+eval $setvar
+
+#-------------------
+
+case "$d_conf_check_symlink" in
+undef) dflt='n' ;;
+*) dflt='y' ;;
+esac
+
+rp="Check if script is a symbolic link?"
+. ./myread
+
+case "$ans" in
+y|Y) val="$define" ;;
+*) val="$undef" ;;
+esac
+
+set d_conf_check_symlink
 eval $setvar
 
 
@@ -4194,6 +4213,7 @@ d_conf_check_scrowrite='$d_conf_check_scrowrite'
 d_conf_check_scrsgid='$d_conf_check_scrsgid'
 d_conf_check_scrsuid='$d_conf_check_scrsuid'
 d_conf_check_scruid='$d_conf_check_scruid'
+d_conf_check_symlink='$d_conf_check_symlink'
 d_conf_fixed_pathtrans='$d_conf_fixed_pathtrans'
 d_check_httpd_user='$d_check_httpd_user'
 d_httpd_user='$d_httpd_user'

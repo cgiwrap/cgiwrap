@@ -15,6 +15,8 @@ script is group or world writable. I cannot make the check for world
 writable forced on, since on my site using AFS, the permission bits 
 aren't used, and some scripts might be marked as world writable. Can't 
 break user scripts without a major hassle.
+	<LI>Added code to optionally check if script file is a symbolic 
+link. Of course, the script dir itself could still be a symbolic link.
 </UL>
 
 <P><H3>New in version 3.5:</H3><UL>

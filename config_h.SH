@@ -258,10 +258,18 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
 /* CONF_CHECK_SCRSGID:
  *	If defined, cgiwrap will verify that the script is not set-gid
  */
+/* CONF_CHECK_SCRGWRITE:
+ *	If defined, cgiwrap will verify that the script is not group writable
+ */
+/* CONF_CHECK_SYMLINK:
+ *	If defined, cgiwrap will verify that the script is not a symlink
+ */
 #$d_conf_check_scruid CONF_CHECK_SCRUID		/**/
 #$d_conf_check_scrgid CONF_CHECK_SCRGID		/**/
 #$d_conf_check_scrsuid CONF_CHECK_SCRSUID		/**/
 #$d_conf_check_scrsgid CONF_CHECK_SCRSGID		/**/
+#$d_conf_check_scrgwrite CONF_CHECK_SCRGWRITE	/**/
+#$d_conf_check_symlink CONF_CHECK_SYMLINK		/**/
 
 /* CONF_FIXED_PATHTRANS:
  *	Defined if you want cgiwrap to set the correct PATH_TRANSLATED

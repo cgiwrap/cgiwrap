@@ -5,9 +5,11 @@
 >CONF_CHECKHOST
 >CONF_CHECK_HTTPD_USER
 >CONF_CHECK_SCRGID
+>CONF_CHECK_SCRGWRITE
 >CONF_CHECK_SCRSGID
 >CONF_CHECK_SCRSUID
 >CONF_CHECK_SCRUID
+>CONF_CHECK_SYMLINK
 >CONF_DENYFILE
 >CONF_FIXED_PATHTRANS
 >CONF_HTTPD_USER
@@ -63,9 +65,11 @@ d_check_httpd_user
 d_conf_access
 d_conf_afs_setpag
 d_conf_check_scrgid
+d_conf_check_scrgwrite
 d_conf_check_scrsgid
 d_conf_check_scrsuid
 d_conf_check_scruid
+d_conf_check_symlink
 d_conf_checkhost
 d_conf_fixed_pathtrans
 d_conf_initgroups
