@@ -519,11 +519,12 @@ AC_ARG_WITH( httpd-user,
 		if test "x$withval" = x; then
 			withval=http
 		fi
+		AC_DEFINE_UNQUOTED(CONF_HTTPD_USER, "$withval", [user httpd executing as])
 	],
 	[ 
+		AC_DEFINE_UNQUOTED(CONF_HTTPD_USER, "$withval", [user httpd executing as])
 		withval=http
 	])
-AC_DEFINE_UNQUOTED(CONF_HTTPD_USER, "$withval", [user httpd executing as])
 AC_MSG_RESULT([server running as "$withval"])
 
 dnl
