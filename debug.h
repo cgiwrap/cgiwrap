@@ -1,3 +1,5 @@
+/* rcsid: $Id$ */
+
 /**
  **  File: debug.h
  **  Purpose: Prototypes and defines for routines in debug.c
