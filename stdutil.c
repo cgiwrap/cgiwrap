@@ -1,16 +1,5 @@
 static char *rcsid="$Id$";
 
-/* CVS Log: 
-test
-$Log$
-Revision 1.7  1996/07/30 02:25:11  nneul
-*** empty log message ***
-
-Revision 1.6  1996/07/30 02:24:38  nneul
-*** empty log message ***
-
-*/
-
 /**
  **  File: stdutil.c
  **  Purpose: Home grown alternatives for routines not in standard library
