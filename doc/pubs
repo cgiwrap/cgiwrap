@@ -8,27 +8,27 @@
           Que Corporation
 
    Excerpt (750-751):
-          A  better  solution  to  the  problem  of deciding which user a
-          script  runs  as  when  multiple  people have CGI access is the
-          CGIWrap  program.  CGIWrap,  which  is  included on the CD that
-          accompanies  this book, is a simple wrapper that executes a CGI
-          script  as the user that owns the file instead of the user that
-          the  server specifies. This simple precaution leaves the script
+          A better solution to the problem of deciding which user a
+          script runs as when multiple people have CGI access is the
+          CGIWrap program. CGIWrap, which is included on the CD that
+          accompanies this book, is a simple wrapper that executes a CGI
+          script as the user that owns the file instead of the user that
+          the server specifies. This simple precaution leaves the script
           owner responsible for the damage it can do.
 
-          For  instance,  if  the  user "joanne" owns a CGI script that's
-          wrapped  in CGIWrap, the server will execute the script as user
-          "joanne."  In  this way, CGIWrap acts like a setuid bit but has
-          the  added  advantage  of  being  controlled  by the Web server
-          rather  than  the operating system. That means that anybody who
+          For instance, if the user "joanne" owns a CGI script that's
+          wrapped in CGIWrap, the server will execute the script as user
+          "joanne." In this way, CGIWrap acts like a setuid bit but has
+          the added advantage of being controlled by the Web server
+          rather than the operating system. That means that anybody who
           sneaks through any security holes in the script will be limited
-          to  whatever "joanne" herself can do-the files she can read and
+          to whatever "joanne" herself can do-the files she can read and
           delete, the directories she can view, and so on.
 
-          Because  CGIWrap  puts  CGI  script  authors  in  charge of the
-          permissions  for  their  own scripts, it can be a powerful tool
-          not  only  to  protect  important files owned by others, but to
-          motivate  people  to write secure scripts. The realization that
+          Because CGIWrap puts CGI script authors in charge of the
+          permissions for their own scripts, it can be a powerful tool
+          not only to protect important files owned by others, but to
+          motivate people to write secure scripts. The realization that
           only their files would be in danger can be a powerful persuader
           to script authors.
 
@@ -36,8 +36,8 @@
           Copyright © 1996, Que Corporation
 
    Comments:
-          The  book  is pretty good, at least in the copy I got, they say
-          that  CGIwrap  is  included  on  the  CD,  but  I can't find it
+          The book is pretty good, at least in the copy I got, they say
+          that CGIwrap is included on the CD, but I can't find it
           anywhere.
 
 Other References
