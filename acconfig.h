@@ -53,6 +53,7 @@
 #undef HAS_SIGSET
 #undef HAS_INITGROUPS
 #undef HAS_SETGROUPS
+#undef HAS_GETGROUPS
 #undef HAS_SETGID
 #undef HAS_SETUID
 #undef HAS_SETEGID
@@ -75,6 +76,7 @@
  * Various options
  */
 #undef CONF_MINIMUM_UID
+#undef CONF_MINIMUM_GID
 #undef CONF_REDIR_STDERR
 #undef CONF_SUBDIRS
 #undef CONF_USERDIRFILE

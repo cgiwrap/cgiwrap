@@ -367,6 +367,14 @@ void CheckUser(struct passwd *user)
 	}
 #endif
 
+#if defined(CONF_MINIMUM_GID)
+	if ( user->pw_gid < CONF_MINIMUM_GID )
+	{
+		Log(user->pw_name, "-", "gid less than minimum");
+		MSG_Error_AccessControl("GID of script userid less than configured minimum.",NULL);
+	}
+#endif
+
 #if defined(CONF_CHECKSHELL)
 	{
 	char *sh, *getusershell();
@@ -829,6 +837,11 @@ void ChangeID ( struct passwd *user)
  */
 void ChangeAuxGroups(struct passwd *user)
 {
+#if defined(CONF_MINIMUM_GID) && defined(HAS_GETGROUPS)
+	int i,j;
+	gid_t *groups;
+#endif
+
 #if defined(HAS_SETGROUPS) && defined(CONF_SETGROUPS)
 	gid_t grouplist[1];
 	grouplist[0] = user->pw_gid;
@@ -840,6 +853,26 @@ void ChangeAuxGroups(struct passwd *user)
 #if defined(HAS_INITGROUPS) && defined(CONF_INITGROUPS)
 	if ( initgroups( user->pw_name, user->pw_gid ) == -1 )
 		MSG_Error_SystemError("initgroups() failed!");
+#endif
+
+	/* verify here that we didn't enable a group less than minimum */
+#if defined(CONF_MINIMUM_GID) && defined(HAS_GETGROUPS)
+	i = getgroups(0, groups);
+	if ( i > 0 )
+	{
+		groups = (gid_t *)SafeMalloc(i * sizeof(gid_t), "Auxilliary Group List");
+		getgroups(i, groups);
+
+		for ( j=0; j<i; j++ )
+		{
+printf("checking %d against %d\n", groups[j], CONF_MINIMUM_GID);
+			if ( groups[j] < CONF_MINIMUM_GID )
+			{
+                		Log(user->pw_name, "-", "supplementary gid less than minimum");
+                		MSG_Error_AccessControl("Supplementary GID of script userid less than configured minimum.",NULL);
+			}
+		}
+	}
 #endif
 }
 

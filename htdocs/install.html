@@ -140,7 +140,10 @@ specific environment to be set up. See <A HREF="chroot.html">chroot docs</A>
 for more details.
 
 <DT>--with-minimum-uid=UID
-<D>set the minimum uid of user that can use cgiwrap
+<D>set the minimum uid of user that can use cgiwrap, defaults to 100
+
+<DT>--with-minimum-gid=GID
+<D>set the minimum gid or aux gid of user that can use cgiwrap - not enabled by default
 
 <DT>--with-logging-syslog=LABEL
 <DD>enable logging script execution to syslog

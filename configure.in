@@ -4,7 +4,7 @@ AC_CONFIG_AUX_DIR(.)
 AC_CANONICAL_SYSTEM
 AC_CONFIG_HEADER(config.h)
 
-VERSION="3.7"
+VERSION="3.7.1"
 AC_SUBST(VERSION)
 
 AC_PROG_CC
@@ -38,6 +38,7 @@ dnl
 AC_CHECK_FUNC(sigset,[AC_DEFINE(HAS_SIGSET)])
 AC_CHECK_FUNC(initgroups, [AC_DEFINE(HAS_INITGROUPS)])
 AC_CHECK_FUNC(setgroups, [AC_DEFINE(HAS_SETGROUPS)])
+AC_CHECK_FUNC(getgroups, [AC_DEFINE(HAS_GETGROUPS)])
 AC_CHECK_FUNC(setgid, [AC_DEFINE(HAS_SETGID)])
 AC_CHECK_FUNC(setuid, [AC_DEFINE(HAS_SETUID)])
 AC_CHECK_FUNC(setegid, [AC_DEFINE(HAS_SETEGID)])
@@ -553,6 +554,25 @@ AC_ARG_WITH( minimum-uid,
 	[
 		AC_MSG_RESULT([10])
 		AC_DEFINE_UNQUOTED(CONF_MINIMUM_UID,10)
+	])
+
+dnl
+dnl Check for minimum gid
+dnl
+AC_MSG_CHECKING([for minimum gid (primary and auxilliary)])
+AC_ARG_WITH( minimum-gid, 
+	[  --with-minimum-gid=GID  (not checked)]
+	[  minimum gid to allow script execution], 
+	[
+		if test "x$withval" != xno; then
+			AC_DEFINE_UNQUOTED(CONF_MINIMUM_GID, $withval)
+			AC_MSG_RESULT($withval)
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
 	])
 
 

@@ -5,7 +5,13 @@
    version to version.
      _________________________________________________________________
 
-  New if version 3.7:
+  New in version 3.7.1:
+
+     * Added  --with-minimum-gid  option  to  check  minimum user GID and
+       auxilliary  groups.  This  is in response to complaints on BugTraq
+       about suexec not checking auxgroups.
+
+  New in version 3.7:
 
      * Encode  user  supplied  output in error messages to fix cross-site
        scripting vulnerability reported by Hiromitsu Takagi.

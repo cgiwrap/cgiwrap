@@ -136,7 +136,10 @@
           details.
 
    --with-minimum-uid=UID set the minimum uid of user that can use
-          cgiwrap
+          cgiwrap, defaults to 100
+
+   --with-minimum-gid=GID set the minimum gid or aux gid of user that can
+          use cgiwrap - not enabled by default
 
    --with-logging-syslog=LABEL
           enable logging script execution to syslog
