@@ -10,11 +10,10 @@ CGIwrap works with NCSA httpd, Apache, CERN httpd, NetSite Commerce and
 Communications servers, and probably any other Unix based web server 
 software that supports CGI.
 
-This code may be freely copied and distributed as long as the documentation
-and README files are kept intact. You may not modify and redistribute 
-CGIwrap without my permission. Permission is granted to include CGIwrap on
-any CD-ROM or online software collection as long as I get a complimentary
-copy of the CD-ROM, or at the very least, you send me an order form.
+CGIWrap is licensed under the GNU General Public License. See the file
+COPYING in the distribution for more details. If you're going to include 
+something about it in a book, I'd appreciate you sending me a copy, but it's
+not required by the license.
  
 An important note is, this script makes the CGI access MORE secure, but 
 it does not make CGI "secure". By it's very nature, CGI itself can 
