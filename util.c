@@ -644,7 +644,15 @@ void DoPError (char *msg)
 	printf("\n");
 
 	printf("CGIwrap Error: %s\n", msg);
+
+#if defined(HAS_STRERROR)
 	printf("Error: %s (%d)\n", strerror(errno), errno);
+#else if defined(HAS_PERROR)
+	perror("Error");
+#else
+	printf("Error: %d\n", errno);
+#endif
+
 	exit(1);
 }
 

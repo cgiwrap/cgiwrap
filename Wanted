@@ -24,6 +24,7 @@
 >CONF_USE_RLIMIT_VMEM
 >CONF_USE_SYSTEM
 >HAS_INITGROUPS
+>HAS_PERROR
 >HAS_SETEGID
 >HAS_SETEUID
 >HAS_SETGID
@@ -37,6 +38,7 @@
 >HAS_SETUID
 >HAS_SIGSET
 >HAS_STRDUP
+>HAS_STRERROR
 >HAS_SYSLOG
 >HAS_SYSTEM
 >I_LIMITS
@@ -77,6 +79,7 @@ d_conf_use_system
 d_conf_userdirfile
 d_conf_useset
 d_initgroups
+d_perror
 d_setegid
 d_seteuid
 d_setgid
@@ -90,6 +93,7 @@ d_setruid
 d_setuid
 d_sigset
 d_strdup
+d_strerror
 d_syslog
 d_system
 date

@@ -20,7 +20,7 @@
 
 # $Id$
 #
-# Generated on Sun Jun  2 14:52:36 CDT 1996 [metaconfig 3.0 PL60]
+# Generated on Wed Jul  3 19:25:29 CDT 1996 [metaconfig 3.0 PL60]
 
 cat >/tmp/c1$$ <<EOF
 ARGGGHHHH!!!!!
@@ -244,6 +244,7 @@ cpplast=''
 cppminus=''
 cpprun=''
 cppstdin=''
+d_perror=''
 d_portable=''
 d_setegid=''
 d_seteuid=''
@@ -254,6 +255,10 @@ d_setreuid=''
 d_setrgid=''
 d_setruid=''
 d_strdup=''
+d_strerrm=''
+d_strerror=''
+d_sysernlst=''
+d_syserrlst=''
 d_syslog=''
 syslogc=''
 syslogo=''
@@ -3511,6 +3516,10 @@ in this Configure script.
 
 EOM
 
+: see if perror exists
+set perror d_perror
+eval $inlibc
+
 : see if sigset exists
 set sigset d_sigset
 eval $inlibc
@@ -3578,6 +3587,43 @@ case "\$name" in
 esac
 EOF
 chmod +x findhdr
+
+: see if strerror and/or sys_errlist[] exist
+echo " "
+if set strerror val -f d_strerror; eval $csym; $val; then
+	echo 'strerror() found.' >&4
+	d_strerror="$define"
+	d_strerrm='strerror(e)'
+	if set sys_errlist val -a d_syserrlst; eval $csym; $val; then	
+		echo "(You also have sys_errlist[], so we could roll our own strerror.)" 
+		d_syserrlst="$define"
+	else
+	echo "(Since you don't have sys_errlist[], sterror() is welcome.)"
+		d_syserrlst="$undef"
+	fi
+elif xxx=`./findhdr string.h`; test "$xxx" || xxx=`./findhdr strings.h`; \
+	$contains '#[ 	]*define.*strerror' "$xxx" >/dev/null 2>&1; then
+	echo 'strerror() found in string header.' >&4
+	d_strerror="$define"
+	d_strerrm='strerror(e)'
+	if set sys_errlist val -a d_syserrlst; eval $csym; $val; then	
+		echo "(Most probably, strerror() uses sys_errlist[] for descriptions.)"
+		d_syserrlst="$define"
+	else
+		echo "(You don't appear to have any sys_errlist[], how can this be?)"
+		d_syserrlst="$undef"
+	fi
+elif set sys_errlist val -a d_syserrlst; eval $csym; $val; then
+echo "strerror() not found, but you have sys_errlist[] so we'll use that." >&4
+	d_strerror="$undef"
+	d_syserrlst="$define"
+	d_strerrm='((e)<0||(e)>=sys_nerr?"unknown":sys_errlist[e])'
+else
+	echo 'strerror() and sys_errlist[] NOT found.' >&4
+	d_strerror="$undef"
+	d_syserrlst="$undef"
+	d_strerrm='"unknown"'
+fi
 
 : see if syslog is available
 echo " "
@@ -4089,6 +4135,7 @@ cpplast='$cpplast'
 cppminus='$cppminus'
 cpprun='$cpprun'
 cppstdin='$cppstdin'
+d_perror='$d_perror'
 d_portable='$d_portable'
 d_setegid='$d_setegid'
 d_seteuid='$d_seteuid'
@@ -4099,6 +4146,10 @@ d_setreuid='$d_setreuid'
 d_setrgid='$d_setrgid'
 d_setruid='$d_setruid'
 d_strdup='$d_strdup'
+d_strerrm='$d_strerrm'
+d_strerror='$d_strerror'
+d_sysernlst='$d_sysernlst'
+d_syserrlst='$d_syserrlst'
 d_syslog='$d_syslog'
 syslogc='$syslogc'
 syslogo='$syslogo'

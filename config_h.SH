@@ -36,6 +36,20 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
 #ifndef _config_h_
 #define _config_h_
 
+/* HAS_PERROR:
+ *	This symbol, if defined, indicates that the perror() routine is
+ *	available to print system error messages. If not defined, you should
+ *	use your own diagnostic routine...
+ */
+/* perror:
+ *	This symbol is maped to null if the  perror() routine is not
+ *	available to print system error messages.
+ */
+#$d_perror HAS_PERROR	/**/
+#ifndef HAS_PERROR
+#define perror(s)	;		/* mapped to a null statement */
+#endif
+
 /* HAS_SETEGID:
  *	This symbol, if defined, indicates that the setegid routine is available
  *	to change the effective gid of the current program.
@@ -92,6 +106,13 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
  *	your own...
  */
 #$d_strdup HAS_STRDUP		/**/
+
+/* HAS_STRERROR:
+ *	This symbol, if defined, indicates that the strerror routine is
+ *	available to translate error numbers to strings. See the writeup
+ *	of Strerror() in this file before you try to define your own.
+ */
+#$d_strerror HAS_STRERROR		/**/
 
 /* HAS_SYSLOG:
  *	This symbol, if defined, indicates that the program can rely on the
