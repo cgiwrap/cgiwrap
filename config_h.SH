@@ -263,6 +263,13 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
 #$d_conf_check_scrsuid CONF_CHECK_SCRSUID		/**/
 #$d_conf_check_scrsgid CONF_CHECK_SCRSGID		/**/
 
+/* CONF_FIXED_PATHTRANS:
+ *	Defined if you want cgiwrap to set the correct PATH_TRANSLATED
+ *	environment variable, as opposed to the incorrect value that has
+ *	been getting set for several versions.
+ */
+#$d_conf_fixed_pathtrans CONF_FIXED_PATHTRANS		/**/
+
 /* CONF_HTTPD_USER:
  *	This symbol contains the userid that the web server runs as.
  */

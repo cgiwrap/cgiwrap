@@ -9,6 +9,7 @@
 >CONF_CHECK_SCRSUID
 >CONF_CHECK_SCRUID
 >CONF_DENYFILE
+>CONF_FIXED_PATHTRANS
 >CONF_HTTPD_USER
 >CONF_INITGROUPS
 >CONF_LOG_LABEL
@@ -67,6 +68,7 @@ d_conf_check_scrsgid
 d_conf_check_scrsuid
 d_conf_check_scruid
 d_conf_checkhost
+d_conf_fixed_pathtrans
 d_conf_initgroups
 d_conf_log_usefile
 d_conf_log_usesyslog

@@ -20,7 +20,7 @@
 
 # $Id$
 #
-# Generated on Wed Jul  3 22:58:30 CDT 1996 [metaconfig 3.0 PL60]
+# Generated on Mon Jul 29 21:17:29 CDT 1996 [metaconfig 3.0 PL60]
 
 cat >/tmp/c1$$ <<EOF
 ARGGGHHHH!!!!!
@@ -224,6 +224,7 @@ d_conf_check_scrgid=''
 d_conf_check_scrsgid=''
 d_conf_check_scrsuid=''
 d_conf_check_scruid=''
+d_conf_fixed_pathtrans=''
 d_check_httpd_user=''
 d_httpd_user=''
 httpd_user=''
@@ -1545,6 +1546,40 @@ esac
 set d_conf_check_scrsgid
 eval $setvar
 
+
+
+$cat <<'EOM'
+
+Versions of CGIwrap up to and including version 3.4 were incorrectly setting 
+the PATH_TRANSLATED environment variable. Unfortunately, since this wasn't 
+noticed till recently, people may be relying on the incorrect behavior. If 
+you want CGIwrap to set the PATH_TRANSLATED variable correctly, then answer 
+the following question yes, otherwise answer no. The default is yes, since
+I am assuming that most people will want the correct value, and will not have
+previosly used it due to it being incorrect.
+
+For your information, if you answer the question yes, the value of the 
+PATH_TRANSLATED variable will be set to DOCUMENT_ROOT/PATH_INFO. Whereas 
+if you choose no, the PATH_TRANSLATED variable will be set to the actual 
+path to the script.
+
+EOM
+
+case "$d_conf_fixed_pathtrans" in
+undef) dflt='n' ;;
+*) dflt="y"
+esac
+
+rp="Correctly set PATH_TRANSLATED variable?"
+. ./myread
+
+case "$ans" in
+y|Y) val="$define" ;;
+*) val="$undef" ;;
+esac
+
+set d_conf_fixed_pathtrans
+eval $setvar
 
 : decide how portable to be
 case "$d_portable" in
@@ -3303,7 +3338,7 @@ use exec.
 
 EOM
 
-case "$d_conf_user_system" in
+case "$d_conf_use_system" in
 define) dflt='y' ;;
 undef) dflt='n' ;;
 *) dflt="n"
@@ -4115,6 +4150,7 @@ d_conf_check_scrgid='$d_conf_check_scrgid'
 d_conf_check_scrsgid='$d_conf_check_scrsgid'
 d_conf_check_scrsuid='$d_conf_check_scrsuid'
 d_conf_check_scruid='$d_conf_check_scruid'
+d_conf_fixed_pathtrans='$d_conf_fixed_pathtrans'
 d_check_httpd_user='$d_check_httpd_user'
 d_httpd_user='$d_httpd_user'
 httpd_user='$httpd_user'
