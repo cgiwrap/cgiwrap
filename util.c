@@ -883,10 +883,10 @@ printf("checking %d against %d\n", groups[j], CONF_MINIMUM_GID);
 int UserInFile(char *filename, char *user)
 {
 	FILE *file;
-	char temp[HUGE_STRING_LEN], *tmpuser;
+	char temp[HUGE_STRING_LEN];
 #if defined(CONF_CHECKHOST)
 	int count, remote_addr[4],spec_mask[4],spec_addr[4];
-	char *i;
+	char *i, *tmpuser;
 #endif
 	int j, intail;
 
