@@ -24,7 +24,7 @@ static char sccsid[] = "@(#)$Id$";
 
 #ifndef _AIX
 
-#include "../src/config.h"
+#include "config.h"
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/file.h>
