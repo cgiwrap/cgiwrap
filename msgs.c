@@ -59,7 +59,7 @@ void MSG_HTML_Header(char *title, char *msg)
 
 void MSG_Footer(void)
 {
-	MSG_RequestInfo();
+	MSG_Info();
 	if ( MSG_HTMLMessages )
 	{
 		MSG_HTML_Footer();
@@ -94,7 +94,7 @@ void MSG_Error_General(char *message)
 	exit(1);
 }
 
-void MSG_RequestInfo(void)
+void MSG_Info(void)
 {
 	if ( MSG_HTMLMessages )
 	{
@@ -107,6 +107,14 @@ void MSG_RequestInfo(void)
 			printf("<DD><B>SERVER_NAME</B>: %s\n", getenv("SERVER_NAME"));
 		}
 		printf("</DL>\n");
+
+		printf("<P><HR><P>\n");
+		printf("<DL>\n");
+		printf("<DT><B>Contact Information and Documentation:</B>\n");
+		printf("<P>\n");
+
+
+		printf("</DL>\n");
 	}
 	else
 	{
@@ -117,6 +125,10 @@ void MSG_RequestInfo(void)
 		{
 			printf("\tSERVER_NAME: %s\n", getenv("SERVER_NAME"));
 		}
+
+		printf("\n\n");
+		printf("Contact Information and Documentation:\n");
+		printf("\n");
 	}
 }
 

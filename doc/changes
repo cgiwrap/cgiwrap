@@ -48,6 +48,9 @@
        calls to autoheader when building cgiwrap.
      * Added in code to configure.in for the various information options
        such as local-site-url, local-contact-phone, etc.
+     * Added fcntl.h include, needed by open(). Problem reported by Seth
+       Chaiklin . Also fixed quoting in the configure.in related to log
+       file.
        
   New in version 3.5:
   

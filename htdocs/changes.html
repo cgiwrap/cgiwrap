@@ -45,6 +45,9 @@ so that a consistent time stamp is reached. This should eliminate spurious
 calls to autoheader when building cgiwrap.
 	<LI>Added in code to configure.in for the various information options
 such as local-site-url, local-contact-phone, etc.
+	<LI>Added fcntl.h include, needed by open(). Problem reported by 
+Seth Chaiklin <seth@psy.au.dk>. Also fixed quoting in the configure.in related
+to log file.
 </UL>
 
 <P><H3>New in version 3.5:</H3><UL>
