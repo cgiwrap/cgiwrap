@@ -26,6 +26,8 @@ fetch.c
 fetch.h
 stdutil.c
 stdutil.h
+msgs.c
+msgs.h
 Makefile.SH
 Configure                    Portability tool
 CVS
