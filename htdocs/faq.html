@@ -40,6 +40,12 @@ HREF="maillist.html">here</A>.
 
 <H3><A NAME="admin">Administrative Questions</H3>
 <DL>
+<P><DT>I am getting the error about the server userid.
+	<DD>CGIwrap needs to be configured with the userid that your 
+	web server is running as. For apache based servers, this is the userid
+	that is listed on the "User" line in httpd.conf. You specify this
+	when configuring CGIWrap using the --with-httpd-user option.
+
 <P><DT>I am getting the error "<TT>Can't ... </TT>". How can I fix this?
 	<DD>CGIwrap needs to be installed set-uid to root. Log in as 
 		root, change to the server's cgi-bin directory, and issue the commands:
@@ -55,7 +61,8 @@ HREF="maillist.html">here</A>.
 </PRE>
 	<DD>One of the problems is that this often is a security hole unless you can
 enable server side exec/virtual include only of executables that are in
-ExecCGI capable directories.
+ExecCGI capable directories. Some people have made patches that will 
+allow this to work. Ask on the list for details.
 
 <P><DT>I am getting the error "<TT>setgroups() failed!</TT>". What is wrong?
 	<DD>This occurs when CGIwrap is unable to set auxilliary groups. 
@@ -79,6 +86,17 @@ their resident size is small.
 	<DD>CGIwrap supports a debugging mode which can help to debug 
 		scripts. To use it, call CGIwrap via the URL <TT>http://.../cgiwrapd/...</TT> 
 		instead of <TT>http://.../cgiwrap/...</TT>.
+
+<P><DT>I am getting the error <TT>execv() failed</TT>
+	<DD>This generally results from either having the wrong path to perl, 
+		or having control-M's after the path to perl. This is usually
+		a result of uploading the script in binary mode instead of ascii.
+		You can fix this by re-uploading the script in ascii mode, or
+		using vi/perl/etc. to get rid of the control-M's in the file.
+		
+	<DD>For some situations, simply adding " -- " to the end of the
+	first line of the script will cause the error to go away, sometimes
+	not. 
 
 </DL>
 

@@ -37,6 +37,13 @@
           
   Administrative Questions
   
+   I am getting the error about the server userid.
+          CGIwrap needs to be configured with the userid that your web
+          server is running as. For apache based servers, this is the
+          userid that is listed on the "User" line in httpd.conf. You
+          specify this when configuring CGIWrap using the
+          --with-httpd-user option.
+          
    I am getting the error "Can't ... ". How can I fix this?
           CGIwrap needs to be installed set-uid to root. Log in as root,
           change to the server's cgi-bin directory, and issue the
@@ -52,7 +59,9 @@
 
           One of the problems is that this often is a security hole
           unless you can enable server side exec/virtual include only of
-          executables that are in ExecCGI capable directories.
+          executables that are in ExecCGI capable directories. Some
+          people have made patches that will allow this to work. Ask on
+          the list for details.
           
    I am getting the error "setgroups() failed!". What is wrong?
           This occurs when CGIwrap is unable to set auxilliary groups.
@@ -77,3 +86,14 @@
           CGIwrap supports a debugging mode which can help to debug
           scripts. To use it, call CGIwrap via the URL
           http://.../cgiwrapd/... instead of http://.../cgiwrap/....
+          
+   I am getting the error execv() failed
+          This generally results from either having the wrong path to
+          perl, or having control-M's after the path to perl. This is
+          usually a result of uploading the script in binary mode instead
+          of ascii. You can fix this by re-uploading the script in ascii
+          mode, or using vi/perl/etc. to get rid of the control-M's in
+          the file.
+          For some situations, simply adding " -- " to the end of the
+          first line of the script will cause the error to go away,
+          sometimes not.
