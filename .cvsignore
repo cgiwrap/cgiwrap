@@ -5,3 +5,4 @@ config.h
 configure
 cgiwrap
 Makefile
+autom4te.cache
