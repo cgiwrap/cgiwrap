@@ -1388,7 +1388,14 @@ void SetPathTranslated( char *cgiBaseDir, char *scriptPath )
 	if ( buf )
 	{
 		/* if so, copy in what we determined pathinfo should be after stripping off user portion */
-		strcpy(buf, new_pi);
+		if ( Context.interpreted_script ) /* for PHP we do not strip script path from PATH_TRANSLATED */
+		{
+			strcpy(buf, "/");
+			strcat(buf, Context.scriptRelativePath);
+			strcat(buf, new_pi);
+		} else {
+			strcpy(buf, new_pi);
+		}
 
 		buf = (char *) SafeMalloc( strlen(new_pt) + strlen("PATH_TRANSLATED") + 5, 
 			"new PATH_TRANSLATED environment variable");
