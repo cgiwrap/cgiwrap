@@ -128,6 +128,10 @@ char *FetchScriptString( char *basedir )
 		if ( !stat( tempStr2, &fstat ) )
 		{
 			max_user = i;
+			if ( S_ISREG(fstat.st_mode) )
+			{
+				i = -1;
+			}
 		} 		
 		else
 		{
@@ -148,6 +152,10 @@ char *FetchScriptString( char *basedir )
 		if ( !stat( tempStr2, &fstat ) )
 		{
 			max_multiuser = i;
+			if ( S_ISREG(fstat.st_mode) )
+			{
+				i = -1;
+			}
 		} 		
 		else
 		{
@@ -189,14 +197,21 @@ char *FetchScriptString( char *basedir )
 		"PATH_INFO environment variable" );
 	if ( !strcmp("", tempStr) )
 	{
+#ifdef HAS_UNSETENV
+		unsetenv("PATH_INFO");
+		free(tempStr2);
+#else
 		strcpy(tempStr2, "PATH_INFO=");
+		Context.newPathInfo = NULL;
+		SafePutenv(tempStr2, "clear PATH_INFO environment variable");
+#endif
 	}
 	else
 	{
-		sprintf(tempStr2, "PATH_INFO=/%s", tempStr);
+		sprintf(tempStr2, "PATH_INFO=%s", tempStr);
+		Context.newPathInfo = strdup(tempStr2 + strlen("PATH_INFO="));
+		SafePutenv(tempStr2, "set PATH_INFO environment variable");
 	}
-	Context.newPathInfo = strdup(tempStr2 + strlen("PATH_INFO="));
-	SafePutenv(tempStr2, "set PATH_INFO environment variable");
 	free(tempStr);
 
 	return GetPathComponents(max, scrStr);

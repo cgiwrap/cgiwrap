@@ -216,6 +216,7 @@ AC_CHECK_FUNC(strdup, 		[AC_DEFINE(HAS_STRDUP, 		[], [has strdup library functio
 AC_CHECK_FUNC(syslog, 		[AC_DEFINE(HAS_SYSLOG, 		[], [has syslog library function])])
 AC_CHECK_FUNC(setrlimit, 	[AC_DEFINE(HAS_SETRLIMIT, 	[], [has setrlimit library function])])
 AC_CHECK_FUNC(putenv, 		[AC_DEFINE(HAS_PUTENV, 		[], [has putenv library function])])
+AC_CHECK_FUNC(unsetenv, 	[AC_DEFINE(HAS_UNSETENV, 	[], [has unsetenv library function])])
 AC_CHECK_FUNC(wait3, 		[AC_DEFINE(HAS_WAIT3, 		[], [has wait3 library function])])
 AC_CHECK_FUNC(innetgr, 		[AC_DEFINE(HAS_INNETGR, 	[], [has innetgr library function])])
 

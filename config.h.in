@@ -261,6 +261,9 @@
 /* has syslog library function */
 #undef HAS_SYSLOG
 
+/* has unsetenv library function */
+#undef HAS_UNSETENV
+
 /* has wait3 library function */
 #undef HAS_WAIT3
 

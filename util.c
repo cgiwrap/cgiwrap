@@ -841,7 +841,10 @@ char *StripPathComponents(int count, char *path)
 		{
 			found++;
 		}	
-		i++;
+		if ( found < count )
+		{
+			i++;
+		}
 	}
 	tmp = strdup(path + i);
 
