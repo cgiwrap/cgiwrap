@@ -1164,7 +1164,8 @@ void SetPathTranslated( char *cgiBaseDir, char *scriptPath )
 	char *buf;
 	char *old_pt, *new_pt;
 	char *old_pi, *new_pi;
-	
+	char *docroot;
+
 	old_pt = getenv("PATH_TRANSLATED");
 	if ( ! old_pt )
 	{
@@ -1187,17 +1188,27 @@ void SetPathTranslated( char *cgiBaseDir, char *scriptPath )
 	{
 		/* if so, copy in what we determined pathinfo should be after stripping off user portion */
 		strcpy(buf, new_pi);
-	}
-	else
-	{
-		/* not found, can't do anything with information we have */
+
+		buf = (char *) SafeMalloc( strlen(new_pt) + 5, 
+			"new PATH_TRANSLATED environment variable");
+		sprintf(buf, "%s=%s", "PATH_TRANSLATED", new_pt); 
+		SafePutenv(buf, "new PATH_TRANSLATED environment variable");
+
 		return;
 	}
 
-	buf = (char *) SafeMalloc( strlen(new_pt) + 5, 
-		"new PATH_TRANSLATED environment variable");
-	sprintf(buf, "%s=%s", "PATH_TRANSLATED", new_pt); 
-	putenv(buf);
+	/* we might be able to fall back to using docroot if we have it */
+
+	docroot = getenv("DOCUMENT_ROOT");
+	if ( docroot )
+	{
+		buf = (char *) SafeMalloc( strlen("PATH_TRANSLATED") + strlen(docroot) + 
+			strlen(new_pi) + 5, "new PATH_TRANSLATED environment variable");
+		sprintf(buf, "PATH_TRANSLATED=%s%s", docroot, new_pi);
+		SafePutenv(buf, "new PATH_TRANSLATED environment variable");
+
+		return;
+	}
 }
 
 
