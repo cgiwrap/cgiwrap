@@ -5,7 +5,7 @@ AC_CONFIG_AUX_DIR(.)
 AC_CANONICAL_SYSTEM
 AC_CONFIG_HEADER(config.h)
 
-VERSION="3.8-rc1"
+VERSION="3.8-rc2"
 AC_SUBST(VERSION)
 
 AC_PROG_CC
@@ -49,6 +49,27 @@ AC_ARG_WITH( use-redirect-url,
 	[
 		AC_MSG_RESULT([disabled])
 	])
+
+
+dnl
+dnl Set SCRIPT_NAME to SCRIPT_URL
+dnl
+AC_MSG_CHECKING(for whether to use SCRIPT_URL to build SCRIPT_NAME)
+AC_ARG_WITH( use-script-url,
+        [  --with-use-script-url]
+        [  use SCRIPT_URL to build SCRIPT_NAME],
+        [
+                if test "x$withval" != xno; then
+                        AC_DEFINE(CONF_USE_SCRIPT_URL, [], [use SCRIPT_URL to build SCRIPT_NAME])
+                        AC_MSG_RESULT([enabled])
+                else
+                        AC_MSG_RESULT([disabled])
+                fi
+        ],
+        [
+                AC_MSG_RESULT([disabled])
+        ])
+
 
 AC_MSG_CHECKING(for require-redirect-url)
 AC_ARG_WITH( require-redirect-url,

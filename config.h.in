@@ -177,6 +177,9 @@
 /* set rlimit for VMEM to bytes */
 #undef CONF_USE_RLIMIT_VMEM
 
+/* use SCRIPT_URL to build SCRIPT_NAME */
+#undef CONF_USE_SCRIPT_URL
+
 /* dir for vhost allow files */
 #undef CONF_VHOST_ALLOWDIR
 

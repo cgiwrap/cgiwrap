@@ -1293,6 +1293,19 @@ void SetScriptName(char *userStr, char *scrStr )
 	}
 #endif
 
+#if defined(CONF_USE_SCRIPT_URL)
+	name = getenv("SCRIPT_URL");
+	if ( name ) {
+		buf = (char*) SafeMalloc (strlen("SCRIPT_NAME=") + strlen(name) + 3, 
+			"new SCRIPT_NAME environment variable");
+
+		sprintf(buf, "SCRIPT_NAME=%s", name);
+		SafePutenv(buf,"set SCRIPT_NAME environment variable");
+		return;
+	}
+
+#endif
+
 	name = getenv("SCRIPT_NAME");
 	if ( name ) {
 		/* only set SCRIPT_NAME if it was already set */
