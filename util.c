@@ -239,7 +239,7 @@ void CheckUser(struct passwd *user)
 		in_deny = UserInFile(CONF_DENYFILE, user->pw_name);
 	}
 #endif
-#if defined(CONF_DENYFILE)
+#if defined(CONF_ALLOWFILE)
 	if ( allow_exists )
 	{
 		in_allow = UserInFile(CONF_ALLOWFILE, user->pw_name);
@@ -656,7 +656,7 @@ void ChangeID ( struct passwd *user)
 	seteuid( user->pw_uid );
 	setruid( user->pw_uid );
 #else
-	MSG_Error_General("Configuration Error, No Way to Change IDs");
+#error "Configuration Error, No Way to Change IDs"
 #endif
 
 
@@ -711,7 +711,7 @@ void ChangeAuxGroups(struct passwd *user)
 int UserInFile(char *filename, char *user)
 {
 	FILE *file;
-	char temp[200], *tmpuser;
+	char temp[HUGE_STRING_LEN], *tmpuser;
 #if defined(CONF_CHECKHOST)
 	int unlen,remote_addr[4],spec_mask[4],spec_addr[4];
 	char *i;
@@ -738,7 +738,12 @@ int UserInFile(char *filename, char *user)
 
 	while ( !feof(file) )
 	{
-		fscanf(file,"%s",temp);
+		if ( fgets(temp, HUGE_STRING_LEN, file) <= 0 )
+		{
+			fclose(file);
+			return 0;
+		}
+
 		if ( !strcmp(temp,user) )
 		{
 			fclose(file);

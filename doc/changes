@@ -64,6 +64,8 @@
      * Fixed problem with CHECKHOST/CHECKHOSTS typos.
      * Added support for using "*" with checkhost support to restrict ALL
        userids from being accessed from that host. (*@x.x.x.x/y.y.y.y)
+     * Made 'no way to change uids' a compile time error with #error
+     * Fixed bug with ALLOWFILE define in util.c.
        
   New in version 3.5:
   

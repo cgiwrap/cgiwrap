@@ -66,6 +66,11 @@
 #include <grp.h>
 #endif
 
+#if defined(HUGE_STRING_LEN)
+#undef HUGE_STRING_LEN
+#endif
+#define HUGE_STRING_LEN 2500
+
 /*
  * Global context structure
  */
