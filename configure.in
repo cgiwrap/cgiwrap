@@ -31,6 +31,25 @@ AC_ARG_WITH( perl,
 	])
 
 dnl
+dnl Check for REDIRECT_URL when building SCRIPT_NAME
+dnl
+AC_MSG_CHECKING(for check-redirect-url)
+AC_ARG_WITH( check-redirect-url,
+	[  --with-check-redirect-url]
+	[  use REDIRECT_URL in building SCRIPT_NAME if available],
+	[
+		if test "x$withval" != xno; then
+			AC_DEFINE(CONF_CHECK_REDIRECT_URL)
+			AC_MSG_RESULT([enabled])
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
+	])
+
+dnl
 dnl Path to perl for unsupported stuff
 dnl
 AC_ARG_WITH( php, 

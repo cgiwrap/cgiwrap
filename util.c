@@ -1119,6 +1119,44 @@ void SetScriptName(char *userStr, char *scrStr )
 	char *buf;
 	char *name;
 
+#if defined(CONF_CHECK_REDIRECT_URL)
+	char *redurl = getenv("REDIRECT_URL");
+	int len;
+
+	/* Use REDIRECT_URL to build SCRIPT_NAME so we can
+	 * keep the URL the way user specified them.
+	 * For this to work we need to have already set
+	 * the correct PATH_INFO env if needed (this is
+ 	 * done by FetchScriptString).
+	 * NOTE: REDIRECT_URL is not a CGI standard
+	 * environment variable. --san@cobalt.rmnet.it;
+	 */
+	if ( redurl )
+	{
+		DEBUG_Str("\t----REDIRECT_URL: ", redurl);
+		name = getenv("PATH_INFO");
+		if ( name ) {
+			/* We need to strip PATH_INFO from REDIRECT_URL */
+			DEBUG_Str("\t----PATH_INFO: ", getenv("PATH_INFO"));
+			len = strlen(redurl) - strlen(name);
+			buf = (char*) SafeMalloc (strlen("SCRIPT_NAME=") +
+		    		len + 2,
+				"new SCRIPT_NAME environment variable");
+			snprintf(buf, strlen("SCRIPT_NAME=")+len+1,
+				"SCRIPT_NAME=%s", redurl);
+			
+		}
+		else {
+			buf = (char*) SafeMalloc (strlen("SCRIPT_NAME=") +
+		    		strlen(redurl) + 2,
+				"new SCRIPT_NAME environment variable");
+			sprintf(buf, "SCRIPT_NAME=%s", redurl);
+		}
+		SafePutenv(buf, "set SCRIPT_NAME environment variable");
+		return;
+	}
+#endif
+
 	name = getenv("SCRIPT_NAME");
 	if ( name ) {
 		/* only set SCRIPT_NAME if it was already set */
