@@ -941,14 +941,20 @@ void LogEnd(void)
 void SetScriptName(char *userStr, char *scrStr )
 {
 	char *buf;
+	char *name;
 
-	buf = (char*) SafeMalloc (strlen("SCRIPT_NAME") +
-	    strlen(getenv("SCRIPT_NAME")) + strlen(userStr)
-	    + strlen(scrStr) + 5, "new SCRIPT_NAME environment variable");
+	name = getenv("SCRIPT_NAME");
+	if ( name ) {
+		/* only set SCRIPT_NAME if it was already set */
 
-	sprintf(buf, "%s=%s/%s/%s", "SCRIPT_NAME", 
-	    getenv("SCRIPT_NAME"), userStr, scrStr);
-	SafePutenv(buf, "set SCRIPT_NAME environment variable");
+		buf = (char*) SafeMalloc (strlen("SCRIPT_NAME") +
+		    strlen(name) + strlen(userStr)
+		    + strlen(scrStr) + 5, "new SCRIPT_NAME environment variable");
+
+		sprintf(buf, "%s=%s/%s/%s", "SCRIPT_NAME", 
+		    name, userStr, scrStr);
+		SafePutenv(buf, "set SCRIPT_NAME environment variable");
+	}
 }
 
 
