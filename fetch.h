@@ -6,4 +6,4 @@
  **/
  
 char *FetchUserString(void);
-char *FetchScriptString(struct passwd *user);
+char *FetchScriptString(char *basedir);

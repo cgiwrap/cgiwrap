@@ -1,3 +1,4 @@
+>CONF_ACCESS
 >CONF_AFS_SETPAG
 >CONF_ALLOWFILE
 >CONF_CGIDIR
@@ -57,14 +58,13 @@ conf_cgidir
 conf_log_label
 conf_log_logfile
 d_check_httpd_user
+d_conf_access
 d_conf_afs_setpag
-d_conf_allowfile
 d_conf_check_scrgid
 d_conf_check_scrsgid
 d_conf_check_scrsuid
 d_conf_check_scruid
 d_conf_checkhost
-d_conf_denyfile
 d_conf_initgroups
 d_conf_log_usefile
 d_conf_log_usesyslog

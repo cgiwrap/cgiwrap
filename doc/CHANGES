@@ -3,6 +3,14 @@ Log of Changes to CGIwrap:
 Changes since 3.3:
    Fixed typo "&" instead of "&&" in setgroups stuff
    Added cgiwrap.aliases option to rewrite home dirs of users.
+   Moved entire cgiwrap source build tree to CVS, will make tracking
+	changes easier.
+   CGIwrap now changes directories to the directory the script is located
+	in before executing the script. Before, it always just changed
+	to the main CGI directory. This behavior is only different if you
+	were using scripts in subdirectories.
+   Changed style of cgiwrap.allow, cgiwrap.deny files to be the same as
+	cron's allow/deny files.
 
 Changes since 3.24:
    Added support for attaching a label to syslog log messages.

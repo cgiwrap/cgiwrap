@@ -147,46 +147,82 @@ void OutputEnvironment(void)
  * Change to the users cgi-bin directory, this serves to provide
  * a consistent strting point for paths.
  */
-void ChangeToCgiDir(struct passwd *user)
+void ChangeToCGIDir(char *scriptPath)
 {
-	if ( chdir(user->pw_dir) )
-	{
-		DoError("Couldn't change to home directory.");
-	}
+	char *tempdir;
+	char *tempstring;
+	int i;
 
-	if ( chdir(CONF_CGIDIR) )
-	{
-		DoError("Couldn't change to user's cgi-bin directory.");
-	}
+	i = CountSubDirs(scriptPath) - 1;
+	tempdir = GetPathComponents(i, scriptPath);
+
+	tempstring = (char *) malloc(strlen(tempdir) + 5);
+	tempstring[0] = '/';
+	tempstring[1] = 0;
+	strcat(tempstring, tempdir);
+
+	DEBUG_Str("\nChanging Current Directory to", tempstring);
+	chdir(tempstring);
+
+	free(tempdir);
+	free(tempstring);
 }
+
 
 /*
  * Perform checks on the userid 
  */
 void CheckUser(struct passwd *user)
 {
-#if defined(CONF_ALLOWFILE) || defined(CONF_DENYFILE)
+	int deny_exists, allow_exists;
+	int in_deny, in_allow;	
+
+#if defined(CONF_ACCESS)
 #if defined(CONF_CHECKHOST)
-      if ( ( !getenv("REMOTE_ADDR") ) | (getenv("REMOTE_ADDR")[0] == '\0') )
-      {
-              Log(user->pw_name, "-", "no remote host");
-              DoError("Your host (null) is not allowed to run this");
-      }
-#endif
-#endif
-#if defined(CONF_ALLOWFILE)
-	if ( ! UserInFile(CONF_ALLOWFILE,user->pw_name) )
+	if ( ( !getenv("REMOTE_ADDR") ) | (getenv("REMOTE_ADDR")[0] == '\0') )
 	{
-		Log(user->pw_name, "-", "not in allow config");
-		DoError("User not in allow config.");
+		Log(user->pw_name, "-", "no remote host");
+		DoError("Your host (null) is not allowed to run this");
 	}
 #endif
 
-#if defined(CONF_DENYFILE)
-	if ( UserInFile(CONF_DENYFILE,user->pw_name) )
+	deny_exists = FileExists(CONF_DENYFILE);
+	allow_exists = FileExists(CONF_ALLOWFILE);
+	in_deny = 0;
+	in_allow = 0;
+
+	if ( deny_exists )
 	{
-		Log(user->pw_name, "-", "user in deny config");
-		DoError("User in deny config.");
+		in_deny = UserInFile(CONF_DENYFILE, user->pw_name);
+	}
+
+	if ( allow_exists )
+	{
+		in_allow = UserInFile(CONF_ALLOWFILE, user->pw_name);
+	}
+
+	if ( !deny_exists && !allow_exists )
+	{
+		Log(user->pw_name, "-", "access control files not found");
+		DoError("Access control files not found!");
+	}
+
+	if ( in_allow && in_deny )
+	{
+		Log(user->pw_name, "-", "user in both allow and deny files");
+		DoError("User is both allowed and denied!");
+	}
+
+	if ( allow_exists && !in_allow )
+	{
+		Log(user->pw_name, "-", "user not in allow file");
+		DoError("User not in allow file!");
+	}
+
+	if ( deny_exists && in_deny )
+	{
+		Log(user->pw_name, "-", "user in deny file");
+		DoError("User in deny file!");
 	}
 #endif
 }
@@ -217,7 +253,7 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 
 	if ( stat(scriptPath, &fileStat) )
 	{
-		DoPError("Could not stat script file!");
+		DoPError("Script file not found!");
 	}
 
 	if ( !S_ISREG(fileStat.st_mode) )
@@ -266,6 +302,7 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 
 }
 
+
 /*
  *  Verify the CGIwrap is being executed by the server userid
  */
@@ -276,15 +313,13 @@ void VerifyExecutingUser(void)
 #if defined(CONF_CHECK_HTTPD_USER)
         if ( !(user = getpwnam(CONF_HTTPD_USER)) )
         {
-                DoError("CONF_HTTPD_USER not found.");
+                DoError("Configured server userid not found.");
         }
-        else
-        {
-                if ( getuid() != user->pw_uid )
-                {
-                        DoError("Real UID does not match CONF_HTTPD_USER.");
-                }
-        }
+
+	if ( getuid() != user->pw_uid )
+	{
+		DoError("Real UID does not match configured server userid!.");
+	}
 #endif
 }
 
@@ -292,19 +327,17 @@ void VerifyExecutingUser(void)
 /*
  * Construct string containing full path to script
  */
-char *BuildScriptPath(struct passwd *user, char *scrStr)
+char *BuildScriptPath(char *basedir, char *scrStr)
 {
 	char *tmp;
+	tmp = (char *) malloc( strlen(basedir) + strlen(scrStr) + 5);
 
-	tmp = (char *) malloc( strlen(scrStr) + strlen(user->pw_dir) + 
-		strlen(CONF_CGIDIR) + 4 );
-	
 	if ( !tmp )
 	{
 		DoPError("Couldn't malloc memory for scriptPath");
 	}
 
-	sprintf(tmp, "%s/%s/%s", user->pw_dir, CONF_CGIDIR, scrStr);
+	sprintf(tmp, "%s/%s", basedir, scrStr);
 
 	return tmp;
 }
@@ -641,8 +674,9 @@ void Log (char *user, char *script, char *msg)
 	time(&timevar);
 	timeString = ctime(&timevar);
 
-#if defined(CONF_LOG_USEFILE)
 	DEBUG_Msg("");
+
+#if defined(CONF_LOG_USEFILE)
 	DEBUG_Msg("Logging Request (File)");
 
 	if ( (logFile = fopen(CONF_LOG_LOGFILE, "a")) == NULL )
@@ -662,7 +696,6 @@ void Log (char *user, char *script, char *msg)
 	fclose(logFile);
 #endif
 #if defined(CONF_LOG_USESYSLOG) && defined(HAS_SYSLOG)
-	DEBUG_Msg("");
 	DEBUG_Msg("Logging Request (syslog)");
 
 	openlog("cgiwrap", LOG_PID | LOG_NOWAIT, LOG_DAEMON);
@@ -688,8 +721,6 @@ void SetScriptName(char *userStr, char *scrStr )
 {
 	char *buf;
 
-	DEBUG_Msg("Fixing SCRIPT_NAME environment variable.");
-
 	buf = (char*) malloc (strlen("SCRIPT_NAME") +
 	    strlen(getenv("SCRIPT_NAME")) + strlen(userStr)
 	    + strlen(scrStr) + 5);
@@ -711,8 +742,6 @@ void SetScriptName(char *userStr, char *scrStr )
 void SetPathTranslated( char *scriptPath )
 {
 	char *buf;
-
-	DEBUG_Msg("Fixing PATH_TRANSLATED environment variable.");
 
 	buf = (char *) malloc( strlen("PATH_TRANSLATED") +
 		strlen(scriptPath) + 5 );
@@ -746,26 +775,27 @@ void Create_AFS_PAG(void)
 /*
  * Rewrite user dir from configuration file if option is enabled
  */
-char *RewriteUserDir(char *user, char *userdir)
+char *GetUserDir(char *user)
 {
 	FILE *file;
-	static char temp[200];
+	static char temp[500];
 	int i, j;
 
 #if defined(CONF_USERDIRFILE)
+	DEBUG_Msg("\nProcessing User Directory Configuration File.");
+
 	if ( (file=fopen(CONF_USERDIRFILE,"r")) == NULL )
 	{
-		DoPError("Couldn't Open User Directory Rewrite File");
+		DoPError("Couldn't Open User Directory Config File");
 	}
 
 	temp[0]=0;
 	while ( !feof(file) )
 	{
-		fgets(temp, 199, file);
-
+		fgets(temp, 450, file);
 		i = strlen(user);
 
-		if ( !strncmp(user, temp, i) && temp[i+1] == ':' )
+		if ( !strncmp(user, temp, i) && temp[i] == ':' )
 		{
 			for ( j=0; j<strlen(temp); j++)
 			{
@@ -776,11 +806,95 @@ char *RewriteUserDir(char *user, char *userdir)
 			}	
 		
 			fclose(file);
-			return &temp[i+2];
+			return &temp[i+1];
 		}
 	}
 	fclose(file);
 #endif
 
-	return userdir;
+	return NULL;
 }
+
+
+/*
+ * Determine the base directory for user's scripts
+ */
+char *GetBaseDirectory(struct passwd *user)
+{
+	char *tmp;
+	char *userdir;
+	char *basedir;
+
+	userdir = GetUserDir(user->pw_name);
+
+	if ( userdir )
+	{
+		basedir = (char *) malloc( strlen(userdir) + 4 );
+		strcpy(basedir, userdir);
+
+		if ( !basedir )
+		{
+			DoPError("Couldn't malloc memory for basedir");
+		}
+	}
+	else
+	{
+		basedir = (char *) malloc( strlen(user->pw_dir) +
+			strlen(CONF_CGIDIR) + 4 );
+		
+		if ( !basedir )
+		{
+			DoPError("Couldn't malloc memory for basedir");
+		}
+
+		sprintf(basedir, "%s/%s", user->pw_dir, CONF_CGIDIR);
+	}
+
+	return basedir;
+}
+
+
+
+/*
+ * Check that a file exists
+ */
+int FileExists(char *path)
+{
+	struct stat fileStat; /* For checking file status */
+
+	if ( stat(path, &fileStat) )
+	{
+		return 0;
+	}
+
+	if ( !S_ISREG(fileStat.st_mode) )
+	{
+		return 0;
+	}
+
+	return 1;
+}
+
+
+
+/*
+ * Check that a directory exists
+ */
+int DirExists(char *path)
+{
+	struct stat fileStat; /* For checking file status */
+
+	if ( stat(path, &fileStat) )
+	{
+		return 0;
+	}
+
+	if ( !S_ISDIR(fileStat.st_mode) )
+	{
+		return 0;
+	}
+
+	return 1;
+}
+
+

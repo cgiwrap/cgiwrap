@@ -180,11 +180,6 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
 #define M_VOID			/* Xenix strikes again */
 #endif
 
-/* CONF_AFS_SETPAG:
- *	Defined if the cgiwrap should issue the AFS setpag() call..
- */
-#$d_conf_afs_setpag CONF_AFS_SETPAG		/**/
-
 /* CONF_ALLOWFILE:
  *	Defined to be the filename that cgiwrap checks to see what users are
  *	allowed to use cgiwrap scripts.
@@ -193,13 +188,23 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
  *	Defined to be the filename that cgiwrap checks to see what users are
  *	not allowed to use cgiwrap scripts.
  */
+/* CONF_ACCESS:
+ *	Defined if you have enabled access control checking of the allow/deny
+ *	files.
+ */
 /* CONF_CHECKHOST:
  *	Defined if you have enabled host address checking in the allow/deny
  *	files.
  */
-#$d_conf_allowfile CONF_ALLOWFILE "$allowfile"		/**/
-#$d_conf_denyfile CONF_DENYFILE "$denyfile"		/**/
+#$d_conf_access CONF_ALLOWFILE "$allowfile"		/**/
+#$d_conf_access CONF_DENYFILE "$denyfile"		/**/
+#$d_conf_access CONF_ACCESS	/**/
 #$d_conf_checkhost CONF_CHECKHOST	/**/
+
+/* CONF_AFS_SETPAG:
+ *	Defined if the cgiwrap should issue the AFS setpag() call..
+ */
+#$d_conf_afs_setpag CONF_AFS_SETPAG		/**/
 
 /* CONF_SETGROUPS:
  *	Defined if you want cgiwrap to clear the auxilliary groups for the 

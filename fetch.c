@@ -69,7 +69,7 @@ char *FetchUserString(void)
 
 
 
-char *FetchScriptString( struct passwd *user)
+char *FetchScriptString( char *basedir )
 {
 	char *tempStr, *tempStr2;
 	char *pathInfoString;
@@ -77,8 +77,6 @@ char *FetchScriptString( struct passwd *user)
 	char *scrStr;
 	struct stat fstat;
 	int i, max;
-
-	DEBUG_Msg("\n");
 
 	scrStr = 0;
 	pathInfoString = getenv("PATH_INFO");
@@ -125,7 +123,7 @@ char *FetchScriptString( struct passwd *user)
 	for (i=1; i<=(CountSubDirs(scrStr)+1) && i>0; i++)
 	{	
 		tempStr = GetPathComponents(i, scrStr);
-		tempStr2 = BuildScriptPath(user,tempStr);
+		tempStr2 = BuildScriptPath(basedir,tempStr);
 
 		if ( !stat( tempStr2, &fstat ) )
 		{
@@ -138,6 +136,11 @@ char *FetchScriptString( struct passwd *user)
 		free(tempStr);
 		free(tempStr2);
 	}	
+
+	if ( max < 1 )
+	{
+		DoError("Script File Not Found!");
+	}
 
 	/* Figure out the PATH_INFO and the script name */
 	tempStr = StripPathComponents(max, scrStr);

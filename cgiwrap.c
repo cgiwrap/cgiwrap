@@ -15,6 +15,7 @@ void main (int argc, char *argv[])
 	char *userStr; /* User name */
 	char *scrStr; /* Name of script */
 	char *scriptPath; /* Path to script file */
+	char *cgiBaseDir; /* Base directory for cgi scripts in user's dir */
 	struct passwd *user; /* For getting uid from name */
 
 	/* Determine if debugging output should be done */
@@ -74,17 +75,25 @@ void main (int argc, char *argv[])
 	/* Perform checks to make sure this user is allow to use CGI scripts */
 	CheckUser(user);
 
+	/* Determine the base directory where this user's CGI scripts
+		are to be stored */
+	cgiBaseDir = GetBaseDirectory(user);	
+	DEBUG_Str("Script Base Directory", cgiBaseDir);
+	if ( !DirExists(cgiBaseDir) )
+	{
+		DoError("CGI Directory Not Found.");	
+	}
+
 	/* Get the script name from the given data */
-	scrStr = FetchScriptString(user);
-	scriptPath = BuildScriptPath(user,scrStr);
+	scrStr = FetchScriptString(cgiBaseDir);
+	scriptPath = BuildScriptPath(cgiBaseDir,scrStr);
 
-	DEBUG_Str("Retrieved Script Name", scrStr);
-	DEBUG_Str("Retrieved Script Path", scriptPath);
+	DEBUG_Str("\tScript Name", scrStr);
+	DEBUG_Str("\tScript Path", scriptPath);
 
-	/* Set the Correct Values of SCRIPT_NAME envir. var. */
+	/* Set the Correct Values of environment variables */
+	DEBUG_Msg("\nFixing Environment Variables.");
 	SetScriptName(userStr, scrStr);
-
-	/* Set the Correct Values of PATH_TRANSLATED envir. var. */
 	SetPathTranslated( scriptPath );
 	
 	/* Output the modified environment variables */
@@ -100,7 +109,7 @@ void main (int argc, char *argv[])
 	ChangeID(user);
 
 	/* Change to the user's cgi-bin directory */
-	ChangeToCgiDir(user);
+	ChangeToCGIDir(scriptPath);
 
 	/* Check to see if ok to execute script file */
 	CheckScriptFile(user, scriptPath);

@@ -19,7 +19,7 @@ void OutputEnvironment(void);
 void CheckUser(struct passwd *user);
 void CheckScriptFile(struct passwd *user, char *scriptPath);
 void VerifyExecutingUser(void);
-char *BuildScriptPath(struct passwd *user, char *scrStr);
+char *BuildScriptPath(char *basedir, char *scrStr);
 char *GetPathComponents(int count, char *path);
 char *StripPathComponents(int count, char *path);
 void ChangeID ( struct passwd *user);
@@ -32,3 +32,8 @@ void Log (char *user, char *script, char *msg);
 void SetScriptName(char *userStr, char *scrStr );
 void SetPathTranslated(char *scriptPath);
 void Create_AFS_PAG(void);
+char *GetUserDir(char *user);
+char *GetBaseDirectory(struct passwd *user);
+
+int FileExists(char *path);
+int DirExists(char *path);
