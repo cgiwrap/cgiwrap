@@ -9,6 +9,12 @@
 /* user allow config file */
 #undef CONF_ALLOWFILE
 
+/* pass script to asp interpreter if suffix */
+#undef CONF_ASP_INTERPRETER
+
+/* pass script to asp interpreter only if nonexecutable file */
+#undef CONF_ASP_NONEXEC_ONLY
+
 /* cgi dir relative to user home dir */
 #undef CONF_CGIDIR
 
@@ -341,6 +347,9 @@
 
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
+
+/* path to asp executable to use */
+#undef PATH_PROG_ASP
 
 /* path to php executable to use */
 #undef PATH_PROG_PHP

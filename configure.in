@@ -145,7 +145,7 @@ AC_ARG_WITH( env-require-user,
 	])
 	
 dnl
-dnl Path to perl for unsupported stuff
+dnl Path to php for interpreter support
 dnl
 AC_ARG_WITH( php, 
 	[  --with-php=PATH]
@@ -164,6 +164,30 @@ AC_ARG_WITH( php,
 		AC_PATH_PROG(PATH_PROG_PHP, php, no)
 		if test "x${PATH_PROG_PHP}" != "xno"; then
 			AC_DEFINE_UNQUOTED(PATH_PROG_PHP,"${PATH_PROG_PHP}", [path to php executable to use])
+		fi
+	])
+
+
+dnl
+dnl Path to asp for interpreter support
+dnl
+AC_ARG_WITH( asp, 
+	[  --with-asp=PATH]
+	[  path to asp interpreter to use], 
+	[
+		AC_MSG_CHECKING(for asp interpreter)
+		if test "x$withval" != x; then
+			PATH_PROG_ASP="$withval"
+			AC_DEFINE_UNQUOTED(PATH_PROG_ASP,"$withval", [asp interpreter path])
+			AC_MSG_RESULT($withval)
+		else
+			AC_MSG_RESULT(not found)
+		fi
+	],
+	[
+		AC_PATH_PROG(PATH_PROG_ASP, asp-perl, no)
+		if test "x${PATH_PROG_ASP}" != "xno"; then
+			AC_DEFINE_UNQUOTED(PATH_PROG_ASP,"${PATH_PROG_ASP}", [path to asp executable to use])
 		fi
 	])
 
@@ -617,6 +641,45 @@ AC_ARG_WITH( php-cgiwrap,
 		AC_MSG_RESULT([disabled]);
 	])
 AC_SUBST(DOINSTALLPHP)
+
+
+
+dnl
+dnl Check for asp filename, and pass to php interpreter directly
+dnl
+AC_MSG_CHECKING(for asp-interpreter support)
+AC_ARG_WITH( asp-interpreter, 
+	[  --with-asp-interpreter]
+	[  pass script to asp interpreter if filename matches], 
+	[
+		if test "x$withval" != xno; then
+			AC_DEFINE(CONF_ASP_INTERPRETER, [], [pass script to asp interpreter if suffix])
+			AC_MSG_RESULT([enabled, asp will be handled specially])
+		else
+			AC_MSG_RESULT([disabled, no special handling for asp scripts])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled, no special handling for asp scripts])
+	])
+
+AC_MSG_CHECKING(for whether to enable special support on non-executable files only)
+AC_ARG_WITH( asp-nonexec-only, 
+	[  --with-asp-nonexec-only]
+	[  pass script to asp interpreter only if not executable, otherwise use #! line ], 
+	[
+		if test "x$withval" != xno; then
+			AC_DEFINE(CONF_ASP_NONEXEC_ONLY, [], [pass script to asp interpreter only if nonexecutable file])
+			AC_MSG_RESULT([enabled if asp enabled, asp will be handled specially only for nonexecutable files])
+		else
+			AC_MSG_RESULT([disabled, all asp scripts handled the same if asp enabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled, all asp scripts handled the same if asp enabled])
+	])
+
+
 
 dnl
 dnl Enable/disable check for special characters in the script path
