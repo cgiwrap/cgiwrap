@@ -40,7 +40,7 @@ void MSG_HTML_Header(char *title)
 	printf("<HTML>\n<HEAD>\n");
 	printf("<TITLE>%s</TITLE>\n",title);
 	printf("<CENTER><H2>%s</H2></CENTER>\n",title);
-	printf("<HR><P></HEAD><BODY><PRE>\n");
+	printf("<HR><p></HEAD><BODY><PRE>\n");
 }
 
 void MSG_HTML_Footer(void)
@@ -57,6 +57,31 @@ void MSG_Plain_Header(char *title)
 
 void MSG_Plain_Footer(void)
 {
+}
+
+void MSG_Error_General(char *title, char *message)
+{
+	if ( MSG_HTMLMessages )
+	{
+		MSG_ContentType("text/html");
+		MSG_HTML_Header(title);
+	}
+	else
+	{
+		MSG_ContentType("text/plain");
+		MSG_Plain_Header(title);
+	}
+
+	printf(message);
+
+	if ( MSG_HTMLMessages )
+	{
+		MSG_HTML_Footer();
+	}
+	else
+	{
+		MSG_Plain_Footer();
+	}
 }
 
 
@@ -77,9 +102,12 @@ void MSG_Error_ServerUserWrong(void)
 		MSG_Plain_Header("CGIWrap Error: Server UserID Mismatch");
 	}
 
-	printf("The userid that the web server ran cgiwrap as\n");
-	printf("does not match the userid that was configured\n");
-	printf("into CGIWrap.\n");
+	printf(
+"The userid that the web server ran cgiwrap as does not match the\n"
+"userid that was configured into the cgiwrap executable.\n\n"
+"This is a configuration/setup problem with cgiwrap on this server.\n"
+"Please contact the server administrator.\n"
+	);
 
 	if ( MSG_HTMLMessages )
 	{
@@ -91,9 +119,42 @@ void MSG_Error_ServerUserWrong(void)
 	}
 }
 
-void MSG_Error_ScrGrpWritable(void)
-{
 
+void MSG_Error_OutOfMemory(char *msg)
+{
 }
+
+void MSG_Error_ExecutionNotPermitted(char *reason)
+{
+	if ( MSG_HTMLMessages )
+	{
+		MSG_ContentType("text/html");
+		MSG_HTML_Header("CGIWrap Error: Execution of this script not permitted");
+	}
+	else
+	{
+		MSG_ContentType("text/plain");
+		MSG_Plain_Header("CGIWrap Error: Execution of this script not permitted");
+	}
+
+	printf("Execution of this script is not permitted for the following\n");
+	printf("reason:\n\n%s\n", reason);
+
+	if ( MSG_HTMLMessages )
+	{
+		MSG_HTML_Footer();
+	}
+	else
+	{
+		MSG_Plain_Footer();
+	}
+}
+
+
+void MSG_Error_UserProhibited(char *why)
+{
+}
+
+
 
 

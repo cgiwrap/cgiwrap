@@ -6,6 +6,7 @@
 >CONF_CHECK_HTTPD_USER
 >CONF_CHECK_SCRGID
 >CONF_CHECK_SCRGWRITE
+>CONF_CHECK_SCROWRITE
 >CONF_CHECK_SCRSGID
 >CONF_CHECK_SCRSUID
 >CONF_CHECK_SCRUID
@@ -66,6 +67,7 @@ d_conf_access
 d_conf_afs_setpag
 d_conf_check_scrgid
 d_conf_check_scrgwrite
+d_conf_check_scrowrite
 d_conf_check_scrsgid
 d_conf_check_scrsuid
 d_conf_check_scruid

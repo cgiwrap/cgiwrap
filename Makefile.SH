@@ -36,7 +36,7 @@ LIBS= $afslibs $libs
 #
 # Object Files
 #
-OBJS=cgiwrap.o debug.o util.o fetch.o stdutil.o
+OBJS=cgiwrap.o debug.o util.o fetch.o stdutil.o msgs.o
 
 #
 # Dependencies and rules

@@ -261,6 +261,9 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
 /* CONF_CHECK_SCRGWRITE:
  *	If defined, cgiwrap will verify that the script is not group writable
  */
+/* CONF_CHECK_SCROWRITE:
+ *	If defined, cgiwrap will verify that the script is not world writable
+ */
 /* CONF_CHECK_SYMLINK:
  *	If defined, cgiwrap will verify that the script is not a symlink
  */
@@ -269,6 +272,7 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
 #$d_conf_check_scrsuid CONF_CHECK_SCRSUID		/**/
 #$d_conf_check_scrsgid CONF_CHECK_SCRSGID		/**/
 #$d_conf_check_scrgwrite CONF_CHECK_SCRGWRITE	/**/
+#$d_conf_check_scrowrite CONF_CHECK_SCROWRITE	/**/
 #$d_conf_check_symlink CONF_CHECK_SYMLINK		/**/
 
 /* CONF_FIXED_PATHTRANS:

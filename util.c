@@ -240,7 +240,8 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 
 	if ( CheckPath(scriptPath) )
 	{
-		DoError("Script path contains illegal characters or '.' or '..'!");
+		MSG_Error_ExecutionNotPermitted("Script path contains illegal components")
+		exit(0);
 	}
 	
 #if !defined(CONF_SUBDIRS)
@@ -248,30 +249,35 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 	if ( CountSubDirs(scriptPath) > 0 )
 	{
 		Log(user->pw_name, scriptPath, "script in subdir not allowed");
-		DoError("Script is in sub-directory, that is not allowed.");
+		MSG_Error_ExecutionNotPermitted("Scripts in subdirectories are not allowed")
+		exit(0);
 	}
 #endif
 
 	if ( stat(scriptPath, &fileStat) )
 	{
-		DoPError("Script file not found!");
+		MSG_Error_ExecutionNotPermitted("Script file not found.")
+		exit(0);
 	}
 
 #if defined(CONF_CHECK_SYMLINK)
 	if ( lstat(scriptPath, &fileLStat) )
 	{
-		DoPError("Script file not found!");
+		MSG_Error_ExecutionNotPermitted("Script file not found.")
+		exit(0);
 	}
 
 	if ( S_ISLNK(fileLStat.st_mode) )
 	{
-		DoError("Script is a symlink - Will not Execute!");
+		MSG_Error_ExecutionNotPermitted("Script is a symbolic link")
+		exit(0);
 	}
 #endif		
 	
 	if ( !S_ISREG(fileStat.st_mode) )
 	{
-		DoError("Script is not a regular file");
+		MSG_Error_ExecutionNotPermitted("Script is not a regular file")
+		exit(0);
 	}
 
 	if (!(fileStat.st_mode & S_IXUSR))
@@ -301,7 +307,11 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 #if defined(CONF_CHECK_SCRSUID)
 	if (fileStat.st_mode & S_ISUID)
 	{
-		DoError("Script is SUID - Will not Execute!");
+		MSG_Error_ExecutionNotPermitted("Script is Set-GID")
+		exit(0);
+void MSG_Error_ExecutionNotPermission(char *reason)
+		DoError("Script is 
+SUID - Will not Execute!");
 	}
 #endif
 
@@ -309,13 +319,16 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 #if defined(CONF_CHECK_SCRSGID)
 	if (fileStat.st_mode & S_ISGID)
 	{
-		DoError("Script is SGID - Will not Execute!");
+		MSG_Error_ExecutionNotPermitted("Script is Set-GID.")
+		exit(0);
 	}
 #endif
 
 #if defined(CONF_CHECK_SCRGWRITE)
 	if (fileStat.st_mode & S_IWGRP)
 	{
+		MSG_Error_ExecutionNotPermitted("Script is group writable.")
+		exit(0);
 		DoError("Script is group writable - Will not Execute!");
 	}
 #endif
@@ -334,9 +347,9 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
  */
 void VerifyExecutingUser(void)
 {
+#if defined(CONF_CHECK_HTTPD_USER)
 	struct passwd *user;
 
-#if defined(CONF_CHECK_HTTPD_USER)
         if ( !(user = getpwnam(CONF_HTTPD_USER)) )
         {
                 DoError("Configured server userid not found.");
@@ -344,10 +357,12 @@ void VerifyExecutingUser(void)
 
 	if ( getuid() != user->pw_uid )
 	{
-		MSG_Error_ServerUserWrong();
+		MSG_Error_General("CGIWrap Error: Server UserID Mismatch",
+			"The userid that the web server ran cgiwrap as does not match the\n"
+			"userid that was configured into the cgiwrap executable.\n\n"
+			"This is a configuration/setup problem with cgiwrap on this server.\n"
+			"Please contact the server administrator.\n");
 		exit(0);
-/*		DoError("Real UID does not match configured server 
-userid!."); */
 	}
 #endif
 }

@@ -66,7 +66,10 @@ void main (int argc, char *argv[])
 	/* user - fetch this information from the passwd file or NIS */
 	if ( !(user = getpwnam(userStr)) )
 	{
-		DoError("User not found in passwd file.");
+		MSG_Error_General(
+			"CGIWrap Error: User not found in password file.",
+			"Specified script userid could not be found in the passwd file.\n"); 
+		exit(0);
 	}
 
 	DEBUG_Msg("User Data Retrieved:");
@@ -85,7 +88,11 @@ void main (int argc, char *argv[])
 	DEBUG_Str("Script Base Directory", cgiBaseDir);
 	if ( !DirExists(cgiBaseDir) )
 	{
-		DoError("CGI Directory Not Found.");	
+		MSG_Error_General("CGIWrap Error: Script Directory Not Found",
+			"The specified user does not have a script directory set up\n"
+			"for execution of cgi scripts, or the directory permissions\n"
+			"prevent cgiwrap from using that directory.");
+		exit(0);
 	}
 
 	/* Get the script name from the given data */
