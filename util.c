@@ -440,6 +440,7 @@ void CheckVHostUserAccess(struct passwd *user)
 	}
 	
 	/* Force to all lowercase */
+	DEBUG_Msg("Determining virtual host for access control.");
 	lower_http_host = (char *) SafeMalloc(strlen(http_host) + 1,
 		"lower_http_host");
 	for (i=0; i<=strlen(http_host); i++)
