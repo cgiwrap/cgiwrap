@@ -84,7 +84,8 @@ char *GetValue( char *keyword, char *string )
 		dataStr = (char *) strstr(tempStr, keyword);
 		if ( dataStr == tempStr )
 		{
-			returnStr = (char *) strchr (dataStr, '=') + 1;
+			returnStr = (char *) strchr (dataStr, '=');
+			if ( returnStr) returnStr++;
 			tempStr = (char *) 0;
 		}
 		else
@@ -93,7 +94,10 @@ char *GetValue( char *keyword, char *string )
 		}
 	}
 
-	returnStr = strdup(returnStr);
+	if ( returnStr )
+	{
+		returnStr = strdup(returnStr);
+	}
 	free(theString);
 	return returnStr;
 }
