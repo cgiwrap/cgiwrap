@@ -48,6 +48,7 @@ clean:
 
 distclean: clean
 	rm -f config.cache config.log config.h config.status Makefile
+	rm -f unsup/loganalyze.pl
 
 #
 # Source file dependencies
@@ -82,8 +83,11 @@ dist:
 	rm -rf ../cgiwrap-$(VERSION)
 	mkdir ../cgiwrap-$(VERSION)
 	cp -r * ../cgiwrap-$(VERSION)
-	cd ../cgiwrap-$(VERSION); make distclean
-	cd ../cgiwrap-$(VERSION); rm -rf CVS */CVS .cvsignore */.cvsignore
+	cd ../cgiwrap-$(VERSION) && make distclean
+	cd ../cgiwrap-$(VERSION) && rm -rf CVS */CVS */*/CVS
+	cd ../cgiwrap-$(VERSION) && rm -rf .cvsignore */.cvsignore */*/.cvsignore
+	cd ../cgiwrap-$(VERSION) && rm -rf RCS */RCS */*/RCS
+	cd ../cgiwrap-$(VERSION) && rm -rf doc U
 
 tardist: dist
 	gtar -C .. -czvf ../cgiwrap-$(VERSION).tar.gz cgiwrap-$(VERSION)
