@@ -428,7 +428,7 @@ void MSG_Error_ExecutionNotPermitted(char *path, char *reason)
 
 	if ( MSG_QuietErrors )
 	{
-		MSG_Error_UserConfigError();
+		MSG_Error_RequestError();
 	}
 	else
 	{
@@ -458,14 +458,14 @@ void MSG_Error_ExecutionNotPermitted(char *path, char *reason)
 
 void MSG_Error_AccessControl(char *why, char *allowfile, char *denyfile)
 {
-	MSG_Header("CGIWrap Error", "Access Control");
 
 	if ( MSG_QuietErrors )
 	{
-		MSG_Error_UserConfigError();
+		MSG_Error_RequestError();
 	}
 	else
 	{
+		MSG_Header("CGIWrap Error", "Access Control");
 		printf("CGIWrap access control mechanism denied execution of this\n");
 		printf("script for the following reason:\n\n");
 
@@ -490,8 +490,8 @@ void MSG_Error_AccessControl(char *why, char *allowfile, char *denyfile)
 				printf("\tAccess Control Deny File: %s\n", HTMLEncode(denyfile));
 			}
 		}
+		MSG_Footer();
 	}
-	MSG_Footer();
 	exit(1);
 }
 
@@ -594,7 +594,7 @@ void MSG_Error_NoSuchUser(char *user)
 {
 	if ( MSG_QuietErrors )
 	{
-		MSG_Error_UserConfigError();
+		MSG_Error_RequestError();
 	}
 	else
 	{
@@ -618,7 +618,7 @@ void MSG_Error_NoScriptDir(void)
 {
 	if ( MSG_QuietErrors )
 	{
-		MSG_Error_UserConfigError();
+		MSG_Error_RequestError();
 	}
 	else
 	{
@@ -647,14 +647,13 @@ void MSG_Error_ServerConfigError(void)
 	exit(1);
 }
 
-void MSG_Error_UserConfigError(void)
+void MSG_Error_RequestError(void)
 {
 #ifdef CONF_QUIET_ERRORS
-	MSG_Header("CGIWrap Error", "User Configuration Error");
+	MSG_Header("CGIWrap Error", "Request Error");
 
 	printf(
-"There is a problem with the user configuration for execution\n"
-"of CGI scripts. Please contact the owner of the site you are\n"
+"There is a problem with the request. Please contact the owner of the site you are\n"
 "trying to access.\n"
 	);
 
