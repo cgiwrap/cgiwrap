@@ -90,7 +90,7 @@ char *GetValue( char *keyword, char *string )
 /*
  * Check if a path is safe to use
  *   Return true if 'path' contains any whitespace or non-printables
- *   Return true if 'path' contains '../' or './'
+ *   Return true if 'path' contains '../'
  */
 int CheckPath(char *path)
 {
@@ -104,7 +104,7 @@ int CheckPath(char *path)
 		}
 	}
 
-	return ( strstr(path, "../") || strstr(path, "./") );
+	return ( strstr(path, "../") );
 }
 
 
