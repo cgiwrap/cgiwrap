@@ -1,8 +1,7 @@
 
                            CGIWrap - Introduction
-                                      
      _________________________________________________________________
-                                      
+   
    CGIWrap is a gateway program that allows general users to use CGI
    scripts and HTML forms without compromising the security of the http
    server. Scripts are run with the permissions of the user who owns the

@@ -1,14 +1,13 @@
 
                 CGIWrap - Publications that Mention CGIWrap
-                                      
      _________________________________________________________________
-                                      
+   
   Special Edition - Using CGI:
   
-   _Publisher_:
+   Publisher:
           Que Corporation
           
-   _Excerpt (750-751)_:
+   Excerpt (750-751):
           A better solution to the problem of deciding which user a
           script runs as when multiple people have CGI access is the
           CGIWrap program. CGIWrap, which is included on the CD that
@@ -16,7 +15,6 @@
           script as the user that owns the file instead of the user that
           the server specifies. This simple precaution leaves the script
           owner responsible for the damage it can do.
-          
           
           For instance, if the user "joanne" owns a CGI script that's
           wrapped in CGIWrap, the server will execute the script as user
@@ -27,7 +25,6 @@
           to whatever "joanne" herself can do-the files she can read and
           delete, the directories she can view, and so on.
           
-          
           Because CGIWrap puts CGI script authors in charge of the
           permissions for their own scripts, it can be a powerful tool
           not only to protect important files owned by others, but to
@@ -35,11 +32,10 @@
           only their files would be in danger can be a powerful persuader
           to script authors.
           
-          
           Excerpted with permission from Special Edition Using CGI
           Copyright © 1996, Que Corporation
           
-   _Comments_:
+   Comments:
           The book is pretty good, at least in the copy I got, they say
           that CGIwrap is included on the CD, but I can't find it
           anywhere.

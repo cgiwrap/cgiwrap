@@ -1,8 +1,7 @@
 
                        CGIWrap - Access Control Files
-                                      
      _________________________________________________________________
-                                      
+   
    CGIWrap includes faclities similar to the cron facility for
    controlling who can access scripts. In general, I don't use this
    facility except to have a deny file available in those cases when I

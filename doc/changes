@@ -4,7 +4,7 @@
    These are some of the changes that have occured in CGIWrap from
    version to version.
      _________________________________________________________________
-                                      
+   
   New in version 3.6.3:
   
      * Added support for checking if user has a valid shell, similar to
