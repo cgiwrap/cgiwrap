@@ -445,7 +445,7 @@ char *StripPathComponents(int count, char *path)
  */
 void SetResourceLimits(void)
 {
-#if defined(CONF_USE_RLIMIT_CPU || defined(CONF_USE_RLIMIT_CPU))
+#if defined(CONF_USE_RLIMIT_CPU) || defined(CONF_USE_RLIMIT_CPU)
 	struct rlimit limstruct;
 #endif
 
