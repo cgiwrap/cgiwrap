@@ -319,50 +319,59 @@ void MSG_Info(void)
 
 void MSG_Error_CGIWrapNotSetUID(void)
 {
-#ifdef CONF_QUIET_ERRORS
-	MSG_Error_ServerConfigError();
-#else
-    MSG_Header("CGIWrap Error", "CGIWrap is not setuid");
+	if ( MSG_QuietErrors )
+	{
+		MSG_Error_ServerConfigError();
+	}
+	else
+	{
+	    MSG_Header("CGIWrap Error", "CGIWrap is not setuid");
 
-    printf(
+	    printf(
 "The cgiwrap executable(s) were not made setuid-root. This is required\n"
 "for it to function properly. (SetUID root is needed in order to change\n"
 "the uid to that of the script owner. This is an installation error\n"
 "please make the executable setuid root, or use the 'make install'\n"
 "method of installing the executables.\n"
-    );
+	    );
 
-    MSG_Footer();
-    exit(1);
-#endif
+	    MSG_Footer();
+	    exit(1);
+	}
 }
 
 
 void MSG_Error_ServerUserMismatch(void)
 {
-#ifdef CONF_QUIET_ERRORS
-	MSG_Error_ServerConfigError();
-#else
-	MSG_Header("CGIWrap Error", "Server UserID Mismatch");
+	if ( MSG_QuietErrors )
+	{
+		MSG_Error_ServerConfigError();
+	}
+	else
+	{
+		MSG_Header("CGIWrap Error", "Server UserID Mismatch");
 
-	printf(
+		printf(
 "The userid that the web server ran cgiwrap as does not match the\n"
 "userid that was configured into the cgiwrap executable.\n\n"
 "This is a configuration/setup problem with cgiwrap on this server.\n"
 "Please contact the server administrator.\n"
-	);
+		);
 
-	MSG_Footer();
-	exit(1);
-#endif
+		MSG_Footer();
+		exit(1);
+	}
 }
 
 
 void MSG_Error_ServerUserNotFound(void)
 {
-#ifdef CONF_QUIET_ERRORS
-	MSG_Error_ServerConfigError();
-#else
+	if ( MSG_QuietErrors )
+	{
+		MSG_Error_ServerConfigError();
+	}
+	else
+	{
 	struct passwd *pw;
 	char *user = "";
 
@@ -404,7 +413,7 @@ void MSG_Error_ServerUserNotFound(void)
 
 	MSG_Footer();
 	exit(1);
-#endif
+	}
 }
 
 
@@ -412,28 +421,31 @@ void MSG_Error_ExecutionNotPermitted(char *path, char *reason)
 {
 	MSG_Header("CGIWrap Error", "Execution of this script not permitted");
 
-#ifdef CONF_QUIET_ERRORS
-	printf("Execution of that script is not permitted\n");
-#else
-	if ( path )
-	{
-		printf("Execution of (%s) is not permitted\n",HTMLEncode(path));
-	}
-	else
+	if ( MSG_QuietErrors )
 	{
 		printf("Execution of that script is not permitted\n");
 	}
-	printf("for the following reason:\n\n");
-	
-	if ( MSG_HTMLMessages )
-	{
-		printf("<P><DL><DT>%s</DL>\n", reason);
-	}
 	else
 	{
-		printf("\t%s\n", reason);
+		if ( path )
+		{
+			printf("Execution of (%s) is not permitted\n",HTMLEncode(path));
+		}
+		else
+		{
+			printf("Execution of that script is not permitted\n");
+		}
+		printf("for the following reason:\n\n");
+
+		if ( MSG_HTMLMessages )
+		{
+			printf("<P><DL><DT>%s</DL>\n", reason);
+		}
+		else
+		{
+			printf("\t%s\n", reason);
+		}
 	}
-#endif
 
 	MSG_Footer();
 	exit(1);
@@ -443,35 +455,38 @@ void MSG_Error_AccessControl(char *why, char *allowfile, char *denyfile)
 {
 	MSG_Header("CGIWrap Error", "Access Control");
 
-#ifdef CONF_QUIET_ERRORS
-	printf("CGIWrap access control mechanism denied execution of this\n");
-	printf("script.\n\n");
-#else
-	printf("CGIWrap access control mechanism denied execution of this\n");
-	printf("script for the following reason:\n\n");
-
-	if ( MSG_HTMLMessages )
+	if ( MSG_QuietErrors )
 	{
-		printf("<P>\n");
+		printf("CGIWrap access control mechanism denied execution of this\n");
+		printf("script.\n\n");
 	}
-	printf("\t%s\n", why);	
-	
-	if ( allowfile || denyfile )
+	else
 	{
+		printf("CGIWrap access control mechanism denied execution of this\n");
+		printf("script for the following reason:\n\n");
+
 		if ( MSG_HTMLMessages )
 		{
 			printf("<P>\n");
 		}
-		if ( allowfile )
+		printf("\t%s\n", why);	
+
+		if ( allowfile || denyfile )
 		{
-			printf("\tAccess Control Allow File: %s\n", HTMLEncode(allowfile));
-		}
-		if ( denyfile )
-		{
-			printf("\tAccess Control Deny File: %s\n", HTMLEncode(denyfile));
+			if ( MSG_HTMLMessages )
+			{
+				printf("<P>\n");
+			}
+			if ( allowfile )
+			{
+				printf("\tAccess Control Allow File: %s\n", HTMLEncode(allowfile));
+			}
+			if ( denyfile )
+			{
+				printf("\tAccess Control Deny File: %s\n", HTMLEncode(denyfile));
+			}
 		}
 	}
-#endif
 	MSG_Footer();
 	exit(1);
 }
@@ -481,7 +496,8 @@ void MSG_Error_SystemError(char *when)
 	MSG_Header("CGIWrap Error", "System Error");
 	printf("CGIWrap encountered a system error:\n");
 
-#ifndef CONF_QUIET_ERRORS
+	if ( ! MSG_QuietErrors )
+	{
 	if ( MSG_HTMLMessages )
 	{
 		printf("<DL>\n");
@@ -504,10 +520,10 @@ void MSG_Error_SystemError(char *when)
 #endif
 		printf("\tError Number: %d\n\n", errno);
 	}
-
+	}
+	
 	MSG_Footer();
 	exit(1);
-#endif
 }
 
 
@@ -518,7 +534,8 @@ void MSG_Error_ExecFailed(void)
 	printf("CGIWrap encountered an error while attempting to execute\n");
 	printf("this script:\n\n");
 
-#ifndef CONF_QUIET_ERRORS
+	if ( ! MSG_QuietErrors )
+	{
 	if ( MSG_HTMLMessages )
 	{
 		printf("<DL>\n");
@@ -563,17 +580,20 @@ void MSG_Error_ExecFailed(void)
 	"and the URL that caused it to the script owner. That is often the\n"
 	"component in the URL right after /cgiwrap/.\n"
 	);
-#endif
-
+	}
+	
 	MSG_Footer();
 	exit(1);
 }
 
 void MSG_Error_NoSuchUser(char *user)
 {
-#ifdef CONF_QUIET_ERRORS
-	MSG_Error_UserConfigError();
-#else
+	if ( MSG_QuietErrors )
+	{
+		MSG_Error_UserConfigError();
+	}
+	else
+	{
 	MSG_Header("CGIWrap Error", "User not found");
 
 	printf("CGIWrap was unable to find the user '%s' in the\n", 
@@ -587,28 +607,30 @@ void MSG_Error_NoSuchUser(char *user)
 
 	MSG_Footer();
 	exit(1);
-#endif
+	}
 }
 
 void MSG_Error_NoScriptDir(void)
 {
-#ifdef CONF_QUIET_ERRORS
-	MSG_Error_UserConfigError();
-#else
-	MSG_Header("CGIWrap Error", "Script dir not found");
+	if ( MSG_QuietErrors )
+	{
+		MSG_Error_UserConfigError();
+	}
+	else
+	{
+		MSG_Header("CGIWrap Error", "Script dir not found");
 
-	printf("The specified user does not have a script directory set up\n");
-	printf("for execution of cgi scripts, or the directory permissions\n");
-	printf("prevent cgiwrap from using that directory.");
-
+		printf("The specified user does not have a script directory set up\n");
+		printf("for execution of cgi scripts, or the directory permissions\n");
+		printf("prevent cgiwrap from using that directory.");
+	}
 	MSG_Footer();
 	exit(1);
-#endif
 }
 
-#ifdef CONF_QUIET_ERRORS
 void MSG_Error_ServerConfigError(void)
 {
+#ifdef CONF_QUIET_ERRORS
 	MSG_Header("CGIWrap Error", "Server Configuration Error");
 
 	printf(
@@ -617,11 +639,13 @@ void MSG_Error_ServerConfigError(void)
 	);
 
 	MSG_Footer();
+#endif
 	exit(1);
 }
 
 void MSG_Error_UserConfigError(void)
 {
+#ifdef CONF_QUIET_ERRORS
 	MSG_Header("CGIWrap Error", "User Configuration Error");
 
 	printf(
@@ -631,9 +655,9 @@ void MSG_Error_UserConfigError(void)
 	);
 
 	MSG_Footer();
+#endif
 	exit(1);
 }
-#endif
 
 
 void MSG_BoxedText(char *string)
