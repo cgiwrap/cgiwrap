@@ -130,6 +130,9 @@
    --with-check-shell
           enable check for a valid user shell
 
+   --with-require-redirect-url
+          require that REDIRECT_URL be set in calling environment
+
    --with-chroot=PATH
           chroots  script  to  PATH  prior  to script execution, requires
           specific  environment  to  be  set up. See chroot docs for more
@@ -207,6 +210,14 @@
 
    --with-deny-file=FILE
           limit cgiwrap usage
+
+   --with-vhost-allow-dir=DIR
+          limit  cgiwrap  usage  specific  to  each  vhost,  to  restrict
+          UnixTools.ORG,    you    would    create    the   access   file
+          'DIR/unixtools.org'.
+
+   --with-vhost-deny-dir=DIR
+          limit cgiwrap usage specific to each vhost
 
    --with-host-checking
           allow specifying hosts in allow/deny files

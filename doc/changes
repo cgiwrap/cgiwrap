@@ -15,6 +15,18 @@
      * Rewrote the path translated support. Is it finally correct?
      * Patch  from  san@cobalt.rmnet.it  to use REDIRECT_URL if available
        for SCRIPT_NAME.
+     * Added support for access control files specific to each HTTP_HOST,
+       useful  for  ISP's using Apache handlers to run cgi's that want to
+       restrict  which  userids  can  run  cgi's  on  certain  vhosts. If
+       enabled, the vhost access control files must exist.
+     * Added   option  to  require  that  REDIRECT_URL  be  specified  in
+       environment.  Can be used to require that cgiwrap be invoked via a
+       handler/action  or some other internal apache redirection/rewrite.
+       Primarily  of  use  when  invoking  cgi's  for  virtual  hosts via
+       Action/SetHandler.
+     * Modified  san's REDIRECT_URL support to be --with-use-redirect-url
+       instead of --with-check-redirect-url, since it's more a functional
+       change, not a security check.
 
   New in version 3.7.1:
 
