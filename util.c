@@ -485,11 +485,6 @@ void SetSignals(void)
 void ChangeID ( struct passwd *user)
 {
 
-#if defined(CONF_USESET)
-	/* dummy dependency for Configure */
-	/* causes it to display stuff about setuid/etc. */
-#endif
-
 
 #if defined(HAS_SETGID) && defined(HAS_SETUID)
 	setgid( user->pw_gid );
