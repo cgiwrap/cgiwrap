@@ -74,7 +74,7 @@ foreach $f ( @CONFIG )
 	}
 	elsif ( $f =~ /^conf_cgidir='/ )
 	{
-		print CONFIG "conf_cgi_dir='$conf_cgidir'\n";
+		print CONFIG "conf_cgidir='$conf_cgidir'\n";
 	}
 	else
 	{

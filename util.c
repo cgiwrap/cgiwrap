@@ -829,6 +829,7 @@ char *GetBaseDirectory(struct passwd *user)
 
 	if ( userdir )
 	{
+		DEBUG_Msg("Using configured base directory.\n");
 		basedir = (char *) malloc( strlen(userdir) + 4 );
 		strcpy(basedir, userdir);
 
