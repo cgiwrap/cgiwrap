@@ -1,4 +1,0 @@
-#!/bin/csh
-
-setenv PATH ${PATH}:/afs/umr.edu/software/cgiwrap/metaconfig/all/bin
-metaconfig -m
