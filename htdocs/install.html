@@ -2,7 +2,9 @@
 <CENTER><H2>CGIWrap - Installation Instructions</H2></CENTER>
 <HR><P>
 
-
+There are two sets of installation instructions here. The basic ones I use,
+and a real-world example config contributed by Piotr Klaban below.
+<P>
 
 <H3>Quick Installation</H3>
 <DL>
@@ -269,3 +271,174 @@ the necessary files.
 <P>
 If you enabled the user directory rewriting feature, you need to create 
 the configuration file that you specified in the configure run.
+
+<P>
+<HR>
+<PRE>
+Here is the real-world example, for those who have problems
+with cgiwrap installing.
+
+Assumptions:
+
+A. I use cgi-bin/ for global cgi scripts, you may choose /cgi-sys/ instead.
+B. I have installed apache in /usr/local/apache/ directory, you may have
+   it in different location (/etc/httpd/ etc.)
+C. I use WWW as a user web directory ('UserDir WWW' Apache directive),
+   you may choose public_html if you wish.
+D. I allow users place .cgi and .php scripts everywhere under the WWW/ directory
+   (--with-cgi-dir=WWW cgiwrap configuration option), you may choose another method.
+E. I have system-wide html pages in /usr/local/apache/WWW/HTML
+   ('DocumentRoot /usr/local/apache/WWW/HTML' apache directive)
+   and system-wide cgi-bin/ directory in /usr/local/apache/WWW/cgi-bin/
+   ('ScriptAlias' apache directive)
+
+Make sure you have installed php, that you can run it from the command line,
+and you see the '--enable-discard-path' configuration option in the output
+of the following command:
+  % php -i | grep configure
+If not, then before/after installing cgiwrap, install php as a normal program
+with the configuration option: --enable-discard-path
+
+cgiwrap install procedure:
+
+1. download and unpack cgiwrap archive
+
+  % wget http://telia.dl.sourceforge.net/sourceforge/cgiwrap/cgiwrap-3.8.tar.gz
+  % gtar zxvf cgiwrap-3.8.tar.gz
+  % cd cgiwrap-3.8
+
+2. configure it:
+
+Replace:
+- /usr/local/bin/php with /usr/bin/php or other location of your php program
+- WWW (in --with-cgi-dir=WWW) with public_html i.e. your users web directory
+- /usr/local/apache/WWW/cgi-bin with /home/httpd/cgi-sys if you use such a value
+  for ScriptAlias
+- admin@man.torun.pl with YOUR contact address
+- www (in --with-httpd-user=www) with apache if you run web server as 'apache' user
+
+./configure --with-check-shell --with-rlimit-core=0 --with-rlimit-cpu=60 \
+--without-redirect-stderr --without-logging-file --with-perl=/usr/bin/perl \
+--with-httpd-user=www --with-cgi-dir=WWW \
+--with-install-dir=/usr/local/apache/WWW/cgi-bin --with-wall \
+--with-local-contact-email=admin@man.torun.pl --with-php=/usr/local/bin/php \
+--with-php-interpreter
+
+  # wait ...
+  # wait more until configure checks everything
+
+3. run make
+
+  %  make
+
+That should output:
+
+gcc -c -Wall -g -O2  -I. -I. debug.c
+gcc -c -Wall -g -O2  -I. -I. util.c
+util.c: In function `CheckUser':
+util.c:370: warning: suggest parentheses around assignment used as truth value
+util.c: In function `UserInFile':
+util.c:1088: warning: subscript has type `char'
+util.c:1096: warning: subscript has type `char'
+gcc -c -Wall -g -O2  -I. -I. fetch.c
+gcc -c -Wall -g -O2  -I. -I. stdutil.c
+gcc -c -Wall -g -O2  -I. -I. msgs.c
+gcc -o cgiwrap cgiwrap.o debug.o util.o fetch.o stdutil.o msgs.o   
+
+4. install with 'make install':
+
+  % make install
+
+That would be executed (make install -n):
+
+rm -f /usr/local/apache/WWW/cgi-bin/cgiwrap
+rm -f /usr/local/apache/WWW/cgi-bin/cgiwrapd
+rm -f /usr/local/apache/WWW/cgi-bin/nph-cgiwrap
+rm -f /usr/local/apache/WWW/cgi-bin/nph-cgiwrapd
+# rm -f /usr/local/apache/WWW/cgi-bin/php-cgiwrap
+# rm -f /usr/local/apache/WWW/cgi-bin/php-cgiwrapd
+cp cgiwrap /usr/local/apache/WWW/cgi-bin/cgiwrap
+chown root /usr/local/apache/WWW/cgi-bin/cgiwrap
+chgrp root /usr/local/apache/WWW/cgi-bin/cgiwrap
+chmod 4755 /usr/local/apache/WWW/cgi-bin/cgiwrap
+ln /usr/local/apache/WWW/cgi-bin/cgiwrap /usr/local/apache/WWW/cgi-bin/cgiwrapd
+ln /usr/local/apache/WWW/cgi-bin/cgiwrap /usr/local/apache/WWW/cgi-bin/nph-cgiwrap
+ln /usr/local/apache/WWW/cgi-bin/cgiwrap /usr/local/apache/WWW/cgi-bin/nph-cgiwrapd
+# ln /usr/local/apache/WWW/cgi-bin/cgiwrap /usr/local/apache/WWW/cgi-bin/php-cgiwrap
+# ln /usr/local/apache/WWW/cgi-bin/cgiwrap /usr/local/apache/WWW/cgi-bin/php-cgiwrapd
+
+Then you see you have cgiwrap in the /usr/local/apache/WWW/cgi-bin/
+directory.
+
+5. Now configure Apache:
+
+  % cd /usr/local/apache/conf     (on linux: % cd /etc/httpd/conf/)
+  % vim httpd.conf                (or % pico httpd.conf)
+
+5a) add these lines to global directives:
+
+# change /usr/local/apache/WWW/cgi-bin/ to YOUR /cgi-bin/ real path
+ScriptAlias /cgi-bin/ "/usr/local/apache/WWW/cgi-bin/"
+
+AddHandler cgi-wrapper .php
+AddHandler cgi-wrapper .cgi
+Action cgi-wrapper /cgi-bin/cgiwrap
+
+5b) do not run cgiwrap on .cgi scripts in the global /cgi-bin/ directory:
+
+<Directory /usr/local/apache/WWW/cgi-bin>
+AllowOverride None
+Options None
+AddHandler cgi-script .cgi
+</DIrectory>
+
+5c) I have a phpMyAdmin installed in /user/local/apache/WWW/HTML/phpMyAdmin/,
+and I want it to be run as a 'www' user from the <home of www>/WWW/HTML/ directory
+
+<Location /phpMyAdmin/*>
+Action cgi-wrapper /cgi-bin/cgiwrap/www/HTML
+</Location>
+
+5d) I have some Virtual Domains defined. Every user can have its own
+    virtual domain. I want .cgi and .php scripts to be run as a specified user
+    ('makler' in this situation):
+
+<VirtualHost *>
+ServerAdmin info@klaban.torun.pl
+DocumentRoot /home/[... home directory/WWW here ...]/makler/WWW
+ServerName www.klaban.torun.pl
+ErrorLog logs/klaban_error_log
+CustomLog logs/klaban_access_log combined
+Action cgi-wrapper /cgi-bin/cgiwrap/makler
+
+# [... other configuration stuff discarded ...]
+
+</VirtualHost>
+
+6. Test your configuration before Apache reload (you may use /etc/init.d/httpd
+   instead of ~www/bin/apachectl):
+
+  % ~www/bin/apachectl configtest
+Syntax OK
+
+7. Reload apache web server:
+
+  % ~www/bin/apachectl stop    # (or: ~www/bin/apachectl restart)
+  % ~www/bin/apachectl start
+
+8. Test if the simple php script is executed OK:
+
+8a) create php script - your php scripts should be owned by the user, not root:
+
+  % su makler
+  % echo '<?php echo "php is OK<br>\n"; ?> HTML too' > ~makler/WWW/test-php.php
+
+8b) point your web browser to: http://www.klaban.torun.pl/test-php.php
+
+  Now you should see:
+php is OK
+HTML too  
+
+-- 
+Piotr Klaban
+
