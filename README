@@ -1,0 +1,18 @@
+This is CGI-Wrap - a gateway that allows more secure user access to CGI 
+programs on an HTTPd server than is provided by the http server itself.
+
+This code may be freely copied and modified, though it may not be
+Sold, Rented, Re-Released, Folded, Spindled, or Mutilated w/o contacting me
+first.
+ 
+I do ask that if you make modifications, or have any improvements that you
+send them to me <nneul@umr.edu> and I will add them to the main source so
+others can benefit. If you wish to re-release a modified version of this 
+source.
+
+An important note is, this script makes the CGI access MORE secure, but 
+it does not make CGI access "secure". By it's very nature, CGI itself can 
+never be 100% secure, it is always dependent on the script itself.
+
+-- Nathan Neulinger <nneul@umr.edu>
+

@@ -1,0 +1,99 @@
+.\"
+.\" CGIWrap - Written by Nathan Neulinger - 1994
+.\" Email To: nneul@umr.edu
+.\" University of Missouri - Rolla
+.\"
+.TH CGIWRAP 1
+.UC 4
+.SH NAME
+
+cgiwrap \- CGI Wrapper for HTTPd WWW Server
+.SH SYNOPSIS
+
+http://server:port/cgi\-bin/cgiwrap?user=USERID&script=SCRIPTNAME
+.SH DESCRIPTION
+
+Cgiwrap is a gateway program that allows general users to use CGI scripts 
+and HTML forms without compromising the security of the http server. 
+Scripts are run with the permissions of the user who owns the script. In 
+addition, several security checks are performed on the script, which will 
+not be executed if any checks fail.
+
+Cgiwrap is used via a URL in an HTML document. As distributed, cgiwrap 
+is configured to run user scripts which are located in the 
+~/public_html/cgi-bin/ directory.
+.TP
+.B server:port
+The server that the script is located on. Port is optional.
+.TP
+.B cgi\-bin
+The common cgi directory on the http server.
+.TP
+.B USERID
+The userid of the user who owns the script that is to be run
+.TP
+.B SCRIPTNAME
+The actual filename of the script that is to be run.
+.SH INSTRUCTIONS (UMR TEST WEB-SERVER)
+
+The following are instructions for setting up your directories and scripts
+for execution on UMR's test web server. 
+
+The instructions are intended for use with AFS. It is assumed that you are 
+familiar with writing CGI scripts and writing HTML documents for the WWW. 
+If not, see one of the URL's listed at the bottom of this man page for more 
+information.
+
+For this example, the script is "email.pl". The user id is "joeminer". 
+
+Create the directories needed to hold html documents and scripts
+.P
+1. cd 
+.P
+2. mkdir public_html 
+.P
+3. mkdir public_html/cgi-bin  
+
+Set permissions on directories
+.P
+4. fs setacl . system:anyuser l
+.P
+5. fs setacl public_html system:anyuser rl
+.P
+6. fs setacl public_html/cgi-bin system:anyuser rl	
+
+Install the script into the cgi-bin directory, along with any related 
+files.
+
+The script is executed using the following URL:
+
+http://www.umr.edu:2520/cgi\-bin/cgiwrap?user=joeminer&script=email.pl
+.SH NOTES
+
+When using cgiwrap with AFS based accounts, you need to keep in mind that
+scripts are run un-authenticated. This means that any files that are accessed
+in AFS directories are accessed as "system:anyuser". This is important when
+considering how your script will return data to you. Currently, the easiest
+way to return data to the user is to email the results of the script. Obviously,
+this only applies to scripts that are supposed to be used for submitting data - 
+scripts that simply return information to the web client are not affected by 
+this.
+
+Cgiwrap can be used with forms, but it is suggested that you use the 
+"POST" method. If you use the get method, you will need to add two hidden 
+fields to your form containing the user and script name. "GET" types 
+requests are discouraged in any case due to the limited amount of data 
+that can be passed to the script.
+
+.SH FILES
+HTTPD/cgi-bin/cgiwrap
+~USERID/public_html/cgi-bin/SCRIPTNAME
+.SH AUTHOR
+Nathan Neulinger (nneul@umr.edu)
+.SH "SEE ALSO"
+Mosaic, lynx
+
+http://sunsite.unc.edu/boutell/faq/www_faq.html
+http://hoohoo.ncsa.uiuc.edu
+http://www.ncsa.uiuc.edu/General/Internet/WWW/HTMLPrimer.html
+http://www.ncsa.uiuc.edu/General/Internet/WWW/HTMLQuickRef.html
