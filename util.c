@@ -799,10 +799,10 @@ int UserInFile(char *filename, char *user)
 					&spec_mask[0], &spec_mask[1],
 					&spec_mask[2], &spec_mask[3]);
 
-				if ((spec_addr[0] == (spec_mask[0] & remote_addr[0])) &&
-					(spec_addr[1] == (spec_mask[1] & remote_addr[1])) &&
-					(spec_addr[2] == (spec_mask[2] & remote_addr[2])) &&
-					(spec_addr[3] == (spec_mask[3] & remote_addr[3])))
+				if (((spec_mask[0] & spec_addr[0]) == (spec_mask[0] & remote_addr[0])) &&
+					((spec_mask[1] & spec_addr[1]) == (spec_mask[1] & remote_addr[1])) &&
+					((spec_mask[2] & spec_addr[2]) == (spec_mask[2] & remote_addr[2])) &&
+					((spec_mask[3] & spec_addr[3]) == (spec_mask[3] & remote_addr[3])))
 				{
 					fclose(file);
 					return 1;
