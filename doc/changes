@@ -10,6 +10,8 @@
      * Merged in special handling for PHP scripts by popular demand. This
        is  based  mostly  on Piotr Klaban's php-cgiwrap patch, with minor
        changes.
+     * Added   options   for   php  support.  --with-php-interpreter  and
+       --with-php-cgiwrap
 
   New in version 3.7.1:
 
