@@ -5,6 +5,12 @@
    version to version.
      _________________________________________________________________
 
+  New in version 3.8.1:
+
+     * Fixed a minor typo preventing allow files from working
+     * Added  support  for  +@netgroup  syntax  optionally  in allow/deny
+       files.
+
   New in version 3.8:
 
      * Merged in special handling for PHP scripts by popular demand. This

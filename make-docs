@@ -1,6 +1,6 @@
 #!/bin/sh
 
 for p in htdocs/*.html; do \
-lynx -nolist -dump $$p > doc/`basename $$p .html`; \
+lynx -nolist -dump $p > doc/`basename $p .html`; \
 done
 
