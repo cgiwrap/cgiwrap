@@ -7,3 +7,19 @@
 
 extern int MSG_HTMLMessages;
 extern int MSG_Need_NPH_Header;
+
+void MSG_ContentType(char *typestring);
+void MSG_Header(char *title, char *msg);
+void MSG_Footer(void);
+void MSG_HTML_Header(char *title, char *msg);
+void MSG_HTML_Footer(void);
+void MSG_Plain_Header(char *title, char *msg);
+void MSG_Plain_Footer(void);
+void MSG_Error_General(char *message);
+void MSG_Error_ServerUserWrong(void);
+void MSG_Error_ExecutionNotPermitted(char *reason);
+void MSG_Error_SystemError(char *when);
+void MSG_Error_ExecFailed(void);
+void MSG_Error_NoSuchUser(char *user);
+void MSG_Error_NoScriptDir(void);
+void MSG_RequestInfo(void);
