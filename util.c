@@ -716,6 +716,7 @@ int UserInFile(char *filename, char *user)
 	int unlen,remote_addr[4],spec_mask[4],spec_addr[4];
 	char *i;
 #endif
+	int j;
 
 #if defined(CONF_CHECKHOST)
 	spec_mask[0]=255; 
@@ -738,10 +739,18 @@ int UserInFile(char *filename, char *user)
 
 	while ( !feof(file) )
 	{
+		temp[0] = 0;
 		if ( fgets(temp, HUGE_STRING_LEN, file) <= 0 )
 		{
 			fclose(file);
 			return 0;
+		}
+		for (j=0; j<=strlen(temp); j++)
+		{
+			if ( !isprint(temp[j]) )
+			{
+				temp[j] = 0;
+			}
 		}
 
 		if ( !strcmp(temp,user) )
