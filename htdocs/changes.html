@@ -5,6 +5,12 @@ These are some of the changes that have occured in CGIwrap from version
 to version.
 
 <HR>
+<P><H3>New in version 3.6:</H3><UL>
+	<LI>Removed check for ./ in the path of the script. The check for 
+../ is still there. There doesn't seem to be any need for this check as 
+it appears to be harmless. It is being removed to allow for users with 
+"./" in their home dir (for chrooting with wuftpd) to be able to use cgiwrap.
+</UL>
 
 <P><H3>New in version 3.5:</H3><UL>
 	<LI>Fixed strerror checking in Configure script and util.c for systems 

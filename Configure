@@ -20,7 +20,7 @@
 
 # $Id$
 #
-# Generated on Sun Aug 25 12:11:04 CDT 1996 [metaconfig 3.0 PL60]
+# Generated on Thu Dec  5 19:58:22 CST 1996 [metaconfig 3.0 PL60]
 
 cat >/tmp/c1$$ <<EOF
 ARGGGHHHH!!!!!
@@ -221,6 +221,8 @@ d_conf_initgroups=''
 d_conf_setgroups=''
 conf_cgidir=''
 d_conf_check_scrgid=''
+d_conf_check_scrgwrite=''
+d_conf_check_scrowrite=''
 d_conf_check_scrsgid=''
 d_conf_check_scrsuid=''
 d_conf_check_scruid=''
@@ -1511,7 +1513,7 @@ start out. That way, you can cut someone off if they abuse the service.
 An option for restricting access further includes checking the remote host
 address against a range of IP addresses. This allows you to restrict cgi
 usage by a particular user to being access from only certain hosts. This
-is usefule for a situation where you only want your users making CGI
+is useful for a situation where you only want your users making CGI
 scripts that can be accessed from your domain. 
 
 The file format is one userid per line, unless you enable host checking.
@@ -1646,7 +1648,7 @@ prevent user scripts that do anything with authentication from
 conflicting with other scripts, and to prevent them from conflicting with 
 the authentication of the server (if it is running authenticated), 
 CGIwrap can automatically create a new PAG (Process Authentication Group) 
-for the script. I highly reccomend doing this if you are using AFS.
+for the script. I highly recommend doing this if you are using AFS.
 
 EOM
 	
@@ -1815,6 +1817,42 @@ y|Y) val="$define" ;;
 esac
 
 set d_conf_check_scrsgid
+eval $setvar
+
+#-------------------
+
+case "$d_conf_check_scrgwrite" in
+undef) dflt='n' ;;
+*) dflt='y' ;;
+esac
+
+rp="Check if script is group writable?"
+. ./myread
+
+case "$ans" in
+y|Y) val="$define" ;;
+*) val="$undef" ;;
+esac
+
+set d_conf_check_scrgwrite
+eval $setvar
+
+#-------------------
+
+case "$d_conf_check_scrowrite" in
+undef) dflt='n' ;;
+*) dflt='y' ;;
+esac
+
+rp="Check if script is world writable?"
+. ./myread
+
+case "$ans" in
+y|Y) val="$define" ;;
+*) val="$undef" ;;
+esac
+
+set d_conf_check_scrowrite
 eval $setvar
 
 
@@ -3185,7 +3223,7 @@ $cat <<'EOM'
 CGIwrap has the capability of automatically redirecting the stderr output
 to stdout. This means that users can debug their scripts from the web 
 browser instead of having to look at the server's error_log to see the error
-output from their scripts. I reccomend you leave this as yes.
+output from their scripts. I recommend you leave this as yes.
 
 This feature has actually turned out to be one of the more handy 
 capabilities of CGIwrap, particularly when combined with the debugging mode.
@@ -3232,7 +3270,7 @@ $cat <<'EOM'
 
 CGIwrap has the capability of allowing users to store scripts in 
 subdirectories of their cgi-bin directory. You need to decide whether
-or not you wish to allow this. I reccomend allowing it, it is extremely
+or not you wish to allow this. I recommend allowing it, it is extremely
 convenient when you start to develop alot of scripts.
 
 EOM
@@ -3339,7 +3377,7 @@ This question deals with how you want to have the script executed. If for
 some reason you don't want to exec() the script directly. (For instance, 
 if your architecture does not support exec()'ing shell scripts directly) 
 Answering this question yes will cause cgiwrap to use system() to execute
-the script. I reccomend choosing no unless you know for certain you can't
+the script. I recommend choosing no unless you know for certain you can't
 use exec.
 
 EOM
@@ -4151,6 +4189,8 @@ d_conf_initgroups='$d_conf_initgroups'
 d_conf_setgroups='$d_conf_setgroups'
 conf_cgidir='$conf_cgidir'
 d_conf_check_scrgid='$d_conf_check_scrgid'
+d_conf_check_scrgwrite='$d_conf_check_scrgwrite'
+d_conf_check_scrowrite='$d_conf_check_scrowrite'
 d_conf_check_scrsgid='$d_conf_check_scrsgid'
 d_conf_check_scrsuid='$d_conf_check_scrsuid'
 d_conf_check_scruid='$d_conf_check_scruid'
