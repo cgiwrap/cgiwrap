@@ -8,6 +8,11 @@ static char *rcsid="$Id$";
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
 
 /*
+ * Global context structure
+ */
+struct cgiwrap_context Context;
+
+/*
  * Main program
  */
 void main (int argc, char *argv[])
@@ -40,6 +45,9 @@ void main (int argc, char *argv[])
 		MSG_ContentType("text/plain");
 	}
 
+	/* Initialize the log */
+	LogInit();
+
 	/* Redirect stderr to stdout */
 #if defined(CONF_REDIR_STDERR)
 	DEBUG_Msg("Redirecting STDERR to STDOUT\n");
@@ -71,6 +79,7 @@ void main (int argc, char *argv[])
 	{
 		MSG_Error_NoSuchUser(userStr);
 	}
+	memcpy(&Context.user, user, sizeof(struct passwd));
 
 	DEBUG_Msg("User Data Retrieved:");
 	DEBUG_Str("   UserID:", user->pw_name);
@@ -94,9 +103,11 @@ void main (int argc, char *argv[])
 	/* Get the script name from the given data */
 	scrStr = FetchScriptString(cgiBaseDir);
 	scriptPath = BuildScriptPath(cgiBaseDir,scrStr);
+	Context.scriptFullPath = CondenseSlashes(scriptPath);
+	Context.scriptRelativePath = CondenseSlashes(scrStr);
 
-	DEBUG_Str("\tScript Name", scrStr);
-	DEBUG_Str("\tScript Path", scriptPath);
+	DEBUG_Str("\tScript Relative Path", scrStr);
+	DEBUG_Str("\tScript Absolute Path", scriptPath);
 
 	/* Set the Correct Values of environment variables */
 	DEBUG_Msg("\nFixing Environment Variables.");
@@ -119,7 +130,7 @@ void main (int argc, char *argv[])
 	ChangeToCGIDir(scriptPath);
 
 	/* Check to see if ok to execute script file */
-	CheckScriptFile(user, scriptPath);
+	CheckScriptFile();
 
 	/* Perform any AFS related tasks before executing script */
 	Create_AFS_PAG();

@@ -47,6 +47,25 @@
 #endif
 
 /*
+ * Global context structure
+ */
+struct cgiwrap_context
+{
+	/* User data retrieved from password file */
+	struct passwd user;
+
+	/* Path of script relative to file system root */
+	char *scriptFullPath;
+	
+	/* Path of script relative to user cgi directory */
+	char *scriptRelativePath;
+
+	/* Previously opened log file */
+	FILE *logFile;
+};
+extern struct cgiwrap_context Context;
+
+/*
  * Local headers for prototypes and defines
  */ 
 #include "util.h"

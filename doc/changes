@@ -37,6 +37,12 @@
      * Eliminated buffer overrun in error message about chmod'ing script.
        Thanks to Duncan Simpson (dps@io.stargate.co.uk)
      * Added --with-minimum-uid option
+     * Fixed the subdirectory restrict option. (Thanks to Jeffery Chow )
+       for pointing this out and for testing the fix.
+     * Added CondenseSlashes routine to eliminate doubled and trailing
+       slashes
+     * Added SafeMalloc routine to eliminate the need to check malloc
+       result throughout the code.
        
   New in version 3.5:
   

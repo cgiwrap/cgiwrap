@@ -34,6 +34,12 @@ not really needed for anything, and just slows things down.
 	<LI>Eliminated buffer overrun in error message about chmod'ing 
 script. Thanks to Duncan Simpson (dps@io.stargate.co.uk)
 	<LI>Added --with-minimum-uid option
+	<LI>Fixed the subdirectory restrict option. (Thanks to Jeffery 
+Chow <j8g1@ugrad.cs.ubc.ca>) for pointing this out and for testing the fix.
+	<LI>Added CondenseSlashes routine to eliminate doubled and 
+trailing slashes
+	<LI>Added SafeMalloc routine to eliminate the need to check 
+malloc result throughout the code.
 </UL>
 
 <P><H3>New in version 3.5:</H3><UL>

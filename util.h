@@ -5,6 +5,7 @@
  **  Purpose: Prototypes and defines for routines in util.c
  **/ 
 
+char *SafeMalloc( size_t size, char *what );
 char **CreateARGV( char *scrStr, int argc, char *argv[]);
 char *StripPrefix(char *, char *);
 void ChangeID(struct passwd *user);
@@ -18,7 +19,7 @@ int CheckPath(char *path);
 void ChangeToCgiDir(struct passwd *user);
 void OutputEnvironment(void);
 void CheckUser(struct passwd *user);
-void CheckScriptFile(struct passwd *user, char *scriptPath);
+void CheckScriptFile(void); 
 void VerifyExecutingUser(void);
 char *BuildScriptPath(char *basedir, char *scrStr);
 char *GetPathComponents(int count, char *path);

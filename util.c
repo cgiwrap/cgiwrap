@@ -8,6 +8,24 @@ static char *rcsid="$Id$";
 #include "cgiwrap.h"	/* Headers for all CGIwrap source files */
 
 /*
+ * Safe malloc
+ */
+char *SafeMalloc(size_t size, char *what)
+{
+	char *tmp;
+	
+	tmp = (char *) malloc( size );
+	if ( !tmp )
+	{
+		char msg[500];
+		sprintf(msg, "Couldn't malloc() (%d) bytes for (%s).\n",
+			size, what);
+		MSG_Error_SystemError(msg);
+	}
+	return tmp;
+}
+
+/*
  * Build the ARGV array for passing to the called script
  */
 char **CreateARGV( char *scrStr, int argc, char *argv[])
@@ -15,12 +33,8 @@ char **CreateARGV( char *scrStr, int argc, char *argv[])
 	char **temp;
 	int i;
 
-	temp = (char **) malloc( (argc+1) * sizeof(char *) );
-
-	if ( !temp )
-	{
-		MSG_Error_SystemError("Couldn't malloc() memory for argv array\n");
-	}
+	temp = (char **) SafeMalloc( (argc+1) * sizeof(char *),
+		"ARGV array");
 	
 	temp[0] = StripPathComponents( CountSubDirs(scrStr), scrStr );
 	temp[argc] = 0;
@@ -51,7 +65,6 @@ char *StripPrefix( char *stringToStrip, char *stripFrom )
 
 	return stripFrom;
 }
-
 
 /*
  *   Extract and return the value portion of a key=value pair found in a string
@@ -107,6 +120,27 @@ int CheckPath(char *path)
 	return ( strstr(path, "../") != NULL );
 }
 
+/*
+ * Condense slashes, removing duplicates and trailers
+ */
+char *CondenseSlashes(char *path)
+{
+	char *tmp;
+	int i,j;
+
+	tmp = (char *) SafeMalloc( strlen(path)+1, "CondenseSlashes");
+
+	for (i=0, j=0; i<strlen(path); i++)
+	{
+		if ( !(path[i] == '/' & (path[i+1] == '/' | path[i+1] == '\0') ))
+		{
+			tmp[j++] = path[i];
+		}
+	}
+	tmp[j] = 0;
+
+	return tmp;
+}
 
 /*
  * Count the number of /'s in a string
@@ -118,7 +152,10 @@ int CountSubDirs(char *path)
 
 	for (i=0; i<strlen(path); i++)
 	{
-		count += (path[i] == '/');
+		if ( path[i] == '/' )
+		{
+			count++;
+		}
 	}
 	return count;
 }
@@ -156,7 +193,8 @@ void ChangeToCGIDir(char *scriptPath)
 	i = CountSubDirs(scriptPath) - 1;
 	tempdir = GetPathComponents(i, scriptPath);
 
-	tempstring = (char *) malloc(strlen(tempdir) + 5);
+	tempstring = (char *) SafeMalloc (strlen(tempdir) + 5,
+		"cgi directory path");
 	tempstring[0] = '/';
 	tempstring[1] = 0;
 	strcat(tempstring, tempdir);
@@ -245,74 +283,75 @@ void CheckUser(struct passwd *user)
 /*
  * Perform file checks on the script file
  */
-void CheckScriptFile(struct passwd *user, char *scriptPath)
+void CheckScriptFile(void)
 {
 	struct stat fileStat; /* For checking file status */
 	struct stat fileLStat; /* For checking symlink status */
 	char tempErrString[255];
 
-	if ( CheckPath(scriptPath) )
+	if ( CheckPath(Context.scriptFullPath) )
 	{
-		MSG_Error_ExecutionNotPermitted(scriptPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
 			"Script path contains illegal components");
 	}
 	
 #if !defined(CONF_SUBDIRS)
 	/* Check if script is in a subdirectory */
-	if ( CountSubDirs(scriptPath) > 0 )
+	if ( CountSubDirs(Context.scriptRelativePath) > 0 )
 	{
-		Log(user->pw_name, scriptPath, "script in subdir not allowed");
-		MSG_Error_ExecutionNotPermitted(scriptPath,
+		Log(Context.user.pw_name, Context.scriptFullPath, 
+			"script in subdir not allowed");
+		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
 			"Scripts in subdirectories are not allowed");
 	}
 #endif
 
-	if ( stat(scriptPath, &fileStat) )
+	if ( stat(Context.scriptFullPath, &fileStat) )
 	{
-		MSG_Error_ExecutionNotPermitted(scriptPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
 			"Script file not found.");
 	}
 
 #if defined(CONF_CHECK_SYMLINK)
-	if ( lstat(scriptPath, &fileLStat) )
+	if ( lstat(Context.scriptFullPath, &fileLStat) )
 	{
-		MSG_Error_ExecutionNotPermitted(scriptPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
 			"Script file not found.");
 	}
 
 	if ( S_ISLNK(fileLStat.st_mode) )
 	{
-		MSG_Error_ExecutionNotPermitted(scriptPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
 			"Script is a symbolic link");
 	}
 #endif		
 	
 	if ( !S_ISREG(fileStat.st_mode) )
 	{
-		MSG_Error_ExecutionNotPermitted(scriptPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
 			"Script is not a regular file");
 	}
 
 	if (!(fileStat.st_mode & S_IXUSR))
 	{
-		MSG_Error_ExecutionNotPermitted(scriptPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
 			"Script is not executable. Issue 'chmod 755 filename'");
 	}
 
 
 #if defined(CONF_CHECK_SCRUID)
-	if (fileStat.st_uid != user->pw_uid)
+	if (fileStat.st_uid != Context.user.pw_uid)
 	{
-		MSG_Error_ExecutionNotPermitted(scriptPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
 			"Script does not have same UID");
 	}
 #endif
 
 
 #if defined(CONF_CHECK_SCRGID)
-	if (fileStat.st_gid != user->pw_gid)
+	if (fileStat.st_gid != Context.user.pw_gid)
 	{
-		MSG_Error_ExecutionNotPermitted(scriptPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
 			"Script does not have same GID");
 	}
 #endif
@@ -321,7 +360,7 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 #if defined(CONF_CHECK_SCRSUID)
 	if (fileStat.st_mode & S_ISUID)
 	{
-		MSG_Error_ExecutionNotPermitted(scriptPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
 			"Script is setuid");
 	}
 #endif
@@ -330,7 +369,7 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 #if defined(CONF_CHECK_SCRSGID)
 	if (fileStat.st_mode & S_ISGID)
 	{
-		MSG_Error_ExecutionNotPermitted(scriptPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
 			"Script is setgid");
 	}
 #endif
@@ -338,7 +377,7 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 #if defined(CONF_CHECK_SCRGWRITE)
 	if (fileStat.st_mode & S_IWGRP)
 	{
-		MSG_Error_ExecutionNotPermitted(scriptPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
 			"Script is group writable.");
 	}
 #endif
@@ -346,7 +385,7 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 #if defined(CONF_CHECK_SCROWRITE)
 	if (fileStat.st_mode & S_IWOTH)
 	{
-		MSG_Error_ExecutionNotPermitted(scriptPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
 			"Script is world writable.");
 	}
 #endif
@@ -380,15 +419,10 @@ void VerifyExecutingUser(void)
 char *BuildScriptPath(char *basedir, char *scrStr)
 {
 	char *tmp;
-	tmp = (char *) malloc( strlen(basedir) + strlen(scrStr) + 5);
-
-	if ( !tmp )
-	{
-		MSG_Error_SystemError("Couldn't malloc memory for scriptPath");
-	}
+	tmp = (char *) SafeMalloc ( strlen(basedir) + strlen(scrStr) + 5,
+		"scriptPath");
 
 	sprintf(tmp, "%s/%s", basedir, scrStr);
-
 	return tmp;
 }
 
@@ -746,6 +780,37 @@ int UserInFile(char *filename, char *user)
 
 
 /*
+ * Initialize the logging
+ */
+void LogInit (void)
+{
+#if defined(CONF_LOG_USEFILE)
+	FILE *logFile;
+	int logfd;
+#endif
+
+	DEBUG_Msg("Initializing Logging");
+
+#if defined(CONF_LOG_USEFILE)
+	logfd = open(CONF_LOG_LOGFILE, O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
+	if ( !logfd )
+	{
+		MSG_Error_SystemError("Could not open log file for appending!");
+	}
+	logFile = fdopen(logfd, "a");
+	if ( !logFile )
+	{
+		MSG_Error_SystemError("Could not open file stream from file descriptor!");
+	}
+
+	Context.logFile = logFile;
+#endif
+#if defined(CONF_LOG_USESYSLOG) && defined(HAS_SYSLOG)
+	openlog("cgiwrap", LOG_PID | LOG_NOWAIT, LOG_DAEMON);
+#endif
+}
+
+/*
  * Add an entry to the log file
  */
 void Log (char *user, char *script, char *msg)
@@ -765,17 +830,6 @@ void Log (char *user, char *script, char *msg)
 #if defined(CONF_LOG_USEFILE)
 	DEBUG_Msg("Logging Request (File)");
 
-	logfd = open(CONF_LOG_LOGFILE, O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
-	if ( !logfd )
-	{
-		MSG_Error_SystemError("Could not open log file for appending!");
-	}
-	logFile = fdopen(logfd, "a");
-	if ( !logFile )
-	{
-		MSG_Error_SystemError("Could not open file stream from file descriptor!");
-	}
-	
 	fprintf(logFile, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
 		NullCheck( user ),
 		NullCheck( script ),
@@ -784,14 +838,13 @@ void Log (char *user, char *script, char *msg)
 		NullCheck( getenv("REMOTE_USER") ),
 		NullCheck( msg ),
 		NullCheck( timeString ) );
+	fflush(logFile);
 
 	fclose(logFile);
 	close(logfd);
 #endif
 #if defined(CONF_LOG_USESYSLOG) && defined(HAS_SYSLOG)
 	DEBUG_Msg("Logging Request (syslog)");
-
-	openlog("cgiwrap", LOG_PID | LOG_NOWAIT, LOG_DAEMON);
 
 	syslog(LOG_INFO, "[%s] %s, %s, %s, %s, %s, %s",
 		NullCheck( CONF_LOG_LABEL ),
@@ -814,14 +867,9 @@ void SetScriptName(char *userStr, char *scrStr )
 {
 	char *buf;
 
-	buf = (char*) malloc (strlen("SCRIPT_NAME") +
+	buf = (char*) SafeMalloc (strlen("SCRIPT_NAME") +
 	    strlen(getenv("SCRIPT_NAME")) + strlen(userStr)
-	    + strlen(scrStr) + 5);
-
-	if( !buf )
-	{
-		MSG_Error_SystemError("Couldn't malloc memory for SCRIPT_NAME buf!");
-	}
+	    + strlen(scrStr) + 5, "new SCRIPT_NAME environment variable");
 
 	sprintf(buf, "%s=%s/%s/%s", "SCRIPT_NAME", 
 	    getenv("SCRIPT_NAME"), userStr, scrStr);
@@ -836,13 +884,8 @@ void SetPathTranslated( char *scriptPath )
 {
 #ifndef CONF_FIXED_PATHTRANS
 	char *buf;
-	buf = (char *) malloc( strlen("PATH_TRANSLATED") +
-		strlen(scriptPath) + 5 );
-
-	if( !buf )
-	{
-		MSG_Error_SystemError("Couldn't malloc memory for PATH_TRANSLATED buf!");
-	}
+	buf = (char *) SafeMalloc( strlen("PATH_TRANSLATED") +
+		strlen(scriptPath) + 5, "new PATH_TRANSLATED environment variable");
 
 	sprintf(buf, "%s=%s", "PATH_TRANSLATED", scriptPath); 
 	putenv(buf);
@@ -859,13 +902,9 @@ void SetPathTranslated( char *scriptPath )
 		return;
 	}
 
-	buf = (char *) malloc( strlen("PATH_TRANSLATED") +
-		strlen(docroot) + strlen(pathinfo) + 5);
-
-	if( !buf )
-	{
-		MSG_Error_SystemError("Couldn't malloc memory for PATH_TRANSLATED buf!");
-	}
+	buf = (char *) SafeMalloc( strlen("PATH_TRANSLATED") +
+		strlen(docroot) + strlen(pathinfo) + 5, 
+		"new PATH_TRANSLATED environment variable");
 
 	sprintf(buf, "%s=%s%s", "PATH_TRANSLATED", docroot, pathinfo); 
 	putenv(buf);
@@ -949,22 +988,14 @@ char *GetBaseDirectory(struct passwd *user)
 	if ( userdir )
 	{
 		DEBUG_Msg("Using configured base directory.\n");
-		basedir = (char *) malloc( strlen(userdir) + 4 );
-		if ( !basedir )
-		{
-			MSG_Error_SystemError("Couldn't malloc memory for basedir");
-		}
+		basedir = (char *) SafeMalloc ( strlen(userdir) + 4,
+			"script base directory");
 		strcpy(basedir, userdir);
 	}
 	else
 	{
-		basedir = (char *) malloc( strlen(user->pw_dir) +
-			strlen(CONF_CGIDIR) + 4 );
-		
-		if ( !basedir )
-		{
-			MSG_Error_SystemError("Couldn't malloc memory for basedir");
-		}
+		basedir = (char *) SafeMalloc (strlen(user->pw_dir) +
+			strlen(CONF_CGIDIR) + 4, "script base directory");
 		sprintf(basedir, "%s/%s", user->pw_dir, CONF_CGIDIR);
 	}
 
