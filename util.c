@@ -241,12 +241,14 @@ void CheckUser(struct passwd *user)
 #if defined(CONF_DENYFILE)
 	if ( deny_exists )
 	{
+	        DEBUG_Str("Checking deny file for",user->pw_name);
 		in_deny = UserInFile(CONF_DENYFILE, user->pw_name);
 	}
 #endif
 #if defined(CONF_ALLOWFILE)
 	if ( allow_exists )
 	{
+	        DEBUG_Str("Checking allow file for",user->pw_name);
 		in_allow = UserInFile(CONF_ALLOWFILE, user->pw_name);
 	}
 #endif
@@ -760,7 +762,7 @@ int UserInFile(char *filename, char *user)
 	int count, remote_addr[4],spec_mask[4],spec_addr[4];
 	char *i;
 #endif
-	int j;
+	int j, intail;
 
 #if defined(CONF_CHECKHOST)
 	if (sscanf(getenv("REMOTE_ADDR"),"%d.%d.%d.%d",
@@ -785,17 +787,33 @@ int UserInFile(char *filename, char *user)
 			fclose(file);
 			return 0;
 		}
-		for (j=0; j<=strlen(temp); j++)
+		intail=1;
+		for (j=strlen(temp)-1; j>=0; j--)
 		{
 			if ( !isprint(temp[j]) )
 			{
 				temp[j] = 0;
+			}
+			else 
+                        { 
+                             if (intail) 
+			     {
+			           if (isspace(temp[j]))
+				   {
+				         temp[j] = 0;
+				   }
+				   else 
+				   {
+				         intail = 0;
+				   }
+			     }
 			}
 		}
 
 		if ( !strcmp(temp,user) )
 		{
 			fclose(file);
+			DEBUG_Str("Found",user);
 			return 1;
 		}
 #if defined(CONF_CHECKHOST)
