@@ -40,6 +40,8 @@
        the   CGIWRAP_REQUIRE_USER   env   var   is   specified   and  the
        --with-env-require-user feature is enabled.
      * Changed to autoconf 2.5 style templates and eliminated acconfig.h.
+     * Added   option   to  enable  the  special  PHP  support  only  for
+       non-executable files.
 
   New in version 3.7.1:
 

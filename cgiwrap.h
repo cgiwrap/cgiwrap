@@ -119,6 +119,9 @@ struct cgiwrap_context
 
 	/* Is this an interpreted script with special handling? ie php */
 	int interpreted_script;
+
+	/* Is this script executable - used for checking if we should invoke interpreter */
+	int script_is_executable;
 };
 extern struct cgiwrap_context Context;
 

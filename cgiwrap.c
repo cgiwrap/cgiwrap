@@ -164,8 +164,14 @@ int main (int argc, char *argv[])
 
 #if defined(CONF_PHP_INTERPRETER) && defined(PATH_PROG_PHP)
 	DEBUG_Msg("\tChecking for special interpreted script (php).");
-	if ( ! interPath ) /* don't double check if already php-cgiwrap */
+	/* don't double check if already php-cgiwrap */
+#ifdef CONF_PHP_NONEXEC_ONLY
+	if ( ! interPath && ! Context.script_is_executable )
+#else
+	if ( ! interPath )
+#endif
 	{
+
 		if ( 
 			StringEndsWith(scriptPath, ".php") ||
 			StringEndsWith(scriptPath, ".php3") ||

@@ -533,6 +533,23 @@ AC_ARG_WITH( php-interpreter,
 	[
 		AC_MSG_RESULT([disabled, no special handling for php scripts])
 	])
+
+AC_MSG_CHECKING(for whether to enable special support on non-executable files only)
+AC_ARG_WITH( php-nonexec-only, 
+	[  --with-php-nonexec-only]
+	[  pass script to php interpreter only if not executable, otherwise use #! line ], 
+	[
+		if test "x$withval" != xno; then
+			AC_DEFINE(CONF_PHP_NONEXEC_ONLY, [], [pass script to php interpreter only if nonexecutable file])
+			AC_MSG_RESULT([enabled if php enabled, php will be handled specially only for nonexecutable files])
+		else
+			AC_MSG_RESULT([disabled, all php scripts handled the same if php enabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled, all php scripts handled the same if php enabled])
+	])
+
 AC_MSG_CHECKING(for whether to install separate php-cgiwrap wrapper)
 AC_ARG_WITH( php-cgiwrap, 
 	[  --with-php-cgiwrap]

@@ -99,6 +99,9 @@
 /* pass script to php interpreter if suffix */
 #undef CONF_PHP_INTERPRETER
 
+/* pass script to php interpreter only if nonexecutable file */
+#undef CONF_PHP_NONEXEC_ONLY
+
 /* avoid release of information */
 #undef CONF_QUIET_ERRORS
 

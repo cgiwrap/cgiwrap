@@ -615,7 +615,11 @@ void CheckScriptFile(void)
 			"Script is not a regular file");
 	}
 
-	if (!(fileStat.st_mode & S_IXUSR) && !Context.interpreted_script)
+	if (fileStat.st_mode & S_IXUSR)
+	{
+		Context.script_is_executable = 1; /* record this in case we might use interpreter later */
+	}
+	else if ( !Context.interpreted_script ) /* if we're passing to interpreter, isn't an error to be non-executable */
 	{
 		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script is not executable. Issue 'chmod 755 filename'");
