@@ -42,7 +42,7 @@ void main (int argc, char *argv[])
 
 	/* Redirect stderr to stdout */
 #if defined(CONF_REDIR_STDERR)
-	DEBUG_Msg("\nRedirecting STDERR to STDOUT");
+	DEBUG_Msg("Redirecting STDERR to STDOUT\n");
 	dup2(1,2);
 #endif
 

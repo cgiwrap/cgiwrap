@@ -369,8 +369,8 @@ dnl Options for clearing/setting a user's auxilliary (/etc/groups) groups
 dnl
 AC_MSG_CHECKING(for initgroups)
 AC_ARG_WITH( initgroups,
-	[  --with-initgroups]
-	[  use initgroups() to clear non-userid auxilliary groups],
+	[  --without-initgroups]
+	[  disable use of initgroups() to clear non-userid auxilliary groups],
 	[
 		if test x$withval != xno; then
 			AC_DEFINE(CONF_INITGROUPS)
@@ -380,13 +380,14 @@ AC_ARG_WITH( initgroups,
 		fi
 	],
 	[
-			AC_MSG_RESULT([disabled, aux groups will not be cleared])
+		AC_DEFINE(CONF_INITGROUPS)
+		AC_MSG_RESULT([enabled, aux groups will be cleared])
 	])
 
 AC_MSG_CHECKING(for setgroups)
 AC_ARG_WITH( setgroups,
-	[  --with-setgroups]
-	[  use setgroups() to add userid's auxilliary groups],
+	[  --without-setgroups]
+	[  disable use of setgroups() to add userid's auxilliary groups],
 	[
 		if test x$withval != xno; then
 			AC_DEFINE(CONF_SETGROUPS)
@@ -396,7 +397,8 @@ AC_ARG_WITH( setgroups,
 		fi
 	],
 	[
-		AC_MSG_RESULT([disabled, aux groups will not be set])
+		AC_DEFINE(CONF_SETGROUPS)
+		AC_MSG_RESULT([enabled, aux groups will be set])
 	])
 
 

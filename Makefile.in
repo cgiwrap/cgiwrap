@@ -96,8 +96,8 @@ dist:
 
 tardist: dist
 	gtar -C .. -czvf ../cgiwrap-$(VERSION).tar.gz cgiwrap-$(VERSION)
-	pgp -sba ../cgiwrap-$(VERSION).tar.gz
+	#pgp -sba ../cgiwrap-$(VERSION).tar.gz
 	rm -f ../cgiwrap-$(VERSION).tar.gz.sig
-	mv ../cgiwrap-$(VERSION).tar.gz.asc ../cgiwrap-$(VERSION).tar.gz.sig
+	#mv ../cgiwrap-$(VERSION).tar.gz.asc ../cgiwrap-$(VERSION).tar.gz.sig
 	
 

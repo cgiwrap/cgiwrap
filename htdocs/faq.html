@@ -48,11 +48,17 @@ HREF="maillist.html">here</A>.
 
 <P><DT>I am getting the error "<TT>setgroups() failed!</TT>". What is wrong?
 	<DD>This occurs when CGIwrap is unable to set auxilliary groups. 
-Auxillliary groups are groups that a user in a member of (in /etc/group), 
-that are not the user's primary group (in /etc/passwd). Two things you 
+Auxilliary groups are groups that a user is a member of in /etc/group, 
+that are not the user's primary group in /etc/passwd. Two things you 
 can do here are to make sure CGIwrap is installed correctly (has to be 
-setid root to be able to set auxilliary groups.), or disable setting 
-auxilliary groups (answer no to the question when running Configure.).
+setuid root to be able to set auxilliary groups.), or disable setting 
+auxilliary groups.
+
+<P><DT> ld.so.1: /net/bin/perl: fatal: /usr/lib/libintl.so.1: can't map file: errno=12
+<DD>This indicates that you installed cgiwrap with resource limiting (with rlimit support)
+but the limits are set too low. There isn't enough memory for perl to load. Keep
+in mind that unix applications usually use alot of virtual memory, even though
+their resident size is small.
 
 </DL>
 
@@ -64,3 +70,5 @@ auxilliary groups (answer no to the question when running Configure.).
 		instead of <TT>http://.../cgiwrap/...</TT>.
 
 </DL>
+
+

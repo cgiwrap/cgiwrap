@@ -210,25 +210,25 @@ void CheckUser(struct passwd *user)
 	if ( !deny_exists && !allow_exists )
 	{
 		Log(user->pw_name, "-", "access control files not found");
-		MSG_Error_General("Access control files not found!");
+		MSG_Error_AccessControl("Access control files not found!");
 	}
 
 	if ( in_allow && in_deny )
 	{
 		Log(user->pw_name, "-", "user in both allow and deny files");
-		MSG_Error_General("User is both allowed and denied!");
+		MSG_Error_AccessControl("User is both allowed and denied!");
 	}
 
 	if ( allow_exists && !in_allow )
 	{
 		Log(user->pw_name, "-", "user not in allow file");
-		MSG_Error_General("User not in allow file!");
+		MSG_Error_AccessControl("User not in allow file!");
 	}
 
 	if ( deny_exists && in_deny )
 	{
 		Log(user->pw_name, "-", "user in deny file");
-		MSG_Error_General("User in deny file!");
+		MSG_Error_AccessControl("User in deny file!");
 	}
 #endif
 }
@@ -283,7 +283,7 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 	if (!(fileStat.st_mode & S_IXUSR))
 	{
 		sprintf(tempErrString, "Script is not executable. Issue chmod 755 %s", scriptPath);
-		MSG_Error_General(tempErrString);
+		MSG_Error_ExecutionNotPermitted(tempErrString);
 	}
 
 
@@ -342,14 +342,14 @@ void VerifyExecutingUser(void)
 #if defined(CONF_CHECK_HTTPD_USER)
 	struct passwd *user;
 
-        if ( !(user = getpwnam(CONF_HTTPD_USER)) )
-        {
-                MSG_Error_General("Configured server userid not found.");
-        }
+	if ( !(user = getpwnam(CONF_HTTPD_USER)) )
+	{
+		MSG_Error_ServerUserNotFound();
+	}
 
 	if ( getuid() != user->pw_uid )
 	{
-		MSG_Error_ServerUserWrong();
+		MSG_Error_ServerUserMismatch();
 	}
 #endif
 }
@@ -497,7 +497,7 @@ void SetEnvironmentVariables(void)
 
 	for (i=0; cgiwrap_setenvs[i].variable; i++)
 	{
-		sprintf(msg, "\nSetting Environment Variable(%s) to (%s)\n", 
+		sprintf(msg, "Setting Environment Variable(%s) to (%s)\n", 
 			cgiwrap_setenvs[i].variable,
 			cgiwrap_setenvs[i].value);
 		DEBUG_Msg(msg);
@@ -567,7 +567,9 @@ void SetResourceLimits(void)
 		limstruct.rlim_cur = cgiwrap_rlimits[i].value;
 		limstruct.rlim_max = cgiwrap_rlimits[i].value;
 
-		sprintf(msg, "\nSetting Limit: %s\n", cgiwrap_rlimits[i].label);
+		sprintf(msg, "Limiting (%s) to (%ld)\n", 
+			cgiwrap_rlimits[i].label,
+			cgiwrap_rlimits[i].value);
 		DEBUG_Msg(msg);
 
 		setrlimit(cgiwrap_rlimits[i].which, &limstruct);
