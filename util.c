@@ -749,8 +749,8 @@ void SetScriptName(char *userStr, char *scrStr )
  */
 void SetPathTranslated( char *scriptPath )
 {
+#ifndef CONF_FIXED_PATHTRANS
 	char *buf;
-
 	buf = (char *) malloc( strlen("PATH_TRANSLATED") +
 		strlen(scriptPath) + 5 );
 
@@ -761,6 +761,31 @@ void SetPathTranslated( char *scriptPath )
 
 	sprintf(buf, "%s=%s", "PATH_TRANSLATED", scriptPath); 
 	putenv(buf);
+
+#else
+	char *buf, *docroot, *pathinfo;
+	
+	docroot = getenv("DOCUMENT_ROOT");
+	pathinfo = getenv("PATH_INFO");
+
+	if ( !docroot || !pathinfo )
+	{
+		putenv("PATH_TRANSLATED=");
+		return;
+	}
+
+	buf = (char *) malloc( strlen("PATH_TRANSLATED") +
+		strlen(docroot) + strlen(pathinfo) + 5);
+
+	if( !buf )
+	{
+		DoPError("Couldn't malloc memory for PATH_TRANSLATED buf!");
+	}
+
+	sprintf(buf, "%s=%s%s", "PATH_TRANSLATED", docroot, pathinfo); 
+	putenv(buf);
+#endif
+
 }
 
 
