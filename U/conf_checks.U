@@ -1,4 +1,4 @@
-?MAKE:d_conf_check_scruid d_conf_check_scrgid d_conf_check_scrsuid d_conf_check_scrsgid : cat contains Setvar Myread Oldconfig 
+?MAKE:d_conf_check_scruid d_conf_check_scrgid d_conf_check_scrsuid d_conf_check_scrsgid d_conf_check_scrgwrite d_conf_check_scrowrite: cat contains Setvar Myread Oldconfig 
 ?MAKE:	-pick add $@ %<
 ?S:d_conf_check_scruid:
 ?S:	If defined, cgiwrap will verify that owner of the script matches
@@ -14,6 +14,12 @@
 ?S:d_conf_check_scrsgid:
 ?S:	If defined, cgiwrap will verify that the script is not set-gid
 ?S:.
+?S:d_conf_check_scrgwrite:
+?S:	If defined, cgiwrap will verify that the script is not group writable
+?S:.
+?S:d_conf_check_scrowrite:
+?S:	If defined, cgiwrap will verify that the script is not world writable
+?S:.
 ?C:CONF_CHECK_SCRUID:
 ?C:	If defined, cgiwrap will verify that owner of the script matches
 ?C:	the UID it switched to.
@@ -28,10 +34,18 @@
 ?C:CONF_CHECK_SCRSGID:
 ?C:	If defined, cgiwrap will verify that the script is not set-gid
 ?C:.
+?C:CONF_CHECK_SCRGWRITE:
+?C:	If defined, cgiwrap will verify that the script is not group writable
+?C:.
+?C:CONF_CHECK_SCROWRITE:
+?C:	If defined, cgiwrap will verify that the script is not world writable
+?C:.
 ?H:#$d_conf_check_scruid CONF_CHECK_SCRUID		/**/
 ?H:#$d_conf_check_scrgid CONF_CHECK_SCRGID		/**/
 ?H:#$d_conf_check_scrsuid CONF_CHECK_SCRSUID		/**/
 ?H:#$d_conf_check_scrsgid CONF_CHECK_SCRSGID		/**/
+?H:#$d_conf_check_scrgwrite CONF_CHECK_SCRGWRITE	/**/
+?H:#$d_conf_check_scrowrite CONF_CHECK_SCROWRITE	/**/
 ?H:.
 $cat <<'EOM'
 
@@ -118,6 +132,42 @@ y|Y) val="$define" ;;
 esac
 
 set d_conf_check_scrsgid
+eval $setvar
+
+#-------------------
+
+case "$d_conf_check_scrgwrite" in
+undef) dflt='n' ;;
+*) dflt='y' ;;
+esac
+
+rp="Check if script is group writable?"
+. ./myread
+
+case "$ans" in
+y|Y) val="$define" ;;
+*) val="$undef" ;;
+esac
+
+set d_conf_check_scrgwrite
+eval $setvar
+
+#-------------------
+
+case "$d_conf_check_scrowrite" in
+undef) dflt='n' ;;
+*) dflt='y' ;;
+esac
+
+rp="Check if script is world writable?"
+. ./myread
+
+case "$ans" in
+y|Y) val="$define" ;;
+*) val="$undef" ;;
+esac
+
+set d_conf_check_scrowrite
 eval $setvar
 
 
