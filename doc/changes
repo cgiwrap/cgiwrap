@@ -61,6 +61,9 @@
      * Cleaned up Makefile, finished support for building in a separate
        directory from the source, added a 'dep' target using depend.awk
        from mutt distribution.
+     * Fixed problem with CHECKHOST/CHECKHOSTS typos.
+     * Added support for using "*" with checkhost support to restrict ALL
+       userids from being accessed from that host. (*@x.x.x.x/y.y.y.y)
        
   New in version 3.5:
   

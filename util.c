@@ -33,8 +33,7 @@ char **CreateARGV( char *scrStr, int argc, char *argv[])
 	char **temp;
 	int i;
 
-	temp = (char **) SafeMalloc( (argc+1) * sizeof(char *),
-		"ARGV array");
+	temp = (char **) SafeMalloc( (argc+1) * sizeof(char *), "ARGV array");
 	
 	temp[0] = StripPathComponents( CountSubDirs(scrStr), scrStr );
 	temp[argc] = 0;
@@ -253,29 +252,20 @@ void CheckUser(struct passwd *user)
 		MSG_Error_AccessControl("Access control files not found!");
 	}
 
-	if ( in_allow && in_deny )
+	if ( (in_allow && in_deny) ||
+		( allow_exists && !in_allow ) ||
+		( deny_exists && in_deny ) )
 	{
-		Log(user->pw_name, "-", "user in both allow and deny files");
-		MSG_Error_AccessControl("User is both allowed and denied!");
-	}
-
-	if ( allow_exists && !in_allow )
-	{
-		Log(user->pw_name, "-", "user not in allow file");
-		MSG_Error_AccessControl("User not in allow file!");
-	}
-
-	if ( deny_exists && in_deny )
-	{
-		Log(user->pw_name, "-", "user in deny file");
-		MSG_Error_AccessControl("User in deny file!");
+		Log(user->pw_name, "-", "user/host not permitted");
+		MSG_Error_AccessControl("Script userid and/or remote host not permitted!");
 	}
 #endif
+
 #if defined(CONF_MINIMUM_UID)
 	if ( user->pw_uid < CONF_MINIMUM_UID )
 	{
 		Log(user->pw_name, "-", "uid less than minimum");
-		MSG_Error_AccessControl("UID of user less than configured minimum.");
+		MSG_Error_AccessControl("UID of script userid less than configured minimum.");
 	}
 #endif
 }
@@ -721,26 +711,29 @@ void ChangeAuxGroups(struct passwd *user)
 int UserInFile(char *filename, char *user)
 {
 	FILE *file;
-	char temp[200];
+	char temp[200], *tmpuser;
 #if defined(CONF_CHECKHOST)
-      int unlen,addr[4],mask[4],snet[4];
-      char *i;
+	int unlen,remote_addr[4],spec_mask[4],spec_addr[4];
+	char *i;
 #endif
 
 #if defined(CONF_CHECKHOST)
-      unlen = strlen(user);
-      mask[0]=255; mask[1]=255; mask[2]=255; mask[3]=255;
-      if (sscanf(getenv("REMOTE_ADDR"),"%d.%d.%d.%d",
-              &addr[0],&addr[1],&addr[2],&addr[3]) != 4 )
-      {
-              Log(user, "-", "no remote host");
-              MSG_Error_General("Your host is not allowed to run this");
-      }
+	spec_mask[0]=255; 
+	spec_mask[1]=255; 
+	spec_mask[2]=255; 
+	spec_mask[3]=255;
+	if (sscanf(getenv("REMOTE_ADDR"),"%d.%d.%d.%d",
+		&remote_addr[0],&remote_addr[1],
+		&remote_addr[2],&remote_addr[3]) != 4 )
+	{
+		Log(user, "-", "no remote host");
+		MSG_Error_General("Your host is not allowed to run this");
+	}
 #endif
 
 	if ( (file=fopen(filename,"r")) == NULL )
 	{
-		MSG_Error_SystemError("Couldn't Open User List File");
+		MSG_Error_SystemError("Couldn't open access control file");
 	}
 
 	while ( !feof(file) )
@@ -752,26 +745,31 @@ int UserInFile(char *filename, char *user)
 			return 1;
 		}
 #if defined(CONF_CHECKHOST)
-              else if (( !strncmp(temp,user,unlen) ) && (temp[unlen] == '@') )
-              {
-                      i = &temp[unlen];
-                      while (i != NULL)
-                      {
-                              i++;
-                              sscanf(i,"%d.%d.%d.%d/%d.%d.%d.%d",
-                              &snet[0],&snet[1],&snet[2],&snet[3],
-                              &mask[0],&mask[1],&mask[2],&mask[3]);
+		i = strchr(temp, '@');
+		tmpuser = strtok(temp, "@");
+		if ( (i != NULL) && (tmpuser != NULL) &&
+			( (!strcmp(tmpuser,user)) || (!strcmp(tmpuser, "*")) ) )
+		{
+			while (i != NULL)
+			{
+				i++;
+				sscanf(i,"%d.%d.%d.%d/%d.%d.%d.%d",
+					&spec_addr[0], &spec_addr[1],
+					&spec_addr[2], &spec_addr[3],
+					&spec_mask[0], &spec_mask[1],
+					&spec_mask[2], &spec_mask[3]);
 
-                              if ((snet[0] == (mask[0] & addr[0])) &&
-                                  (snet[1] == (mask[1] & addr[1])) &&
-                                  (snet[2] == (mask[2] & addr[2])) &&
-                                  (snet[3] == (mask[3] & addr[3])))
-                              {
-                                      return 1;
-                              }
-                      i = strchr(i,',');
-                      }
-              }
+				if ((spec_addr[0] == (spec_mask[0] & remote_addr[0])) &&
+					(spec_addr[1] == (spec_mask[1] & remote_addr[1])) &&
+					(spec_addr[2] == (spec_mask[2] & remote_addr[2])) &&
+					(spec_addr[3] == (spec_mask[3] & remote_addr[3])))
+				{
+					fclose(file);
+					return 1;
+            	}
+    			i = strchr(i,',');
+    		}
+		}
 #endif
 	}
 	fclose(file);

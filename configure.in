@@ -4,7 +4,7 @@ AC_CONFIG_AUX_DIR(.)
 AC_CANONICAL_SYSTEM
 AC_CONFIG_HEADER(config.h)
 
-VERSION="3.6beta5"
+VERSION="3.6beta6"
 AC_SUBST(VERSION)
 
 AC_PROG_CC
@@ -749,7 +749,7 @@ AC_ARG_WITH( host-checking,
 	[  allow specifying hosts in allow/deny files],
 	[
 		if test "x$withval" != xno; then
-			AC_DEFINE_UNQUOTED(CONF_CHECKHOST, "$withval")
+			AC_DEFINE(CONF_CHECKHOST)
 			AC_MSG_RESULT([enabled])
 		else
 			AC_MSG_RESULT([disabled])
@@ -796,9 +796,8 @@ if test "x$AFSDIR" != x; then
 	case $target_os in
 		hpux* )	
 			EXTRA_AFS_LIBS="-lBSD"
-			AC_DEFINE(_HPUX_SOURCE)
 			AFSLIBS="$AFSLIBS $EXTRA_AFS_LIBS"
-			os_specific_msg="$EXTRA_AFS_LIBS, _HPUX_SOURCE"
+			os_specific_msg="$EXTRA_AFS_LIBS"
 		;;
 		*solaris*)
 			EXTRA_AFS_LIBS="-lnsl -lsocket -L/usr/ucblib -lucb"

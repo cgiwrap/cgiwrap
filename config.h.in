@@ -81,7 +81,7 @@
 #undef CONF_SETGROUPS
 #undef CONF_ALLOWFILE
 #undef CONF_DENYFILE
-#undef CONF_CHECKHOSTS
+#undef CONF_CHECKHOST
 #undef CONF_AFS_SETPAG
 #undef CONF_CGIDIR
 
@@ -100,11 +100,6 @@
 #undef CONF_USE_RLIMIT_NPROC
 #undef CONF_USE_RLIMIT_NOFILE
 #undef CONF_USE_RLIMIT_MEMLOCK
-
-/*
- * OS Specific Definitions
- */
-#undef _HPUX_SOURCE
 
 /* Define if you have the <ctype.h> header file.  */
 #undef HAVE_CTYPE_H
