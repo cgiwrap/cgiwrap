@@ -449,6 +449,8 @@ void CheckVHostUserAccess(struct passwd *user)
 	}
 	free(http_host);
 
+	DEBUG_Str("   Access Control Virtual Host: ", lower_http_host);
+
 	/* Now build the two filenames */	
 #if defined(CONF_VHOST_ALLOWDIR)
 	allowfile = (char *) SafeMalloc(strlen(CONF_VHOST_ALLOWDIR) + 1 +
@@ -456,6 +458,8 @@ void CheckVHostUserAccess(struct passwd *user)
 	strcpy(allowfile, CONF_VHOST_ALLOWDIR);
 	strcat(allowfile, "/");
 	strcat(allowfile, lower_http_host);
+
+	DEBUG_Str("      VHost Allow File: ", allowfile);
 #endif
 
 #if defined(CONF_VHOST_DENYDIR)
@@ -464,6 +468,8 @@ void CheckVHostUserAccess(struct passwd *user)
 	strcpy(denyfile, CONF_VHOST_DENYDIR);
 	strcat(denyfile, "/");
 	strcat(denyfile, lower_http_host);
+
+	DEBUG_Str("      VHost Deny File: ", denyfile);
 #endif
 
 	CheckAccess_Helper(user, allowfile, denyfile);
@@ -487,9 +493,29 @@ void CheckAccess_Helper(struct passwd *user, char *allowfile, char *denyfile)
 	}
 
 	if ( denyfile )
+	{
 		deny_exists = FileExists(denyfile);
+		if ( deny_exists )
+		{
+			DEBUG_Str("Deny file exists: ", denyfile);
+		}
+		else
+		{
+			DEBUG_Str("Deny file nonexistent: ", denyfile);
+		}
+	}
 	if ( allowfile )
+	{
 		allow_exists = FileExists(allowfile);
+		if ( allow_exists )
+		{
+			DEBUG_Str("Allow file exists: ", allowfile);
+		}
+		else
+		{
+			DEBUG_Str("Allow file nonexistent: ", allowfile);
+		}
+	}
 
 	if ( !deny_exists && !allow_exists )
 	{
