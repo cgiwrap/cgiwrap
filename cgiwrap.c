@@ -165,11 +165,7 @@ int main (int argc, char *argv[])
 #if defined(CONF_PHP_INTERPRETER) && defined(PATH_PROG_PHP)
 	DEBUG_Msg("\tChecking for special interpreted script (php).");
 	/* don't double check if already php-cgiwrap */
-#ifdef CONF_PHP_NONEXEC_ONLY
-	if ( ! interPath && ! Context.script_is_executable )
-#else
 	if ( ! interPath )
-#endif
 	{
 
 		if ( 
@@ -237,6 +233,15 @@ int main (int argc, char *argv[])
 	/* Check to see if ok to execute script file */
 	CheckScriptFile();
 
+	/* Check to see if we should force handling with #! line */
+#if defined(CONF_PHP_NONEXEC_ONLY)
+	if ( Context.interpreted_script && Context.script_is_executable )
+	{
+		DEBUG_Msg("\tScript is executable, ignoring interpreter and using #! line.\n");
+		Context.interpreted_script = 0;
+	}
+#endif
+
 	/* Perform any AFS related tasks before executing script */
 	Create_AFS_PAG();
 	
@@ -284,7 +289,7 @@ int main (int argc, char *argv[])
 		exit(WEXITSTATUS(childstatus));
 	}
 #else
-	if ( interPath )
+	if ( interPath && Context.interpreted_script )
 	{
 		execv(interPath, CreateARGV(scrStr, argc, argv));
 	}
