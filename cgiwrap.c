@@ -33,6 +33,8 @@
 * Changes since 2.2:
 *   Fixed location of setgroups() call
 *   Added INSTALL file and fixed PROMO that was old.
+* Changes since 2.3:
+*   Fixed incorrect exec call, added null at end.
 ******************************************************************/
 
 
@@ -579,7 +581,7 @@ void main (int argc, char *argv[])
 #ifdef USE_SYSTEM
 	scriptErr = system(execStr);
 #else
-	scriptErr = execl(execStr, scrStr);  
+	scriptErr = execl(execStr, scrStr, (char *) 0);  
 #endif
 
 
