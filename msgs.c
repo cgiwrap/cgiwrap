@@ -352,6 +352,15 @@ void MSG_Error_ServerUserMismatch(void)
 
 void MSG_Error_ServerUserNotFound(void)
 {
+	struct passwd *pw;
+	char *user = "";
+
+	pw = getpwuid(getuid());
+	if ( pw )
+	{
+		user = pw->pw_name;
+	}
+
 	MSG_Header("CGIWrap Error", "Server UserID Not Found");
 
 	printf(
@@ -369,6 +378,17 @@ void MSG_Error_ServerUserNotFound(void)
 	printf(
 "This is a configuration/setup problem with CGIWrap on this server.\n"
 "Please contact the server administrator.\n"
+	);
+
+	if ( MSG_HTMLMessages )
+	{
+		printf("<P>");
+	}
+
+	printf(
+"As near as can be determined from the current execution environment,\n"
+"the userid this server is running as is \"%s\". Try reconfiguring\n"
+"cgiwrap using '--with-httpd-user=%s'.\n", user, user
 	);
 
 	MSG_Footer();
