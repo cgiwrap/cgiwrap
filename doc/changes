@@ -19,6 +19,20 @@
        writable. Can't break user scripts without a major hassle.
      * Added code to optionally check if script file is a symbolic link.
        Of course, the script dir itself could still be a symbolic link.
+     * Changed to GNU autoconf for configuration
+     * Makefile now supports 'install' target with --install-path is
+       specified with configure.
+     * Support added for setting PATH and TZ environment variables before
+       executing script
+     * Support added for setting a bunch of different RLIMIT_ parameters
+       before executing script, as well as allowing the administrator to
+       set the limits with the --with-rlimit-*=value option to configure.
+     * Error messages are now more verbose and output in HTML if
+       possible.
+     * Support for calling script using system() has been removed as it
+       is not really needed for anything, and just slows things down.
+     * Fixed malloc() error check in GetUserDir routines
+     * Fixed race condition with permissions and opening of log file
        
   New in version 3.5:
   
@@ -35,7 +49,7 @@
        
   New in version 3.4:
   
-     * Fixed typo "& instead of "&& in setgroups stuff
+     * Fixed typo "&" instead of "&&" in setgroups stuff
      * Added cgiwrap.aliases option to rewrite home dirs of users.
      * Moved entire cgiwrap source build tree to CVS, will make tracking
        changes easier.

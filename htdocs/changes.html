@@ -17,6 +17,19 @@ aren't used, and some scripts might be marked as world writable. Can't
 break user scripts without a major hassle.
 	<LI>Added code to optionally check if script file is a symbolic 
 link. Of course, the script dir itself could still be a symbolic link.
+	<LI>Changed to GNU autoconf for configuration
+	<LI>Makefile now supports 'install' target with --install-path is 
+specified with configure.
+	<LI>Support added for setting PATH and TZ environment variables
+before executing script
+	<LI>Support added for setting a bunch of different RLIMIT_ parameters
+before executing script, as well as allowing the administrator to set the
+limits with the --with-rlimit-*=value option to configure.
+	<LI>Error messages are now more verbose and output in HTML if possible.
+	<LI>Support for calling script using system() has been removed as it is
+not really needed for anything, and just slows things down.
+	<LI>Fixed malloc() error check in GetUserDir routines
+	<LI>Fixed race condition with permissions and opening of log file
 </UL>
 
 <P><H3>New in version 3.5:</H3><UL>
