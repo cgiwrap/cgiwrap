@@ -873,6 +873,10 @@ void SetEnvironmentVariables(void)
 #if defined(CONF_SETENV_TZ)
 		{"TZ", CONF_SETENV_TZ, "TZ=" CONF_SETENV_TZ},
 #endif
+#if defined(CONF_SETENV_LD_LIBRARY_PATH)
+		{"LD_LIBRARY_PATH", CONF_SETENV_LD_LIBRARY_PATH, 
+			"LD_LIBRARY_PATH=" CONF_SETENV_LD_LIBRARY_PATH},
+#endif
 		{0,0,0}
 	};
 
