@@ -469,8 +469,8 @@ void CheckVHostUserAccess(struct passwd *user)
 	CheckAccess_Helper(user, allowfile, denyfile);
 	
 	/* Clean up */
-	free(denyfile);
-	free(allowfile);
+	if ( denyfile ) free(denyfile);
+	if ( allowfile ) free(allowfile);
 	free(lower_http_host);
 #endif
 }
