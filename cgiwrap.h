@@ -62,6 +62,10 @@
 #include <fcntl.h>
 #endif
 
+#if defined(HAVE_GRP_H)
+#include <grp.h>
+#endif
+
 /*
  * Global context structure
  */

@@ -9,8 +9,8 @@
 srcdir=@srcdir@
 VPATH=@srcdir@
 @SET_MAKE@
-CC=@CC@ 
-CFLAGS=@CFLAGS@ -I. -I$(srcdir) @CPPFLAGS@ @AFSCFLAGS@
+CC=@CC@
+CFLAGS=@GCC_WALL_OPT@ @CFLAGS@ @CPPFLAGS@
 LDFLAGS=@LDFLAGS@ @AFSLDFLAGS@
 LIBS=@AFSLIBS@ @LIBS@
 
@@ -25,7 +25,7 @@ OBJS=cgiwrap.o debug.o util.o fetch.o stdutil.o msgs.o
 all: cgiwrap
 
 .c.o: cgiwrap.h config.h Makefile
-	$(CC) -c $(CCFLAGS) $<
+	$(CC) -c $(CFLAGS) $<
 
 install: cgiwrap
 	@DOINSTALL@ rm -f @INSTALLDIR@/cgiwrap
