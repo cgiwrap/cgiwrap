@@ -431,7 +431,17 @@ void CheckVHostUserAccess(struct passwd *user)
 	char *http_host = getenv("HTTP_HOST");
 	char *lower_http_host = NULL;
 	int i;
-		
+
+#ifdef CONF_VHOST_OVERRIDE
+	char *cgiwrap_auth_vhost = getenv("CGIWRAP_AUTH_VHOST");
+
+	if ( cgiwrap_auth_vhost && cgiwrap_auth_vhost[0])
+	{
+		DEBUG_Str("Overriding Access Control Virtual Host: ", HTMLEncode(cgiwrap_auth_vhost));
+		http_host = cgiwrap_auth_vhost;
+	}
+#endif
+
 	/* Get the vhost we are running on */
 	if ( ! http_host || ! http_host[0] )
 	{

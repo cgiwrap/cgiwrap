@@ -83,6 +83,25 @@ AC_ARG_WITH( quiet-errors,
 	[
 		AC_MSG_RESULT([disabled])
 	])
+
+dnl
+dnl Allow cgiwrap specific vhost override - for use with wildcard vhosts
+dnl
+AC_MSG_CHECKING(for vhost-override)
+AC_ARG_WITH( vhost-override,
+	[  --with-vhost-override]
+	[  allow overriding HTTP_HOST with CGIWRAP_AUTH_VHOST],
+	[
+		if test "x$withval" != xno; then
+			AC_DEFINE(CONF_VHOST_OVERRIDE)
+			AC_MSG_RESULT([enabled])
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
+	])
 	
 dnl
 dnl Path to perl for unsupported stuff

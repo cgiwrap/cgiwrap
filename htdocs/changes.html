@@ -17,6 +17,8 @@ cgi's that want to restrict which userids can run cgi's on certain vhosts. If en
 	<LI>Modified san's REDIRECT_URL support to be --with-use-redirect-url instead of --with-check-redirect-url, since it's more a functional change, not a security check.
 	<LI>Added a --with-quiet-errors option to allow significantly restricting the amount of
 internal information that an error message displays.
+	<LI>Added ability to override the vhost that cgiwrap users via an optional CGIWRAP_AUTH_VHOST env var, which if present and feature enabled, will be used instead of HTTP_HOST. This is useful for
+when you have wildcard servernames in apache.
 </UL>
 
 <P><H3>New in version 3.7.1:</H3><UL>

@@ -94,6 +94,7 @@
 #undef CONF_CGIDIR
 #undef CONF_MULTIUSER_CGI_DIR
 #undef CONF_QUIET_ERRORS
+#undef CONF_VHOST_OVERRIDE
 
 /*
  * RLimit Options
