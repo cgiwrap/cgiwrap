@@ -179,6 +179,23 @@ char *GetValue( char *keyword, char *string )
 	return returnStr;
 }
 
+/*
+ * Check if a script name ends with a particular string (i.e. .php)
+ */
+int StringEndsWith(char *string, char *ending)
+{
+	int len = strlen(string);
+	int elen = strlen(ending);
+
+	if ( len >= elen && !strncmp(string + len - elen, ending, elen) )
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
 
 /*
  * Check if a path is safe to use

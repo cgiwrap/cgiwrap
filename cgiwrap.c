@@ -151,6 +151,22 @@ int main (int argc, char *argv[])
 	DEBUG_Str("\tScript Relative Path: ", scrStr);
 	DEBUG_Str("\tScript Absolute Path: ", scriptPath);
 
+#if defined(CONF_PHP_INTERPRETER) && defined(PATH_PROG_PHP)
+	DEBUG_Msg("\tChecking for special interpreted script (php).");
+	if ( ! interPath ) /* don't double check if already php-cgiwrap */
+	{
+		if ( 
+			StringEndsWith(scriptPath, ".php") ||
+			StringEndsWith(scriptPath, ".php3") ||
+			StringEndsWith(scriptPath, ".php4") ||
+			StringEndsWith(scriptPath, ".phtml") )
+		{
+			Context.interpreted_script = 1;
+			interPath = PATH_PROG_PHP;
+		}
+	}
+#endif
+
 	if ( interPath )
 	{
 		DEBUG_Str("\tInterpreter Path: ", interPath);

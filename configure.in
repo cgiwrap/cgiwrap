@@ -423,6 +423,42 @@ AC_ARG_WITH( report-rusage,
 	])
 
 dnl
+dnl Check for php filename, and pass to php interpreter directly
+dnl
+AC_MSG_CHECKING(for php-interpreter support)
+AC_ARG_WITH( php-interpreter, 
+	[  --with-php-interpreter]
+	[  pass script to php interpreter if filename matches], 
+	[
+		if test "x$withval" != xno; then
+			AC_DEFINE(CONF_PHP_INTERPRETER)
+			AC_MSG_RESULT([enabled, php will be handled specially])
+		else
+			AC_MSG_RESULT([disabled, no special handling for php scripts])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled, no special handling for php scripts])
+	])
+AC_MSG_CHECKING(for whether to install separate php-cgiwrap wrapper)
+AC_ARG_WITH( php-cgiwrap, 
+	[  --with-php-cgiwrap]
+	[  install separate php-cgiwrap executable ], 
+	[
+		if test "x$withval" != xno; then
+			AC_MSG_RESULT([enabled])
+		else
+			DOINSTALLPHP="#"
+			AC_MSG_RESULT([disabled]);
+		fi
+	],
+	[
+		DOINSTALLPHP="#"
+		AC_MSG_RESULT([disabled]);
+	])
+AC_SUBST(DOINSTALLPHP)
+
+dnl
 dnl Enable/disable check for special characters in the script path
 dnl Disabling this turns off the !isprint and isspace checks in the
 dnl CheckPath routine. Thanks to Cobalt for pointing out that this

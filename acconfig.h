@@ -120,6 +120,7 @@
  * PHP support
  */
 #undef PATH_PROG_PHP
+#undef CONF_PHP_INTERPRETER
 
 /*
  * Quiet warning about rcsid

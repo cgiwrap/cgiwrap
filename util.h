@@ -39,6 +39,7 @@ void SetPathTranslated(char *cgiBaseDir, char *scriptPath);
 void Create_AFS_PAG(void);
 char *GetUserDir(char *user);
 char *GetBaseDirectory(struct passwd *user);
+int StringEndsWith(char *string, char *ending);
 
 int FileExists(char *path);
 int DirExists(char *path);
