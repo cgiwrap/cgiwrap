@@ -318,6 +318,9 @@ void MSG_Info(void)
 
 void MSG_Error_CGIWrapNotSetUID(void)
 {
+#ifdef CONF_QUIET_ERRORS
+	MSG_Error_ServerConfigError();
+#else
     MSG_Header("CGIWrap Error", "CGIWrap is not setuid");
 
     printf(
@@ -330,11 +333,15 @@ void MSG_Error_CGIWrapNotSetUID(void)
 
     MSG_Footer();
     exit(1);
+#endif
 }
 
 
 void MSG_Error_ServerUserMismatch(void)
 {
+#ifdef CONF_QUIET_ERRORS
+	MSG_Error_ServerConfigError();
+#else
 	MSG_Header("CGIWrap Error", "Server UserID Mismatch");
 
 	printf(
@@ -346,11 +353,15 @@ void MSG_Error_ServerUserMismatch(void)
 
 	MSG_Footer();
 	exit(1);
+#endif
 }
 
 
 void MSG_Error_ServerUserNotFound(void)
 {
+#ifdef CONF_QUIET_ERRORS
+	MSG_Error_ServerConfigError();
+#else
 	struct passwd *pw;
 	char *user = "";
 
@@ -392,6 +403,7 @@ void MSG_Error_ServerUserNotFound(void)
 
 	MSG_Footer();
 	exit(1);
+#endif
 }
 
 
@@ -399,6 +411,9 @@ void MSG_Error_ExecutionNotPermitted(char *path, char *reason)
 {
 	MSG_Header("CGIWrap Error", "Execution of this script not permitted");
 
+#ifdef CONF_QUIET_ERRORS
+	printf("Execution of that script is not permitted\n");
+#else
 	if ( path )
 	{
 		printf("Execution of (%s) is not permitted\n",HTMLEncode(path));
@@ -417,6 +432,7 @@ void MSG_Error_ExecutionNotPermitted(char *path, char *reason)
 	{
 		printf("\t%s\n", reason);
 	}
+#endif
 
 	MSG_Footer();
 	exit(1);
@@ -425,7 +441,11 @@ void MSG_Error_ExecutionNotPermitted(char *path, char *reason)
 void MSG_Error_AccessControl(char *why, char *allowfile, char *denyfile)
 {
 	MSG_Header("CGIWrap Error", "Access Control");
-	
+
+#ifdef CONF_QUIET_ERRORS
+	printf("CGIWrap access control mechanism denied execution of this\n");
+	printf("script.\n\n");
+#else
 	printf("CGIWrap access control mechanism denied execution of this\n");
 	printf("script for the following reason:\n\n");
 
@@ -450,7 +470,7 @@ void MSG_Error_AccessControl(char *why, char *allowfile, char *denyfile)
 			printf("\tAccess Control Deny File: %s\n", denyfile);
 		}
 	}
-
+#endif
 	MSG_Footer();
 	exit(1);
 }
@@ -459,7 +479,8 @@ void MSG_Error_SystemError(char *when)
 {
 	MSG_Header("CGIWrap Error", "System Error");
 	printf("CGIWrap encountered a system error:\n");
-	
+
+#ifndef CONF_QUIET_ERRORS
 	if ( MSG_HTMLMessages )
 	{
 		printf("<DL>\n");
@@ -485,6 +506,7 @@ void MSG_Error_SystemError(char *when)
 
 	MSG_Footer();
 	exit(1);
+#endif
 }
 
 
@@ -495,6 +517,7 @@ void MSG_Error_ExecFailed(void)
 	printf("CGIWrap encountered an error while attempting to execute\n");
 	printf("this script:\n\n");
 
+#ifndef CONF_QUIET_ERRORS
 	if ( MSG_HTMLMessages )
 	{
 		printf("<DL>\n");
@@ -539,6 +562,7 @@ void MSG_Error_ExecFailed(void)
 	"and the URL that caused it to the script owner. That is often the\n"
 	"component in the URL right after /cgiwrap/.\n"
 	);
+#endif
 
 	MSG_Footer();
 	exit(1);
@@ -546,6 +570,9 @@ void MSG_Error_ExecFailed(void)
 
 void MSG_Error_NoSuchUser(char *user)
 {
+#ifdef CONF_QUIET_ERRORS
+	MSG_Error_UserConfigError();
+#else
 	MSG_Header("CGIWrap Error", "User not found");
 
 	printf("CGIWrap was unable to find the user '%s' in the\n", 
@@ -559,10 +586,14 @@ void MSG_Error_NoSuchUser(char *user)
 
 	MSG_Footer();
 	exit(1);
+#endif
 }
 
 void MSG_Error_NoScriptDir(void)
 {
+#ifdef CONF_QUIET_ERRORS
+	MSG_Error_UserConfigError();
+#else
 	MSG_Header("CGIWrap Error", "Script dir not found");
 
 	printf("The specified user does not have a script directory set up\n");
@@ -571,7 +602,38 @@ void MSG_Error_NoScriptDir(void)
 
 	MSG_Footer();
 	exit(1);
+#endif
 }
+
+#ifdef CONF_QUIET_ERRORS
+void MSG_Error_ServerConfigError(void)
+{
+	MSG_Header("CGIWrap Error", "Server Configuration Error");
+
+	printf(
+"There is a problem with the server configuration for execution\n"
+"of CGI scripts. Please contact the server administrator.\n"
+	);
+
+	MSG_Footer();
+	exit(1);
+}
+
+void MSG_Error_UserConfigError(void)
+{
+	MSG_Header("CGIWrap Error", "User Configuration Error");
+
+	printf(
+"There is a problem with the user configuration for execution\n"
+"of CGI scripts. Please contact the owner of the site you are\n"
+"trying to access.\n"
+	);
+
+	MSG_Footer();
+	exit(1);
+}
+#endif
+
 
 void MSG_BoxedText(char *string)
 {

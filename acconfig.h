@@ -93,6 +93,7 @@
 #undef CONF_AFS_SETPAG
 #undef CONF_CGIDIR
 #undef CONF_MULTIUSER_CGI_DIR
+#undef CONF_QUIET_ERRORS
 
 /*
  * RLimit Options

@@ -66,6 +66,25 @@ AC_ARG_WITH( require-redirect-url,
 	])
 
 dnl
+dnl Avoid information disclosure in error messages
+dnl
+AC_MSG_CHECKING(for quiet-errors)
+AC_ARG_WITH( quiet-errors,
+	[  --with-quiet-errors]
+	[  avoid releasing internal information in error messages],
+	[
+		if test "x$withval" != xno; then
+			AC_DEFINE(CONF_QUIET_ERRORS)
+			AC_MSG_RESULT([enabled])
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
+	])
+	
+dnl
 dnl Path to perl for unsupported stuff
 dnl
 AC_ARG_WITH( php, 
