@@ -1,8 +1,7 @@
-(CGIwrap 2.2 improves 2.1 by adding an option to check whether the 
-script's exec bit is set, and returns an error message if it is. The 
-debugging output is cleaned up a bit, and the debugging routines have 
-been moved into a separate source file.
-
+CGIwrap 2.5 is a upgrade to CGIwrap 2.4 with some minor security 
+improvements (or even more double checking of stuff) and also a fix for
+use with CERN's server. (It worked before, but one of the URL formats did 
+not work correctly.)
 
 For those who are not familiar with CGIwrap - it is a small package I have
 written which provides a more secure front end for system administrators
@@ -10,16 +9,7 @@ to allow their user's to access cgi scripts on a unix http server.
 
 CGIwrap performs a series of security checks on the scripts before
 executing them. Any script execution is done as the user who owns the
-script, and all script accesses are logged. Some of the security checks
-that are performed are:
-
-   *  if script is located in "~nneul/public_html/cgi-bin", it must be 
-owned by
-      nneul to be executable.
-
-   *  The userid and groupid of the user executing the script must match 
-those
-      of the user who owns the script.
+script, and all script accesses are logged. 
 
 CGIwrap changed both the real and effective UIDs before running any script.
 
@@ -27,12 +17,16 @@ The level of security, etc. can be adjusted in the source. CGIwrap is
 known to work on A/UX, HPUX, Solaris, Linux, and OSF/1. It should work on
 almost any unix system.
 
-CGIwrap is available at:
-   ftp://pluto.cc.umr.edu/pub/cgiwrap/cgiwrap-2.2.tar
+CGIwrap is now available at:
+   ftp://ftp.cc.umr.edu/pub/cgi/cgiwrap/
+
+It also might be available at:
+   ftp://pluto.cc.umr.edu/pub/cgi/cgiwrap
+   ftp://ftp.rollanet.org/pub/cgi/cgiwrap
 
 Other CGI scripts I have written, and some scripts that have been 
 modified to work with cgiwrap more easily are available from:
-   ftp://pluto.cc.umr.edu/pub/cgi
+   ftp://ftp.cc.umr.edu/pub/cgi
 
 More information, and some sample user instructions on how to use cgiwrap
 are available at:
@@ -40,10 +34,9 @@ are available at:
 
 To subscribe to the CGIwrap mailing list, send a message containing the line:
 
-SUBSCRIBE CGIWRAP FirstName LastName
+SUBSCRIBE CGIWRAP  FirstName LastName
 
 to <listserv@rollanet.org>. Be sure to replace FirstName and LastName 
 with your first and last names. 
 
--- Nathan
-
+-- Nathan (nneul@umr.edu)

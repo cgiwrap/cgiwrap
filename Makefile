@@ -16,13 +16,7 @@ INSTALLPERMS=4750
 INSTALLOWNER=root
 INSTALLGROUP=root
 
-VERSION=2.4
-
-#
-# Other Compiler Flags
-#
-CC= gcc
-CCOPT= -O
+VERSION=2.5
 
 #
 # Some options suggestion by users
@@ -35,6 +29,12 @@ CCOPT= -O
 #	CC=cc
 #	CCOPT= -systype sysv -I/usr/include/bsd -lbsd
 #
+
+#
+# Other Compiler Flags
+#
+CC= gcc
+CCOPT= -O
 
 #
 # Dependencies and rules

@@ -16,28 +16,6 @@
 /*    YYYY is the name of the script itself                       */ 
 /******************************************************************/
 
-/******************************************************************
-* Changes since 1.0:                                             
-*   Added support for PATH_INFO specification of user/script     
-*   Added stderr redirection to stdout                           
-*   Added option for doing debugging output by cmd name          
-*   Added option to use exec or system calls                     
-* Changes since 2.0:
-*   Fixed ~ bug						
-*   Added PATH_INFO and SCRIPT_NAME rewrite code                
-*   Added SETGROUPS option to config
-*   Added RLIMIT option to config
-* Changes since 2.1:
-*   More debug outpt for environment variables
-*   Option to check exec bit on script and error msg if not set
-* Changes since 2.2:
-*   Fixed location of setgroups() call
-*   Added INSTALL file and fixed PROMO that was old.
-* Changes since 2.3:
-*   Fixed incorrect exec call, added null at end.
-******************************************************************/
-
-
 #include <stdio.h>     /* For passing data into called script */
 #include <stdlib.h>    /* Standard library functions */
 #include <pwd.h>       /* For getting uids from username */
@@ -297,6 +275,10 @@ void main (int argc, char *argv[])
 	char *homeDir;
 	char *curDir;
 	char tempErrString[255];
+	char *pathInfoString;
+	char *queryString;
+	char *olduserStr;
+	char *oldscrStr;
 
 	int validRequest;
 	int debugExtLen;
@@ -347,31 +329,47 @@ void main (int argc, char *argv[])
 	
 
 	validRequest = 0;
-	if ( getenv("PATH_INFO") )  /* use PATH_INFO */
+	pathInfoString = getenv("PATH_INFO");
+	if ( pathInfoString )  /* use PATH_INFO */
 	{
-		DEBUG_Msg("\nTrying to extract user/script from PATH_INFO\n");
-		ExtractPathInfo(&userStr, &scrStr);		
+		if ( pathInfoString[0] != 0 )
+		{
+			DEBUG_Msg("\nTrying to extract user/script from PATH_INFO\n");
+			ExtractPathInfo(&userStr, &scrStr);		
 		
-		validRequest = userStr && scrStr;
+			validRequest = userStr && scrStr;
+		}
+		else
+		{
+			DEBUG_Msg("\nPATH_INFO is empty, can't check.\n");
+		}
 	}
 	
-	if ( !validRequest && getenv("QUERY_STRING") )  /* or use QUERY_STRING */
+	queryString = getenv("QUERY_STRING");
+	if ( !validRequest && queryString )  /* or use QUERY_STRING */
 	{
-		DEBUG_Msg("\nTrying to extract user/script from QUERY_STRING\n");		
+		if ( queryString[0] != 0 )
+		{
+			DEBUG_Msg("\nTrying to extract user/script from QUERY_STRING\n");		
 
-		DEBUG_Msg("\nRead in user keyword value");
-		userStr = GetValue("user", getenv("QUERY_STRING") );
+			DEBUG_Msg("\nRead in user keyword value");
+			userStr = GetValue("user", getenv("QUERY_STRING") );
 	
-		DEBUG_Msg("\nRead in script keyword value");
-		scrStr = GetValue("script", getenv("QUERY_STRING") );
+			DEBUG_Msg("\nRead in script keyword value");
+			scrStr = GetValue("script", getenv("QUERY_STRING") );
 
-		validRequest = userStr && scrStr;
+			validRequest = userStr && scrStr;
+		}
+		else
+		{
+			DEBUG_Msg("\nQUERY_STRING is empty, can't check.\n");
+		}
 	}
 	
 	
 	if ( !validRequest ) /* nothing at all found */
 	{
-		DoError("No path_info or query string was specified, check your URL.");
+		DoError("Couldn't find used and script name, check your URL.");
 	}
 
 	DEBUG_Msg("\nModified Environment Variables:");
@@ -383,8 +381,10 @@ void main (int argc, char *argv[])
 	/***/
 
 #ifdef SANITIZE
-	DEBUG_StrStr("\nSanitize user name:", userStr, Sanitize(userStr));
-	DEBUG_StrStr("Sanitize script name:", scrStr, Sanitize(scrStr));
+	olduserStr = mystrcpy(userStr);
+	oldscrStr = mystrcpy(scrStr);
+	DEBUG_StrStr("\nSanitize user name:", olduserStr, Sanitize(userStr));
+	DEBUG_StrStr("Sanitize script name:", oldscrStr, Sanitize(scrStr));
 #endif
 
 
@@ -424,9 +424,16 @@ void main (int argc, char *argv[])
 		DoError("setgroups() failed!");
 #endif
 
-#ifdef SETUID
+#if defined(SETUID)
 	setgid( user->pw_gid );
 	setuid( user->pw_uid );
+#endif
+
+#if defined(SETUID_SETEUID)
+	setgid( user->pw_gid );
+	setuid( user->pw_uid );
+	setegid( user->pw_gid );
+	seteuid( user->pw_uid );
 #endif
 
 #ifdef SETREUID
@@ -448,22 +455,42 @@ void main (int argc, char *argv[])
 
 
 	/***/
-	/**   Check to make sure the RUID actually changed with the setuid call */
+	/**   Check to make sure the RUID actually changed */
 	/***/
 #ifdef CHECK_RUID
 	if ( getuid() != user->pw_uid ) 
 	{
-		DoError("UID could not be changed!");
+		DoError("Real UID could not be changed!");
 	}
 #endif
 
 	/***/
-	/**   Check to make sure the RGID actually changed with the setgid call */
+	/**   Check to make sure the RGID actually changed */
 	/***/
 #ifdef CHECK_RGID
 	if ( getgid() != user->pw_gid )
 	{
-		DoError("GID could not be changed!");
+		DoError("Real GID could not be changed!");
+	}
+#endif
+
+	/***/
+	/**   Check to make sure the EUID actually changed */
+	/***/
+#ifdef CHECK_EUID
+	if ( geteuid() != user->pw_uid ) 
+	{
+		DoError("Effective UID could not be changed!");
+	}
+#endif
+
+	/***/
+	/**   Check to make sure the EGID actually changed */
+	/***/
+#ifdef CHECK_EGID
+	if ( getegid() != user->pw_gid )
+	{
+		DoError("Effective GID could not be changed!");
 	}
 #endif
 

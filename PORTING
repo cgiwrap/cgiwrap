@@ -9,11 +9,13 @@ Don't include "strings.h"
 A/UX:
 -----
 Use SETREUID
-Do not use SETGROUPS
 
 
 HPUX:
 -----
 Use SETRESUID
-Do not use SETGROUPS
 
+
+SunOS 5.x/Solaris 2:
+--------------------
+If not using BSD libs, use SETUID_SETEUID

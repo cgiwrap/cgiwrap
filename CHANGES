@@ -1,0 +1,31 @@
+/******************************************************************/
+/* CGI Wrapper Program to allow access to scripts on HTTPD server */
+/* Written by:  Nathan Neulinger  <nneul@umr.edu>                 */
+/* Includes many fixes and improvements as suggested by users     */
+/*----------------------------------------------------------------*/
+/* Provides various levels of security depending on which options */
+/* are chosen in config.h                                         */
+/******************************************************************/
+
+Changes since 1.0:                                             
+   Added support for PATH_INFO specification of user/script     
+   Added stderr redirection to stdout                           
+   Added option for doing debugging output by cmd name          
+   Added option to use exec or system calls                     
+Changes since 2.0:
+   Fixed ~ bug						
+   Added PATH_INFO and SCRIPT_NAME rewrite code                
+   Added SETGROUPS option to config
+   Added RLIMIT option to config
+Changes since 2.1:
+   More debug outpt for environment variables
+   Option to check exec bit on script and error msg if not set
+Changes since 2.2:
+   Fixed location of setgroups() call
+   Added INSTALL file and fixed PROMO that was old.
+Changes since 2.3:
+   Fixed incorrect exec call, added null at end.
+Changes since 2.4:
+   Fixed problem with not correctly falling back from PATH_INFO
+   Added SETUID_SETEUID option for setting UID's 
+   Added checks to make sure effective ugid changed as well as real.
