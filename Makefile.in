@@ -63,7 +63,7 @@ msgs.o: config.h cgiwrap.h msgs.c
 #
 # Dependencies for developing cgiwrap
 #
-VERSION=3.6beta1
+VERSION=3.6beta3
 
 allconf: configure config.h.in Makefile config.h
 
