@@ -1,4 +1,4 @@
 #!/bin/csh
 
-~cgiwrap/metaconfig/all/bin/metaconfig -m
-~cgiwrap/metaconfig/all/bin/makedist -c ../cgiwrap-3.6
+setenv PATH ${PATH}:/afs/umr.edu/software/cgiwrap/metaconfig/all/bin
+metaconfig -m
