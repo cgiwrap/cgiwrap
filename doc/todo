@@ -9,8 +9,6 @@
      * More flexible approach to user directory mapping - rewrite file,
        mapping dir to user instead of user to dir
      * Limiting script execution based on load average.
-     * Allow setting PATH from cgiwrap
-     * Allow setting TZ from cgiwrap
      * Allow setting any environment variable from CGIwrap
      * use SERVER_ADMIN
      * add a "--with-cgiwrap-admin=email-address" option

@@ -49,6 +49,7 @@ AC_CHECK_FUNC(strerror, [AC_DEFINE(HAS_STRERROR)])
 AC_CHECK_FUNC(strdup, [AC_DEFINE(HAS_STRDUP)])
 AC_CHECK_FUNC(syslog, [AC_DEFINE(HAS_SYSLOG)])
 AC_CHECK_FUNC(setrlimit, [AC_DEFINE(HAS_SETRLIMIT)])
+AC_CHECK_FUNC(putenv, [AC_DEFINE(HAS_PUTENV)])
 
 
 dnl
@@ -439,6 +440,37 @@ AC_ARG_WITH( fixed-path-translated,
 		AC_DEFINE(CONF_FIXED_PATHTRANS)
 		AC_MSG_RESULT([enabled])
 	])
+
+dnl
+dnl Environment variable definitions
+dnl
+dnl CGIWRAP_SETENV(path,PATH,STRING,[search path])
+
+AC_DEFUN(CGIWRAP_SETENV,[
+	AC_MSG_CHECKING(for setenv-$1)
+	AC_ARG_WITH( setenv-$1,
+	[  --with-setenv-$1=$3]
+        [  set $2 environment variable to $3],
+	[
+		if test x$withval = xyes; then
+			AC_MSG_RESULT([no value specified])
+		elif test x$withval = x; then
+			AC_MSG_RESULT([no value specified])
+		elif test x$withval = xno; then
+			AC_MSG_RESULT([disabled])
+		else
+			AC_DEFINE(CONF_SETENV_ANY)
+			AC_DEFINE_UNQUOTED(CONF_SETENV_$2, "${withval}")
+			AC_MSG_RESULT([enabled, set to (${withval})])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
+	])
+])
+
+CGIWRAP_SETENV(path,PATH,STRING,[search path])
+CGIWRAP_SETENV(tz,TZ,STRING,[time zone])
 
 
 dnl

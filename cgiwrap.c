@@ -52,6 +52,9 @@ void main (int argc, char *argv[])
 	/* Set any default signal behavior */
 	SetSignals();
 
+	/* Set Environment Variables */
+	SetEnvironmentVariables();
+
 	/* Set CPU and other limits */
 	SetResourceLimits();
 

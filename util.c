@@ -472,6 +472,45 @@ char *StripPathComponents(int count, char *path)
 
 
 /*
+ * Set Environment Variables
+ */
+void SetEnvironmentVariables(void)
+{
+#if defined(CONF_SETENV_ANY)
+	int i;
+	char msg[200];
+
+	struct cgiwrap_setenv_table
+	{
+		char *variable;
+		char *value;
+		char *setstring;
+	} cgiwrap_setenvs[] = {
+#if defined(CONF_SETENV_PATH)
+		{"PATH", CONF_SETENV_PATH, "PATH=" CONF_SETENV_PATH},
+#endif
+#if defined(CONF_SETENV_TZ)
+		{"TZ", CONF_SETENV_TZ, "TZ=" CONF_SETENV_TZ},
+#endif
+		{0,0,0}
+	};
+
+	for (i=0; cgiwrap_setenvs[i].variable; i++)
+	{
+		sprintf(msg, "\nSetting Environment Variable(%s) to (%s)\n", 
+			cgiwrap_setenvs[i].variable,
+			cgiwrap_setenvs[i].value);
+		DEBUG_Msg(msg);
+
+#if defined(HAS_PUTENV)
+		putenv(cgiwrap_setenvs[i].setstring);
+#endif
+	}
+#endif
+}
+
+
+/*
  * Set Resource Limits
  */
 void SetResourceLimits(void)

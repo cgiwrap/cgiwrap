@@ -4,6 +4,13 @@
 #undef CONF_CHECK_HTTPD_USER
 #undef CONF_HTTPD_USER 
 
+/* 
+ * Environment variable setting
+ */
+#undef CONF_SETENV_ANY
+#undef CONF_SETENV_PATH
+#undef CONF_SETENV_TZ
+
 /*
  * Script checks
  */
@@ -44,6 +51,7 @@
 #undef HAS_SYSLOG
 #undef HAS_SETRLIMIT
 #undef HAS_STRERROR
+#undef HAS_PUTENV
 
 /*
  * Various options

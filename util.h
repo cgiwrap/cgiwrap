@@ -10,6 +10,7 @@ char *StripPrefix(char *, char *);
 void ChangeID(struct passwd *user);
 void ChangeAuxGroups(struct passwd *user);
 void SetResourceLimits(void);
+void SetEnvironmentVariables(void);
 void SetSignals(void);
 char *GetValue(char *keyword, char *string);
 int CountSubDirs(char *path);
