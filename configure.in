@@ -906,6 +906,6 @@ AC_HEADER_STDC
 AC_CHECK_HEADERS(limits.h stdlib.h pwd.h string.h strings.h)
 AC_CHECK_HEADERS(sys/resource.h sys/types.h sys/time.h unistd.h)
 AC_CHECK_HEADERS(syslog.h fcntl.h sys/stat.h signal.h ctype.h grp.h)
-AC_CHECK_HEADERS(errno.h sys/wait.h)
+AC_CHECK_HEADERS(errno.h sys/errno.h sys/wait.h)
 
 AC_OUTPUT(Makefile unsup/loganalyze.pl)

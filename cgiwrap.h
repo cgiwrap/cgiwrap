@@ -20,6 +20,10 @@
 #include <errno.h>      /* Error numbers for functions */
 #endif
 
+#if defined(HAVE_SYS_ERRNO_H)
+#include <sys/errno.h>      /* Error numbers for functions */
+#endif
+
 #if defined(HAVE_STDLIB_H)
 #include <stdlib.h>	/* Standard library functions */
 #endif
