@@ -1,7 +1,8 @@
-(CGIwrap 2.1 is a small fix from 2.0 that fixes couple minor cosmetic bug,
-and also has a couple additional options, such as setting the auxillary
-groups that a process is executed with, and also an option for limiting
-CPU time.)
+(CGIwrap 2.2 improves 2.1 by adding an option to check whether the 
+script's exec bit is set, and returns an error message if it is. The 
+debugging output is cleaned up a bit, and the debugging routines have 
+been moved into a separate source file.
+
 
 For those who are not familiar with CGIwrap - it is a small package I have
 written which provides a more secure front end for system administrators
@@ -27,19 +28,22 @@ known to work on A/UX, HPUX, Solaris, Linux, and OSF/1. It should work on
 almost any unix system.
 
 CGIwrap is available at:
-   ftp://pluto.cc.umr.edu/pub/cgiwrap/cgiwrap-2.1.tar
+   ftp://pluto.cc.umr.edu/pub/cgiwrap/cgiwrap-2.2.tar
+
+Other CGI scripts I have written, and some scripts that have been 
+modified to work with cgiwrap more easily are available from:
+   ftp://pluto.cc.umr.edu/pub/cgi
 
 More information, and some sample user instructions on how to use cgiwrap
 are available at:
    http://www.umr.edu/~cgiwrap
 
--- Nathan
+To subscribe to the CGIwrap mailing list, send a message containing the line:
 
-------------------------------------------------------------------
-Nathan Neulinger                    Univ. of Missouri - Rolla
-EMail: nneul@umr.edu                      Computer Center
-WWW: http://www.umr.edu/~nneul      SysAdmin: pluto.cc.umr.edu
-WWW: http://pluto.cc.umr.edu          SysAdmin: rollanet.org
-------------------------------------------------------------------
-These oppinions are my own. I do not speak for Computing Services.
+SUBSCRIBE CGIWRAP FirstName LastName
+
+to <listserv@rollanet.org>. Be sure to replace FirstName and LastName 
+with your first and last names. 
+
+-- Nathan
 

@@ -16,6 +16,8 @@ INSTALLPERMS=4750
 INSTALLOWNER=root
 INSTALLGROUP=root
 
+VERSION=2.2
+
 #
 # Other Compiler Flags
 #
@@ -39,26 +41,33 @@ CCOPT= -O
 #
 all: cgiwrap man
 
-cgiwrap: cgiwrap.c config.h Makefile
-	$(CC) $(CCOPT) cgiwrap.c -o cgiwrap
+cgiwrap.o: cgiwrap.c config.h Makefile
+	$(CC) $(CCOPT) -c cgiwrap.c
+
+debug.o: debug.c config.h Makefile
+	$(CC) $(CCOPT) -c debug.c
+
+cgiwrap: debug.o cgiwrap.o
+	$(CC) $(CCOPT) cgiwrap.o debug.o -o cgiwrap
 
 man: cgiwrap.1
 	nroff -man cgiwrap.1 > cgiwrap.cat
 
 tar: clean
-	rm -f cgiwrap-2.1.tar
-	cd .. ; tar -cvf /tmp/cgiwrap-2.1.tar cgiwrap-2.1
-	mv /tmp/cgiwrap-2.1.tar .
+	rm -f cgiwrap-$(VERSION).tar
+	cd .. ; tar -cvf /tmp/cgiwrap-$(VERSION).tar cgiwrap-$(VERSION)
+	mv /tmp/cgiwrap-$(VERSION).tar .
 
 install: cgiwrap
 	cp cgiwrap $(INSTALLDIR)/$(INSTALLNAME)
 	chgrp $(INSTALLGROUP) $(INSTALLDIR)/$(CGIW_NAME)
 	chown $(INSTALLOWNER) $(INSTALLDIR)/$(CGIW_NAME)
 	chmod $(INSTALLPERMS) $(INSTALLDIR)/$(CGIW_NAME)
+	cd $(INSTALLDIR)
 	ln $(CGIW_NAME) $(CGIWD_NAME)
 	ln $(CGIW_NAME) $(NPHCGIW_NAME)
-	ln $(CGIW_NAME) $(NPGCGIWD_NAME)
+	ln $(CGIW_NAME) $(NPHCGIWD_NAME)
 
 clean:
-	rm -f *.o cgiwrap core
+	rm -f *.o *.tar cgiwrap.cat cgiwrap core
 

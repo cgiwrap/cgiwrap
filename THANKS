@@ -3,7 +3,9 @@ legalize@xmission.com:
 
 Jim Jagielski (jim@jagunet.com)
 	Fix for ~ problem. Simplest and cleanest one I got.
-
+	Suggestion and sample code to check exec bit on script and return 
+	error if not set.
+	
 Thomas Parmelan (Thomas.Parmelan@efrei.fr):
 	SETGROUPS config option and code
 	SCRIPT_NAME and PATH_INFO rewrite code

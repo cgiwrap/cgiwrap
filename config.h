@@ -50,6 +50,10 @@
 #define CHECK_SGID
 
 
+/* Check user exec bit on script */
+#define CHECK_MODE
+
+
 /* Do not allow subdirectories of cgi-bin dir */
 #define NO_SUB_DIRS
 
@@ -84,7 +88,8 @@
 #undef USE_RLIMIT
 #define RLIMIT_SETTING { 9, 10 }
 
+
 /* Set auxilliary groups */
-#define SETGROUPS
+#undef SETGROUPS
 
 

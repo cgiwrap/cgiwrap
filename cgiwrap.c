@@ -27,6 +27,9 @@
 *   Added PATH_INFO and SCRIPT_NAME rewrite code                
 *   Added SETGROUPS option to config
 *   Added RLIMIT option to config
+* Changes since 2.1:
+*   More debug outpt for environment variables
+*   Option to check exec bit on script and error msg if not set
 ******************************************************************/
 
 
@@ -43,6 +46,8 @@
 #include <ctype.h> 
 
 #include "config.h"    /* Configuration Options */
+#include "debug.h"	/* Prototypes for debuygging routines */
+
 
 #ifdef SET_RLIMIT
 #include <sys/resource.h>	/* rlimit */
@@ -76,35 +81,6 @@ void DoError (char *msg)
 }
 
 
-/***/
-/**   Print a debugging string if DEBUG is defined */
-/***/
-void DEBUG_Msg (char *msg)
-{
-	if (DEBUG)
-	{
-		printf("%s\n", NullCheck(msg));
-		fflush(stdout);
-	}
-}
-
-void DEBUG_Str (char *msg, char *var)
-{
-	if (DEBUG)
-	{
-		printf("%s '%s'\n", NullCheck(msg), NullCheck(var) );
-		fflush(stdout);
-	}
-}
-
-void DEBUG_Int (char *msg, int var)
-{
-	if (DEBUG)
-	{
-		printf("%s '%d'\n", NullCheck(msg), var );
-		fflush(stdout);
-	}
-}
 
 
 /***/
@@ -221,30 +197,13 @@ void ExtractPathInfo(char **userStr, char **scrStr )
 	pathStr = mystrcpy( (char *) getenv("PATH_INFO"));
 	tempStr = mystrcpy(pathStr);
 
-	DEBUG_Str("   PATH_INFO: ", (char *) getenv("PATH_INFO"));
-	DEBUG_Str("   SCRIPT_NAME: ", (char *) getenv("SCRIPT_NAME"));
-
 	*userStr = (char *) strtok(tempStr, "/"); /* Get usestring */
 	*scrStr = (char *) strtok( (char *) 0, "/"); /* Get script string */
 
 	tempStr = (char *) strtok( (char *) 0, "/");
 
-#if 0
-	if (tempStr)
-	{
-		strcpy(pathStr, "/");
-		strcat(pathStr, tempStr);	
-	}
-	else
-	{
-		strcpy(pathStr, "");
-	}
-#endif
-
-/* new version 2.1 */
 	tempStr = pathStr + strlen(*userStr) + strlen(*scrStr) + 2;
 	strcpy(pathStr, tempStr ? tempStr : "");
-/**/
 
 	if (*userStr)
 	{
@@ -254,17 +213,15 @@ void ExtractPathInfo(char **userStr, char **scrStr )
 		}
 	}
 	
-		
+	DEBUG_Msg("Extracted Data:");
 	DEBUG_Str("   User: ", *userStr);
 	DEBUG_Str("   Script: ", *scrStr);
-	DEBUG_Str("   New PathInfo: ", pathStr);
 
-	DEBUG_Msg("\nStripping user and script data from PATH_INFO envar.\n");
-
+	DEBUG_Msg("\nStripping user and script data from PATH_INFO env. var.");
 	sprintf(putEnvString, "%s=%s", "PATH_INFO", pathStr);
 	putenv(putEnvString);
 
-       DEBUG_Msg("\nAdding user and script to SCRIPT_NAME env. var.\n");
+	DEBUG_Msg("Adding user and script to SCRIPT_NAME env. var.");
 
        buf = (char*) malloc (strlen(getenv("SCRIPT_NAME"))
 			+strlen(*userStr)+strlen(*scrStr)+3);
@@ -272,10 +229,8 @@ void ExtractPathInfo(char **userStr, char **scrStr )
        {
            DoError("Couldn't malloc memory for SCRIPT_NAME buf!");
        }
+
        sprintf(buf, "%s/%s/%s", getenv("SCRIPT_NAME"), *userStr, *scrStr);
-
-       DEBUG_Str("   SCRIPT_NAME: ", buf);
-
        sprintf(putEnvString2, "%s=%s", "SCRIPT_NAME", buf);
        putenv(putEnvString2);
        free(buf);
@@ -288,7 +243,7 @@ void ExtractPathInfo(char **userStr, char **scrStr )
 /***/
 /**  Clean up a username and script name - removing non printables and whitespace  */
 /***/
-void Sanitize(char *string)
+char *Sanitize(char *string)
 {
 	int len, in;
 
@@ -312,7 +267,10 @@ void Sanitize(char *string)
 		}
 
 	}
+
+	return string;
 }
+
 
 
 
@@ -331,6 +289,7 @@ void main (int argc, char *argv[])
 	char *execStr; /* String that is actually executed */
 	char *homeDir;
 	char *curDir;
+	char tempErrString[255];
 
 	int validRequest;
 	int debugExtLen;
@@ -372,14 +331,13 @@ void main (int argc, char *argv[])
 	/***/
 	/**   Print out the URL used to query this script */
 	/***/
-	DEBUG_Str("Query_String:", (char *) getenv("QUERY_STRING") );
-	DEBUG_Str("Path_Info:", (char *) getenv("PATH_INFO") );
-	DEBUG_Str("Remote Host:", (char *) getenv("REMOTE_HOST") );
-	DEBUG_Str("Remote Addr:", (char *) getenv("REMOTE_ADDR") );
-
-/* heres where I need to process to get the result from either the
-   query string or the extra path info */
-
+	DEBUG_Msg("Environment Variables:");
+	DEBUG_Str("   QUERY_STRING:", (char *) getenv("QUERY_STRING") );
+	DEBUG_Str("   PATH_INFO:", (char *) getenv("PATH_INFO") );
+	DEBUG_Str("   REMOTE_HOST:", (char *) getenv("REMOTE_HOST") );
+	DEBUG_Str("   REMOTE_ADDR:", (char *) getenv("REMOTE_ADDR") );
+	DEBUG_Str("   SCRIPT_NAME:", (char *) getenv("SCRIPT_NAME") );
+	
 
 	validRequest = 0;
 	if ( getenv("PATH_INFO") )  /* use PATH_INFO */
@@ -409,18 +367,17 @@ void main (int argc, char *argv[])
 		DoError("No path_info or query string was specified, check your URL.");
 	}
 
-
-
+	DEBUG_Msg("\nModified Environment Variables:");
+	DEBUG_Str("   PATH_INFO:", (char *) getenv("PATH_INFO") );
+	DEBUG_Str("   SCRIPT_NAME:", (char *) getenv("SCRIPT_NAME") );
+	
 	/***/
 	/**   Sanitize user name and script name */
 	/***/
+
 #ifdef SANITIZE
-	DEBUG_Str("\nSanitize user name:", userStr);
-	Sanitize(userStr);
-	DEBUG_Str(  "      Sanitized to:", userStr);
-	DEBUG_Str("Sanitize script name:", scrStr);
-	Sanitize(scrStr);
-	DEBUG_Str(  "      Sanitized to:", scrStr);
+	DEBUG_StrStr("\nSanitize user name:", userStr, Sanitize(userStr));
+	DEBUG_StrStr("Sanitize script name:", scrStr, Sanitize(scrStr));
 #endif
 
 
@@ -570,6 +527,19 @@ void main (int argc, char *argv[])
 		DoError("Script is SGID - Will not Execute!");
 	}
 #endif
+
+#ifdef CHECK_MODE
+	/***/
+	/**   Make sure the script is executable. */
+	/***/
+ 
+	if (!(fileStat.st_mode & S_IXUSR))
+	{
+		sprintf(tempErrString, "Script is not executable. Issue chmod 755 %s", scrStr);
+		DoError(tempErrString);
+	}
+#endif
+
 
 
 	/*

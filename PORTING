@@ -4,3 +4,16 @@ CC=cc
 CCOPT=-systype sysv -I/usr/include/bsd -lbsd
 
 Don't include "strings.h"
+
+
+A/UX:
+-----
+Use SETREUID
+Do not use SETGROUPS
+
+
+HPUX:
+-----
+Use SETRESUID
+Do not use SETGROUPS
+
