@@ -3,6 +3,116 @@
 <HR><P>
 
 
+<PRE>
+Ok, here's a few examples on how you can use mod_rewrite to rewrite your 
+CGIwrap URL's in a way that is totally transparent to the end user.
+
+Example #1 - Basic Rewriting of CGIwrap URL's
+
+In this example all VirtualHosts are in the format username.domain.com
+All user's CGI directory's are ~/cgi/
+
+In httpd.conf :-
+
+# I control the Scope of these Rewrite with a VirtualHost Directive
+# I dont want these rewrites to apply to the Main VHost, only to the customers
+# VHosts (which are also rewritten)
+&lt;VirtualHost 192.168.0.1:80&gt;
+
+# set up scriptaliases for the man cgi-bin
+ScriptAlias /cgi-bin/ /path/to/main/cgi-bin/
+
+# Init out rewrite engine
+RewriteEngine On
+
+RewriteMap lowercase int:tolower
+
+# keep the main CGI bin intact
+RewriteCond %{REQUEST_URI} !^/cgi-bin/
+# make the requested vhost lowercase in case some doofus uses wierd caps
+RewriteCond ${lowercase:%{HTTP_HOST}} ^[a-z-][-0-9]+\.domain\.com$
+
+RewriteRule ^(.+) ${lowercase:%{HTTP_HOST}}$1 [C]
+
+# do the magic
+RewriteRule ^([a-z-][-0-9]+)\.domain\.com/cgi/(.*) /cgi-bin/cgiwrap/$1/$2 [PT]
+RewriteRule ^([a-z-][-0-9]+)\.domain\.com/cgi-d/(.*) /cgi-bin/cgiwrapd/$1/$2 [PT] 
+RewriteRule ^([a-z-][-0-9]+)\.domain\.com/nph-cgi/(.*) /cgi-bin/nph-cgiwrap/$1/$2 [PT]
+RewriteRule ^([a-z-][-0-9]+)\.domain\.com/nph-cgi-d/(.*) /cgi-bin/nph-cgiwrapd/$1/$2 [PT]
+
+&lt;VirtualHost>
+
+Example #2 - Rewriting with a RewriteMap
+
+RewriteMap's are alot faster than standard regexp based rewrite because
+mod_rewrite caches each map lookup, until the mtime of the mapfile changes,
+thus removing the needs for interpratation of the Rules each time they are
+requested
+
+This is a complete example, as used on our production webserver
+(http://www.server101.com/)
+
+# Again use a VirtualHost directive to control the scope
+&lt;VirtualHost 165.90.18.194:80&gt;
+ScriptAlias /cgi-bin/ /s101/current/cgi-bin/
+
+RewriteEngine On
+RewriteMap lowercase int:tolower
+# map file which contains key/value information for all our customer
+# subdomains (username.server101.com) and any domains they host with us
+# map file is of format
+# username.server101.com /s101/home/user
+# domain.com /s101/home/user
+# www.domain.com /s101/home/user
+RewriteMap vhost dbm:/etc/apache/hostmap
+# map file which contains key/value information for path info for customers
+# cgi 
+# format:
+# username.server101.com /cgi-bin/cgiwrap/
+# ...
+RewriteMap cgi   dbm:/etc/apache/cgimap
+
+# keep our CGI bin intact
+RewriteCond %{REQUEST_URI} !^/cgi-bin/
+# Other Aliases we have that we want to stay intact
+RweriteCond %{REQUEST_URI} !^/icons/
+RewriteCond %{REQUEST_URI} !^/cgi/
+RewriteCond %{REQUEST_URI} !^/stats/images/
+# we dont want the machine's name to be rewritten or even attempt to be
+# rewritten as a failed map lookup will cause a pass through of the main vhost
+RewriteCond ${lowercase:%{HTTP_HOST}} !^launch.server101.com$ [NC]
+# heres where the magic starts
+RewriteCond ${lowercase:%{HTTP_HOST}} ^(.+)$
+RewriteCond ${vhost:%1} ^(/.*)$
+RewriteRule ^/(.*) %1/$1
+
+# Ok with the handling of the user vhosts/domains out of the way we can get on
+# to the CGI stuff
+
+# all our users personal cgi's are ~/cgi/
+RewriteCond %{REQUEST_URI}  ^/cgi/
+# keep the global cgi-bin intact still
+RewriteCond %{REQUEST_URI} !^/cgi-bin/
+# and our other aliases
+RewriteCond %{REQUEST_URI} !^/icons/
+RewriteCond %{REQUEST_URI} !^/stats/images/
+# here we go again...
+RewriteCond ${lowercase:%{HTTP_HOST}} ^(.+)$
+RewriteCond ${cgi:%1} ^(/.*)$
+RewriteCond ^/cgi/(.*)$ %1/$1 [PT]
+
+&lt;VirtualHost&gt;
+
+and thats it. We dont allow access to any of the *cgiwrapd's as they give out a
+little more info than we want our users to have access to...
+
+comments/corrections roady@linux-solutions.org
+
+--
+Ben O'Shea
+
+</PRE>
+<HR>
 
 <PRE>
 From: Shane DeRidder <shane@together.net>
