@@ -394,6 +394,19 @@ void CheckUser(struct passwd *user)
 	}
 #endif
 
+#if defined(CONF_ENV_REQUIRE_USER)
+	DEBUG_Msg("Checking for CGIWRAP_REQUIRE_USER in environment.");
+	if ( getenv("CGIWRAP_REQUIRE_USER") )
+	{
+		if ( strcmp(getenv("CGIWRAP_REQUIRE_USER"), user->pw_name) )
+		{
+			Log(user->pw_name, "-", "CGIWRAP_REQUIRE_USER mismatch");
+			MSG_Error_AccessControl("User does not match CGIWRAP_REQUIRE_USER in environment.",
+				NULL, NULL);
+		}
+	}
+#endif
+
 }
 
 

@@ -102,6 +102,25 @@ AC_ARG_WITH( vhost-override,
 	[
 		AC_MSG_RESULT([disabled])
 	])
+
+dnl
+dnl Allow specifying CGIWRAP_REQUIRE_USER=userid in environment
+dnl
+AC_MSG_CHECKING(for env-require-user)
+AC_ARG_WITH( env-require-user,
+	[  --with-env-require-user]
+	[  allow specifying CGIWRAP_REQUIRE_USER in env to restrict to specific userid],
+	[
+		if test "x$withval" != xno; then
+			AC_DEFINE(CONF_ENV_REQUIRE_USER)
+			AC_MSG_RESULT([enabled])
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
+	])
 	
 dnl
 dnl Path to perl for unsupported stuff

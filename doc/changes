@@ -33,7 +33,12 @@
      * Added  ability  to  override  the  vhost that cgiwrap users via an
        optional  CGIWRAP_AUTH_VHOST env var, which if present and feature
        enabled,  will  be  used  instead of HTTP_HOST. This is useful for
-       when you have wildcard servernames in apache.
+       when   you   have  wildcard  servernames  in  apache.  Enable  the
+       --with-vhost-override  option  if  you want this capabillity. Only
+       applicable if vhost allow/deny dir is enabled.
+     * Added  ability  to  only allow scripts run by a specific userid if
+       the   CGIWRAP_REQUIRE_USER   env   var   is   specified   and  the
+       --with-env-require-user feature is enabled.
 
   New in version 3.7.1:
 
