@@ -1,22 +1,29 @@
-This is CGI-Wrap - a gateway that allows more secure user access to CGI 
-programs on an HTTPd server than is provided by the http server itself.
+README for CGIwrap:
+-------------------
 
-This code may be freely copied and modified, though it may not be
-Sold, Rented, Re-Released, Folded, Spindled, or Mutilated w/o contacting me
-first.
- 
-I do ask that if you make modifications, or have any improvements that you
-send them to me <nneul@umr.edu> and I will add them to the main source so
-others can benefit. If you wish to re-release a modified version of this 
-source, please contact me first.
+Read the NOTES file in the Docs subdirectory, it may have specific 
+suggestions or restrictions for your architecture/platform.
 
-An important note is, this script makes the CGI access MORE secure, but 
-it does not make CGI access "secure". By it's very nature, CGI itself can 
-never be 100% secure, it is always dependent on the script itself.
+To compile, just run Configure, answer the questions, and then type make.
 
-CGIWRAP Mailing List:  Send a message to listserv@rollanet.org with the line
-"subscribe CGIWRAP your_name_here"
+---
+
+CGIwrap will work with AFS, with at least the following permissions:
+
+~           system:anyuser l
+public_html system:anyuser l
+cgi-bin     system:anyuser rl
+
+The scripts need to be executable by the user
+
+If you are running httpd authenticated to AFS, you can replace the 
+system:anyuser above with that userid
 
 
--- Nathan Neulinger <nneul@umr.edu>
+---
+
+If you are using this with AFS I'd suggest making sure to use the AFS PAG 
+support in the config file. This automatically creates a PAG for any 
+script that is launched, that way if the user klog's or something, it 
+won't affect the server or other scripts.
 

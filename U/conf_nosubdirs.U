@@ -1,0 +1,42 @@
+?MAKE:d_conf_nosubdirs: cat contains Setvar Myread Oldconfig 
+?MAKE:	-pick add $@ %<
+?S:d_conf_nosubdirs:
+?S:	Defined if you don't want to allow users to store cgi scripts
+?S:	in a subdirectory under their cgi-bin directory.
+?S:.
+?C:CONF_NOSUBDIRS:
+?C:	Defined if you don't want to allow users to store cgi scripts
+?C:	in a subdirectory under their cgi-bin directory.
+?C:.
+?H:#$d_conf_nosubdirs CONF_NOSUBDIRS		/**/
+?H:.
+$cat <<'EOM'
+
+You need to decide now if you want to allow your users to put cgi scripts in
+subdirectories under cgi-bin. Note, this will only work with the URL 
+notation:  
+
+	/cgi-bin/cgiwrap?user=userid&script=scriptname
+
+
+It will not work (currently) with the URL:
+
+	/cgi-bin/cgiwrap/userid/scriptname
+
+I reccomend turning answering this question no until I get subdirectories 
+working for both URL formats.
+
+EOM
+
+dflt='n'
+rp="Allow users to store scripts in subdirectories of cgi-bin?"
+. ./myread
+
+case "$ans" in
+y|Y) val="$undef" ;;
+*) val="$define" ;;
+esac
+
+set d_conf_nosubdirs
+eval $setvar
+

@@ -1,0 +1,31 @@
+?MAKE:d_conf_redir_stderr: cat contains Setvar Myread Oldconfig 
+?MAKE:	-pick add $@ %<
+?S:d_conf_redir_stderr:
+?S:	Should cgiwrap redirect stderr from scripts to stdout
+?S:.
+?C:CONF_REDIR_STDERR:
+?C:	Sgould cgiwrap redirect stderr from scripts to stdout
+?C:.
+?H:#$d_conf_redir_stderr CONF_REDIR_STDERR		/**/
+?H:.
+$cat <<'EOM'
+
+CGIwrap has the capability of automatically redirecting the stderr output
+to stdout. This means that users can debug their scripts from the web 
+browser instead of having to look at the server's error_log to see the error
+output from their scripts. I reccomend you leave this as yes.
+
+EOM
+
+dflt='y'
+rp="Redirect standard error"
+. ./myread
+
+case "$ans" in
+y|Y) val="$define" ;;
+*) val="$undef" ;;
+esac
+
+set d_conf_redir_stderr
+eval $setvar
+

@@ -1,0 +1,67 @@
+?MAKE:d_log_requests log_file: cat contains Setvar Myread Oldconfig 
+?MAKE:	-pick add $@ %<
+?S:d_log_requests:
+?S:	Should we log requests
+?S:.
+?S:log_file:
+?S:	Shell sym for log_file filename
+?S:.
+?C:CONF_LOGFILE:
+?C:	Defined to be the filename that cgiwrap logs requests to.
+?C:.
+?C:CONF_LOG_REQUESTS:
+?C:	Defined this if cgiwrap should log all requests to a file.
+?C:.
+?H:#$d_log_requests CONF_LOG_REQUESTS		/**/
+?H:#define CONF_LOGFILE "$log_file"		/**/
+?H:.
+$cat <<'EOM'
+
+Answer the next question yes if you want cgiwrap to log all CGI script
+requests to a file. The time, date, remote host, user, and script name
+are logged to this file.
+
+EOM
+
+dflt='y'
+rp="Log Requests?"
+. ./myread
+
+case "$ans" in
+y|Y) val="$define" ;;
+*) val="$undef" ;;
+esac
+
+set d_log_requests
+eval $setvar
+
+
+
+case "$d_log_requests" in
+define) 
+$cat <<'EOM'
+
+Now I need to know what file name you would like cgiwrap to log to. 
+
+EOM
+
+
+#
+# Get the log file name
+#
+
+	case "$log_file" in
+	'')	dflt="/usr/adm/cgiwrap.log" ;;
+	*)	dflt="$log_file" ;;
+	esac
+
+	rp="What file should cgiwrap log to?"
+	. ./myread
+
+	log_file="$ans"
+
+;;
+
+*) ;;
+esac
+

@@ -1,0 +1,44 @@
+?MAKE:d_conf_use_system: cat contains Setvar Myread Oldconfig d_system
+?MAKE:	-pick add $@ %<
+?S:d_conf_use_system:
+?S:	Should we use system() instead of exec()
+?S:.
+?C:CONF_USE_SYSTEM:
+?C:	Defined this if you want to execute script via system() instead
+?C:	of via exec().
+?C:.
+?H:#$d_conf_use_system CONF_USE_SYSTEM		/**/
+?H:.
+
+case "$d_system" in
+"define")
+
+$cat <<'EOM'
+
+This question deals with how you want to have the script executed. If for 
+some reason you don't want to exec() the script directly. (For instance, 
+if your architecture does not support exec()'ing shell scripts directly) 
+Answering this question yes will cause cgiwrap to use system() to execute
+the script. I reccomend choosing no unless you know for certain you can't
+use exec.
+
+EOM
+
+dflt='n'
+rp="Use system() instead of exec()?"
+. ./myread
+
+case "$ans" in
+y|Y) val="$define" ;;
+*) val="$undef" ;;
+esac
+
+set d_conf_use_system
+eval $setvar
+
+;;
+
+*)
+d_conf_system='' ;;
+
+esac

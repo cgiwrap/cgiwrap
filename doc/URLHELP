@@ -10,3 +10,16 @@ URL:  http://server/cgi-bin/cgiwrap/~user/script
     XXXX is the user who owns the script
     YYYY is the name of the script itself
 
+Place your scripts in your ~/public_html/cgi-bin/ directory
+
+--- If your site has installed a copy for access controls scripts ---
+
+URL:  http://server/auth-cgi-bin/cgiwrap?user=XXXX&script=YYYY
+URL:  http://server/auth-cgi-bin/cgiwrap/user/script
+URL:  http://server/auth-cgi-bin/cgiwrap/~user/script
+
+    XXXX is the user who owns the script
+    YYYY is the name of the script itself
+
+Place the scripts in your ~/public_html/auth-cgi-bin/ directory.
+

@@ -2,10 +2,20 @@
 /* CGI Wrapper Program to allow access to scripts on HTTPD server */
 /* Written by:  Nathan Neulinger  <nneul@umr.edu>                 */
 /* Includes many fixes and improvements as suggested by users     */
-/*----------------------------------------------------------------*/
-/* Provides various levels of security depending on which options */
-/* are chosen in config.h                                         */
 /******************************************************************/
+
+Changes since 2.7:
+   Set up Configure scripts for CGIwrap
+   Renamed many of the config options to make more consistent
+   Rearranged directory structure of CGIwrap distribution
+   Removed "CONF_SANITIZE" option, it is always on now.
+   Removed "CONF_CHECK_UID" option, it is always on now.
+   Removed "CONF_FORCE_DEBUG" option, and "CONF_DEBUG_BY_NAME" option, 
+	cgiwrap automatically does debugging output by name now.
+   Added info about setting up an access-controlled cgiwrap which allows
+        users to control access to their scripts.
+   Renamed DEBUG to CONF_DEBUG to solve a compile problem with some systems
+	wanting to add -DDEBUG to CFLAGS.
 
 Changes since 2.6:
    Added HTTPD_USER and CHECK_HTTPD_USER to verify that cgiwrap is being

@@ -1,0 +1,127 @@
+?MAKE:d_conf_using_afs d_conf_afs_setpag afsccopts afsldopts afslibs: cat contains Setvar Myread Oldconfig 
+?MAKE:	-pick add $@ %<
+?S:d_conf_using_afs:
+?S:	Is AFS installed on this system
+?S:.
+?S:d_conf_afs_setpag:
+?S:	Should cgiwrap issue the AFS setpag() call?
+?S:.
+?S:afsccopts:
+?S:	AFS cc options
+?S:.
+?S:afsldopts:
+?S:	AFS ld options
+?S:.
+?S:afslibs:
+?S:	AFS libraries
+?S:.
+?C:CONF_AFS_SETPAG:
+?C:	Defined if the cgiwrap should issue the AFS setpag() call..
+?C:.
+?H:#$d_conf_afs_setpag CONF_AFS_SETPAG		/**/
+?H:.
+
+$cat <<'EOM'
+
+The next few questions have to do with whether or not AFS is installed on 
+the webserver system. (AFS is the Andrew File System, if you don't know 
+what AFS is, or if you aren't sure if it is installed, answer the first 
+question 'no').
+
+If you answer yes, the questions following will ask you if you want to 
+set an AFS PAG for the script you run, and the locations of the AFS 
+libraries that will need to be linked in with CGIwrap.
+
+EOM
+
+case "$d_conf_using_afs" in
+"") dflt='n' ;;
+"define") dflt='y' ;;
+"undef") dflt='n' ;;
+*) dflt="n"
+esac
+
+rp="Is AFS installed on your system?"
+. ./myread
+
+case "$ans" in
+y|Y) val="$define" ;;
+*) val="$undef" ;;
+esac
+
+set d_conf_using_afs
+eval $setvar
+
+
+case "$d_conf_using_afs" in
+"define")
+	
+	case "$d_conf_afs_setpag" in
+	"") dflt='n' ;;
+	"define") dflt='y' ;;
+	"undef") dflt='n' ;;
+	*) dflt="n"
+	esac
+
+	rp="Should CGIwrap issue the AFS setpag() call for each script?"
+	. ./myread
+	
+	case "$ans" in
+	y|Y) val="$define" ;;
+	*) val="$undef" ;;
+	esac
+
+	set d_conf_afs_setpag
+	eval $setvar
+
+;;
+*)
+	d_conf_afs_setpag="undef"
+	afsccopts=""
+	afsldopts=""
+	afslibs=""
+;;
+esac
+
+
+
+case "$d_conf_afs_setpag" in
+"define")
+	
+	case "$afsccopts" in
+	"") dflt='-I/usr/afsws/include' ;;
+	*) dflt="$afsccopts"
+	esac
+
+	rp="AFS include flags for CC?"
+	. ./myread
+	
+	afsccopts=$ans
+
+#---------
+
+	case "$afsldopts" in
+	"") dflt='-L/usr/afsws/lib -L/usr/afsws/lib/afs' ;;
+	*) dflt="$afsldopts"
+	esac
+
+	rp="AFS ld flags?"
+	. ./myread
+	
+	afsldopts=$ans
+
+#---------
+
+	case "$afslibs" in
+	"") dflt='-lkauth -lprot -lubik -lauth -lrxkad -lsys -ldes -lrx -llwp -lcom_err /usr/afsws/lib/afs/util.a' ;;
+	*) dflt="$afslibs"
+	esac
+
+	rp="AFS lib flags?"
+	. ./myread
+	
+	afslibs=$ans
+
+;;
+esac
+

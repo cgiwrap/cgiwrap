@@ -1,0 +1,14 @@
+?MAKE:d_initgroups: Inlibc
+?MAKE:	-pick add $@ %<
+?S:d_initgroups:
+?S:	Ths variable defines whether the system has the initgroups call.
+?S:.
+?C:HAS_INITGROUPS:
+?C:	If defined, this indicates that the system has the initgroups call.
+?C:.
+?H:#$d_initgroups HAS_INITGROUPS		/**/
+?H:.
+
+set initgroups d_initgroups
+eval $inlibc
+

@@ -1,0 +1,18 @@
+BLURB
+README
+doc/ANNOUNCE
+doc/CHANGES
+doc/INSTALL
+doc/NOTES
+doc/THANKS
+doc/URLHELP
+doc/cgiwrap.1
+cgiwrap.c
+cgiwrap.h
+debug.c
+debug.h
+util.h
+util.c
+Makefile.SH
+Configure                    Portability tool
+config_h.SH                  Produces config.h

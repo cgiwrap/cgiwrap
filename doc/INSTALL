@@ -1,0 +1,47 @@
+Installation Instructions:
+-------------------------
+
+Look at NOTES to see if there are any hints for your platform.
+
+Run the Configure script.
+
+Type "make"
+
+Copy cgiwrap executable to your servers cgi-bin directory
+
+Hardlink or symlink nph-cgiwrap, nph-cgiwrapd, cgiwrapd to cgiwrap in the 
+ cgi-bin directory.
+
+# THIS STEP MUST BE PERFORMED WHILE LOGGED IN AS "root"
+Make cgiwrap owned by root, executable by all, and setuid.
+	chown root cgiwrap
+	chmod 4755 cgiwrap
+
+
+---- 
+Special additional instructions for installing a copy of cgiwrap that 
+allows users to create access controlled scripts. For this to work, you 
+will need to have a single common password file that will be used by all 
+authenticated scripts.
+
+Re run configure, specify "public_html/auth-cgi-bin" instead of 
+"public_html/cgi-bin" for the cgi directory.
+
+Type make.
+
+Create a new server cgi-bin directory called "auth-cgi-bin", and install 
+this new copy of cgiwrap into that directory the same way you installed 
+it into the cgi-bin directory. (4 copies, and set permissions). You will 
+now be able to use the url:  http://server/auth-cgi-bin/cgiwrap...
+
+To enable access control, place a .htaccess or equivalent file in the 
+auth-cgi-bin directory where cgiwrap is located, that requires 
+authentication to get at any file in that directory, but will allow any 
+valid user to get through.
+
+Now, your users can simply check: 1. That their script was executed by 
+them (eg. check the real uid of the script to make sure someone else 
+wasn't running it by hand) 2. That the REMOTE_USER environment variable 
+contains a user name that they want to allow to access the script.
+
+

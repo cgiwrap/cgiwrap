@@ -1,0 +1,12 @@
+CDC 4680 EP/IX 2.1.1ad:
+-----------------------
+CC=cc
+CCOPT=-systype sysv -I/usr/include/bsd -lbsd
+
+Don't include "strings.h"
+
+
+HPUX:
+-----
+Don't enable the setrlimit checking, it is not completely supported by HPUX.
+

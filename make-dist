@@ -1,0 +1,3 @@
+#!/bin/csh
+
+makedist -c ../cgiwrap-3.0
