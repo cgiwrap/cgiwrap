@@ -12,6 +12,9 @@ without strerror, can now use strerror, sys_errlist, perror, or just errno.
 	<LI>Major documentation overhaul, create all HTML based docs
 	<LI>Added option (defaulting to yes) to correctly set the 
 PATH_TRANSLATED environment variable.
+	<LI>Fixed bug with the configure script and the use_system 
+option. It would cause a preprocessor error if the system call was not 
+found.
 
 </UL><P><H3>New in version 3.4:</H3><UL>
 	<LI>Fixed typo "&" instead of "&&" in setgroups stuff
