@@ -5,6 +5,11 @@
    version to version.
      _________________________________________________________________
                                       
+  New in version 3.6.1:
+  
+     * Fixed the UserInFile routine. It broke cause I forgot to remove
+       newlines.
+       
   New in version 3.6:
   
      * Removed check for ./ in the path of the script. The check for ../

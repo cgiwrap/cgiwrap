@@ -19,6 +19,8 @@
                 
         Stuff still to be done
                 
+        Year 2000 Issues
+                
         Acknowledgements
                 
         Publications mentioning CGIwrap
@@ -42,6 +44,8 @@
           web server machines.
           
         Installation and Configuration
+                
+        Access Control Files (allow/deny)
                 
         Compilation Notes
                 
