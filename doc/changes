@@ -42,6 +42,8 @@
      * Changed to autoconf 2.5 style templates and eliminated acconfig.h.
      * Added   option   to  enable  the  special  PHP  support  only  for
        non-executable files.
+     * Added  modified  patch  by  Gabriel  Ambuehl to use SCRIPT_URL for
+       SCRIPT_NAME generation.
 
   New in version 3.7.1:
 
