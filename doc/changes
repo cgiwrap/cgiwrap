@@ -34,6 +34,9 @@
      * Fixed malloc() error check in GetUserDir routines
      * Fixed race condition with permissions and opening of log file
      * initgroups() and setgroups() support now enabled by default
+     * Eliminated buffer overrun in error message about chmod'ing script.
+       Thanks to Duncan Simpson (dps@io.stargate.co.uk)
+     * Added --with-minimum-uid option
        
   New in version 3.5:
   
@@ -50,7 +53,7 @@
        
   New in version 3.4:
   
-     * Fixed typo "& instead of "&& in setgroups stuff
+     * Fixed typo "&" instead of "&&" in setgroups stuff
      * Added cgiwrap.aliases option to rewrite home dirs of users.
      * Moved entire cgiwrap source build tree to CVS, will make tracking
        changes easier.
