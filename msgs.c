@@ -317,6 +317,23 @@ void MSG_Info(void)
  * Error Messages 
  */
 
+void MSG_Error_CGIWrapNotSetUID(void)
+{
+    MSG_Header("CGIWrap Error", "CGIWrap is not setuid");
+
+    printf(
+"The cgiwrap executable(s) were not made setuid-root. This is required\n"
+"for it to function properly. (SetUID root is needed in order to change\n"
+"the uid to that of the script owner. This is an installation error\n"
+"please make the executable setuid root, or use the 'make install'\n"
+"method of installing the executables.\n"
+    );
+
+    MSG_Footer();
+    exit(1);
+}
+
+
 void MSG_Error_ServerUserMismatch(void)
 {
 	MSG_Header("CGIWrap Error", "Server UserID Mismatch");
@@ -383,7 +400,7 @@ void MSG_Error_ExecutionNotPermitted(char *path, char *reason)
 	exit(1);
 }
 
-void MSG_Error_AccessControl(char *why)
+void MSG_Error_AccessControl(char *why, char *controlfile)
 {
 	MSG_Header("CGIWrap Error", "Access Control");
 	
@@ -395,6 +412,15 @@ void MSG_Error_AccessControl(char *why)
 		printf("<P>\n");
 	}
 	printf("\t%s\n", why);	
+	
+	if ( controlfile )
+	{
+		if ( MSG_HTMLMessages )
+		{
+			printf("<P>\n");
+		}
+		printf("\tAccess Control File: %s\n", controlfile);
+	}
 
 	MSG_Footer();
 	exit(1);

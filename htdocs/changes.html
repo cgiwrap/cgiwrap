@@ -9,6 +9,11 @@ to version.
 	<LI>Fixed netmask comparison
 	<LI>Added anonymous CVS server info
 	<LI>Updates from David Hollenberg for misc. error checking/handling and overflow protection.
+	<LI>Added check for making sure cgiwrap is setuid and printing out a usable
+error message if not.
+	<LI>Now prints out path to access control files if one or both are missing.
+	<LI>Slight changes to aux groups code just in case setgroups() doesn't
+support a empty list.
 </UL>
 
 <P><H3>New in version 3.6.3:</H3><UL>

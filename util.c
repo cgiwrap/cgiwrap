@@ -251,7 +251,16 @@ void CheckUser(struct passwd *user)
 	if ( !deny_exists && !allow_exists )
 	{
 		Log(user->pw_name, "-", "access control files not found");
-		MSG_Error_AccessControl("Access control files not found!");
+#if defined(CONF_ALLOWFILE) && defined(CONF_DENYFILE)
+		MSG_Error_AccessControl("Access control files not found!",
+			CONF_ALLOWFILE " and " CONF_DENYFILE);
+#elif defined(CONF_ALLOWFILE)
+		MSG_Error_AccessControl("Access control file not found!",
+			CONF_ALLOWFILE);
+#elif defined(CONF_DENYFILE)
+		MSG_Error_AccessControl("Access control file not found!",
+			CONF_DENYFILE);
+#endif
 	}
 
 	if ( (in_allow && in_deny) ||
@@ -259,7 +268,7 @@ void CheckUser(struct passwd *user)
 		( deny_exists && in_deny ) )
 	{
 		Log(user->pw_name, "-", "user/host not permitted");
-		MSG_Error_AccessControl("Script userid and/or remote host not permitted!");
+		MSG_Error_AccessControl("Script userid and/or remote host not permitted!",NULL);
 	}
 #endif
 
@@ -267,7 +276,7 @@ void CheckUser(struct passwd *user)
 	if ( user->pw_uid < CONF_MINIMUM_UID )
 	{
 		Log(user->pw_name, "-", "uid less than minimum");
-		MSG_Error_AccessControl("UID of script userid less than configured minimum.");
+		MSG_Error_AccessControl("UID of script userid less than configured minimum.",NULL);
 	}
 #endif
 
@@ -287,7 +296,7 @@ void CheckUser(struct passwd *user)
 	if (found == 0)
 	{
 	  Log(user->pw_name, "-", "restricted login shell");
-	  MSG_Error_AccessControl("Restricted login shell, permission denied.");
+	  MSG_Error_AccessControl("Restricted login shell, permission denied.",NULL);
 	}
 	}
 #endif
@@ -409,6 +418,7 @@ void CheckScriptFile(void)
 
 /*
  *  Verify the CGIwrap is being executed by the server userid
+ *  and that it is running as effective uid root.
  */
 void VerifyExecutingUser(void)
 {
@@ -425,8 +435,12 @@ void VerifyExecutingUser(void)
 		MSG_Error_ServerUserMismatch();
 	}
 #endif
-}
 
+	if ( geteuid() != 0 )
+	{
+		MSG_Error_CGIWrapNotSetUID();
+	}
+}
 
 /*
  * Construct string containing full path to script
@@ -718,7 +732,10 @@ void ChangeID ( struct passwd *user)
 void ChangeAuxGroups(struct passwd *user)
 {
 #if defined(HAS_SETGROUPS) && defined(CONF_SETGROUPS)
-	if ( setgroups(0, NULL) == -1 )
+	gid_t grouplist[1];
+	grouplist[0] = user->pw_gid;
+
+	if ( setgroups(1, grouplist) == -1 )
 		MSG_Error_SystemError("setgroups() failed!");
 #endif
 

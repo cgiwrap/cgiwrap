@@ -14,6 +14,15 @@
      Updates from David Hollenberg for misc. error checking/handling and
    overflow protection.
    
+     Added check for making sure cgiwrap is setuid and printing out a
+   usable error message if not.
+   
+     Now prints out path to access control files if one or both are
+   missing.
+   
+     Slight changes to aux groups code just in case setgroups() doesn't
+   support a empty list.
+   
   New in version 3.6.3:
   
      * Added support for checking if user has a valid shell, similar to
