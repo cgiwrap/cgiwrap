@@ -785,6 +785,7 @@ AC_ARG_WITH( check-shell,
 	[  --with-check-shell]
 	[  user shell must be in system shells list ],
 	[
+		GETUSERSHELL=""
 		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_CHECKSHELL)
 			AC_MSG_RESULT([enabled])
@@ -803,6 +804,7 @@ AC_ARG_WITH( check-shell,
 		fi
 	],
 	[
+		GETUSERSHELL=""
 		AC_MSG_RESULT([disabled])
 	])
 AC_SUBST(GETUSERSHELL)

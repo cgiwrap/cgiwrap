@@ -9,6 +9,9 @@ to version.
 	<LI>Added support for checking if user has a valid shell, similar to 
 what ftpd does. The BSD licensed getusershell.o has been included for support
 where needed.
+	<LI>Bug fix for SEGV condition when certain syntax is used for the request. 
+It did not appear exploitable, but would cause cgiwrap to core as root. Thanks
+to Michael Bryan (michael@blueneptune.com) for the fix.
 </UL>
 
 <P><H3>New in version 3.6.2:</H3><UL>

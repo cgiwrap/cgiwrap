@@ -39,9 +39,14 @@
           (Eg. 4750) But if you do this, make sure that the group of
           cgiwrap is the same as the group that the server runs as.
           
-   *VERY IMPORTANT* - Do NOT allow any user to run scripts directly out
-          of the main cgi-bin directory, as this will allow them to use
-          cgiwrap to run any of the other users scripts.
+   *VERY IMPORTANT* - Do NOT allow any non-trusted user to run scripts
+          directly out of the main cgi-bin directory, as this will allow
+          them to use cgiwrap to run any of the other users scripts. The
+          reason for this is that if they can run scripts as the same
+          userid as the web server, they can subvert some of cgiwrap's
+          security checks to allow them to run other users scripts. I
+          recommend not running ANY scripts on the web server directly,
+          once you have cgiwrap installed.
           
   Configuration Options
   
@@ -117,8 +122,11 @@
    --without-check-symlink
           disable check for symlinked script
           
-   --with-minimum-uid=UID Set the minimum uid of user that can use
-          cgiwrap.
+   --with-check-shell
+          enable check for a valid user shell
+          
+   --with-minimum-uid=UID set the minimum uid of user that can use
+          cgiwrap
           
    --with-logging-syslog=LABEL
           enable logging script execution to syslog
@@ -143,7 +151,7 @@
           use a file to rewrite user directories
           
    --without-fixed-path-translated
-          Don't fix the PATH_TRANSLATED variable (pre 3.5 behavior)
+          don't fix the PATH_TRANSLATED variable (pre 3.5 behavior)
           
    --with-setenv-path=STRING
           set PATH environment variable to STRING
