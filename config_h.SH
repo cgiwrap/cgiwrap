@@ -93,6 +93,13 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
  */
 #$d_strdup HAS_STRDUP		/**/
 
+/* HAS_SYSLOG:
+ *	This symbol, if defined, indicates that the program can rely on the
+ *	system providing syslog().  Otherwise, the syslog code provided by
+ *	the package should be used.
+ */
+#$d_syslog HAS_SYSLOG	/**/
+
 /* HAS_SYSTEM:
  *	This symbol, if defined, indicates that the system routine is
  *	available to issue a shell command.
@@ -239,15 +246,22 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
 #$d_check_httpd_user CONF_CHECK_HTTPD_USER		/**/
 #define CONF_HTTPD_USER "$httpd_user"		/**/
 
-/* CONF_LOGFILE:
+/* CONF_LOG_LOGFILE:
  *	Defined to be the filename that cgiwrap logs requests to.
  */
-/* CONF_LOG_REQUESTS:
- *	Defined this if cgiwrap should log all requests to a file.
+/* CONF_LOG_LABEL:
+ *	Defined to be the label that identifies this copy of cgiwrap.
  */
-#$d_log_requests CONF_LOG_REQUESTS		/**/
-#define CONF_LOGFILE "$log_file"		/**/
-
+/* CONF_LOG_USEFILE:
+ *	Defined if cgiwrap will log to a file.
+ */
+/* CONF_LOG_USESYSLOG:
+ *	Defined if cgiwrap will log to syslog..
+ */
+#$d_conf_log_usefile CONF_LOG_USEFILE		/**/
+#$d_conf_log_usesyslog CONF_LOG_USESYSLOG		/**/
+#define CONF_LOG_LOGFILE "$conf_log_logfile"		/**/
+#define CONF_LOG_LABEL "$conf_log_label"		/**/
 /* CONF_SUBDIRS:
  *	Defined if you want to allow users to store cgi scripts
  *	in subdirectories under their cgi-bin directory.

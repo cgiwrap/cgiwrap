@@ -10,8 +10,10 @@
 >CONF_DENYFILE
 >CONF_HTTPD_USER
 >CONF_INITGROUPS
->CONF_LOGFILE
->CONF_LOG_REQUESTS
+>CONF_LOG_LABEL
+>CONF_LOG_LOGFILE
+>CONF_LOG_USEFILE
+>CONF_LOG_USESYSLOG
 >CONF_REDIR_STDERR
 >CONF_SETGROUPS
 >CONF_SUBDIRS
@@ -33,6 +35,7 @@
 >HAS_SETUID
 >HAS_SIGSET
 >HAS_STRDUP
+>HAS_SYSLOG
 >HAS_SYSTEM
 >I_LIMITS
 >I_PWD
@@ -50,6 +53,8 @@ allowfile
 cc
 ccflags
 conf_cgidir
+conf_log_label
+conf_log_logfile
 d_check_httpd_user
 d_conf_afs_setpag
 d_conf_allowfile
@@ -60,6 +65,8 @@ d_conf_check_scruid
 d_conf_checkhost
 d_conf_denyfile
 d_conf_initgroups
+d_conf_log_usefile
+d_conf_log_usesyslog
 d_conf_redir_stderr
 d_conf_setgroups
 d_conf_subdirs
@@ -68,7 +75,6 @@ d_conf_use_rlimit_vmem
 d_conf_use_system
 d_conf_useset
 d_initgroups
-d_log_requests
 d_setegid
 d_seteuid
 d_setgid
@@ -82,6 +88,7 @@ d_setruid
 d_setuid
 d_sigset
 d_strdup
+d_syslog
 d_system
 date
 denyfile
@@ -97,7 +104,6 @@ i_systypes
 i_unistd
 ldflags
 libs
-log_file
 optimize
 perl
 spitshell

@@ -119,6 +119,7 @@ char *FetchScriptString( struct passwd *user)
 	}
 
 	/** Now, need to split out PATH_INFO from the script name */
+	max = 0;
 	for (i=1; i<=(CountSubDirs(scrStr)+1) && i>0; i++)
 	{	
 		tempStr = GetPathComponents(i, scrStr);

@@ -14,6 +14,11 @@ char **CreateARGV( char *scrStr, int argc, char *argv[])
 	int i;
 
 	temp = (char **) malloc( (argc+1) * sizeof(char *) );
+
+	if ( !temp )
+	{
+		DoPError("Couldn't malloc() memory for argv array\n");
+	}
 	
 	temp[0] = StripPathComponents( CountSubDirs(scrStr), scrStr );
 	temp[argc] = 0;
@@ -127,12 +132,13 @@ void OutputEnvironment(void)
 {
 	DEBUG_Msg("");
  	DEBUG_Msg("Environment Variables:");  
-	DEBUG_Str("   QUERY_STRING:", (char *) getenv("QUERY_STRING") );
-        DEBUG_Str("    SCRIPT_NAME:", (char *) getenv("SCRIPT_NAME") );
-        DEBUG_Str("      PATH_INFO:", (char *) getenv("PATH_INFO") );
-        DEBUG_Str("    REMOTE_USER:", (char *) getenv("REMOTE_USER") );
-        DEBUG_Str("    REMOTE_HOST:", (char *) getenv("REMOTE_HOST") );
-        DEBUG_Str("    REMOTE_ADDR:", (char *) getenv("REMOTE_ADDR") );
+	DEBUG_Str("     QUERY_STRING:", (char *) getenv("QUERY_STRING") );
+        DEBUG_Str("      SCRIPT_NAME:", (char *) getenv("SCRIPT_NAME") );
+        DEBUG_Str("        PATH_INFO:", (char *) getenv("PATH_INFO") );
+        DEBUG_Str("  PATH_TRANSLATED:", (char *) getenv("PATH_TRANSLATED") );
+        DEBUG_Str("      REMOTE_USER:", (char *) getenv("REMOTE_USER") );
+        DEBUG_Str("      REMOTE_HOST:", (char *) getenv("REMOTE_HOST") );
+        DEBUG_Str("      REMOTE_ADDR:", (char *) getenv("REMOTE_ADDR") );
 }
 
 /*
@@ -626,29 +632,49 @@ void DoError (char *msg)
  */
 void Log (char *user, char *script, char *msg)
 {
-#if defined(CONF_LOG_REQUESTS)
 	time_t timevar;
 	FILE *logFile;
+	char *timeString;
 
+	time(&timevar);
+	timeString = ctime(&timevar);
+
+#if defined(CONF_LOG_USEFILE)
 	DEBUG_Msg("");
-	DEBUG_Msg("Log Request");
+	DEBUG_Msg("Logging Request (File)");
 
-	if ( (logFile = fopen(CONF_LOGFILE, "a")) == NULL )
+	if ( (logFile = fopen(CONF_LOG_LOGFILE, "a")) == NULL )
 	{
 		DoPError("Could not open log file for appending!");
 	}
 	
-	fprintf(logFile, "%s\t", NullCheck( user ) );
-	fprintf(logFile, "%s\t", NullCheck( script ) );
-	fprintf(logFile, "%s\t", NullCheck( getenv("REMOTE_HOST") ) );
-	fprintf(logFile, "%s\t", NullCheck( getenv("REMOTE_ADDR") ) );
-	fprintf(logFile, "%s\t", NullCheck( getenv("REMOTE_USER") ) );
-	fprintf(logFile, "%s\t", NullCheck( msg ) );
-
-	time(&timevar);
-	fprintf(logFile, "%s", ctime(&timevar) );
+	fprintf(logFile, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
+		NullCheck( user ),
+		NullCheck( script ),
+		NullCheck( getenv("REMOTE_HOST") ),
+		NullCheck( getenv("REMOTE_ADDR") ),
+		NullCheck( getenv("REMOTE_USER") ),
+		NullCheck( msg ),
+		NullCheck( timeString ) );
 
 	fclose(logFile);
+#endif
+#if defined(CONF_LOG_USESYSLOG) && defined(HAS_SYSLOG)
+	DEBUG_Msg("");
+	DEBUG_Msg("Logging Request (syslog)");
+
+	openlog("cgiwrap", LOG_PID | LOG_NOWAIT, LOG_DAEMON);
+
+	syslog(LOG_INFO, "[%s] %s, %s, %s, %s, %s, %s",
+		NullCheck( CONF_LOG_LABEL ),
+		NullCheck( user ), 
+		NullCheck( script ),
+		NullCheck( getenv("REMOTE_HOST") ), 
+		NullCheck( getenv("REMOTE_ADDR") ),
+		NullCheck( getenv("REMOTE_USER") ),
+		NullCheck( msg ) );
+
+	closelog();
 #endif
 }
 
@@ -673,6 +699,28 @@ void SetScriptName(char *userStr, char *scrStr )
 
 	sprintf(buf, "%s=%s/%s/%s", "SCRIPT_NAME", 
 	    getenv("SCRIPT_NAME"), userStr, scrStr);
+	putenv(buf);
+}
+
+
+/*
+ * Set the correct PATH_TRANSLATED environment variable
+ */
+void SetPathTranslated( char *scriptPath )
+{
+	char *buf;
+
+	DEBUG_Msg("Fixing PATH_TRANSLATED environment variable.");
+
+	buf = (char *) malloc( strlen("PATH_TRANSLATED") +
+		strlen(scriptPath) + 5 );
+
+	if( !buf )
+	{
+		DoPError("Couldn't malloc memory for PATH_TRANSLATED buf!");
+	}
+
+	sprintf(buf, "%s=%s", "PATH_TRANSLATED", scriptPath); 
 	putenv(buf);
 }
 

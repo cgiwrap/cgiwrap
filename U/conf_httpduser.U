@@ -30,10 +30,8 @@ on, cgiwrap will exit.
 EOM
 
 case "$d_check_httpd_user" in
-'')     dflt="y" ;;
-define)	dflt="y" ;;
 undef)	dflt="n" ;;
-*)      dflt="$d_check_httpd_user" ;;
+*)      dflt="y" ;;
 esac
 
 rp="Verify cgiwrap executed by server?"

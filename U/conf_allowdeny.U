@@ -160,6 +160,7 @@ EOM
 esac
 
 
+
 case "$d_conf_allowfile$d_conf_denyfile" in
 undefdefine|defineundef|definedefine)
 
@@ -201,4 +202,7 @@ EOM
 	eval $setvar
 	
 	;;
+
+*)
+	d_conf_checkhost="undef"
 esac

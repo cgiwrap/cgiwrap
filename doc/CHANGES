@@ -1,5 +1,12 @@
 Log of Changes to CGIwrap:
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+Changes since 3.24:
+   Added support for attaching a label to syslog log messages.
+   Added code to rewrite the PATH_TRANSLATED environment variable.
+
+Changes since 3.23:
+   Added support for logging to syslog.
+
 Changes since 3.22:
    Setgroups was being used no matter what you said in configure - fixed
    Problem with undefined variables in Log call for subdirectories - fixed

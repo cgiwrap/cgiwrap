@@ -28,4 +28,5 @@ void DoPError (char *msg);
 void DoError (char *msg);
 void Log (char *user, char *script, char *msg);
 void SetScriptName(char *userStr, char *scrStr );
+void SetPathTranslated(char *scriptPath);
 void Create_AFS_PAG(void);

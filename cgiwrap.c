@@ -81,6 +81,9 @@ void main (int argc, char *argv[])
 
 	/* Set the Correct Values of SCRIPT_NAME envir. var. */
 	SetScriptName(userStr, scrStr);
+
+	/* Set the Correct Values of PATH_TRANSLATED envir. var. */
+	SetPathTranslated( scriptPath );
 	
 	/* Output the modified environment variables */
 	OutputEnvironment();
@@ -116,6 +119,7 @@ void main (int argc, char *argv[])
 #endif
 #else
 	execv(scriptPath, CreateARGV(scrStr, argc,argv));
+	DoPError("System Error: execv() failed\n");
 #endif
 
 }

@@ -4,7 +4,6 @@
 #include <ctype.h> 
 #include <sys/stat.h>		/* For file stating */
 #include <signal.h>		/* For signals stuff */
-
 #include <errno.h>
 
 #if defined(I_STDLIB)
@@ -40,6 +39,8 @@
 #if defined(I_SYS_RESOURCE)	/* For rlimit use */
 #include <sys/resource.h>
 #endif
+
+#include <syslog.h>
 
 /*
  * Local headers for prototypes and defines
