@@ -1,10 +1,11 @@
 static char *rcsid="$Id$";
 
-/* CVS Log: $Log$
-/* CVS Log: Revision 1.5  1996/07/30 02:23:24  nneul
-/* CVS Log: Added cvs log to source.
-/* CVS Log: */
+/* CVS Log: 
+$Log$
+Revision 1.6  1996/07/30 02:24:38  nneul
+*** empty log message ***
 
+*/
 
 /**
  **  File: stdutil.c
