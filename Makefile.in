@@ -99,6 +99,9 @@ dist:
 	cd ../cgiwrap-$(VERSION) && rm -rf CVS */CVS */*/CVS
 	cd ../cgiwrap-$(VERSION) && rm -rf .cvsignore */.cvsignore */*/.cvsignore
 	cd ../cgiwrap-$(VERSION) && rm -rf RCS */RCS */*/RCS
+	cd ../cgiwrap-$(VERSION) && rm -rf autom4te.cache *.rej *.orig
+	cd ../cgiwrap-$(VERSION) && rm -rf .#* */.#*
+	cd ../cgiwrap-$(VERSION) && rm -rf depend.awk
 	cd ../cgiwrap-$(VERSION) && rm -rf U
 
 tardist: dist	
