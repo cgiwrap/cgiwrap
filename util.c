@@ -143,6 +143,29 @@ char **CreateARGV( char *scrStr, int argc, char *argv[])
 
 
 /*
+ * Build the ARGV array for passing to the called script via interpreter
+ */
+char **CreateInterpreterARGV( char *interp, char *scrStr, int argc, char *argv[])
+{
+	char **temp;
+	int i;
+
+	temp = (char **) SafeMalloc( (argc+2) * sizeof(char *), "ARGV array");
+	
+	temp[0] = StripPathComponents( CountSubDirs(interp), interp );
+	temp[1] = StripPathComponents( CountSubDirs(scrStr), scrStr );
+	temp[argc+1] = 0;
+
+	for (i=1; i<argc; i++)
+	{
+		temp[i+1] = argv[i];
+	}
+
+	return temp;
+}
+
+
+/*
  *   Extract and return the value portion of a key=value pair found in a string
  */
 char *GetValue( char *keyword, char *string )

@@ -9,6 +9,7 @@ char *HTMLEncode( char *what );
 char *SafeMalloc( size_t size, char *what );
 void SafePutenv( char * string, char *what );
 char **CreateARGV( char *scrStr, int argc, char *argv[]);
+char **CreateInterpreterARGV( char *interp, char *scrStr, int argc, char *argv[]);
 void ChangeID(struct passwd *user);
 void ChangeAuxGroups(struct passwd *user);
 void SetResourceLimits(void);

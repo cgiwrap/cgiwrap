@@ -274,7 +274,7 @@ int main (int argc, char *argv[])
 	{
 		if ( interPath && Context.interpreted_script )
 		{
-			execv(interPath, CreateARGV(scrStr, argc, argv));
+			execv(interPath, CreateInterpreterARGV(interPath, scrStr, argc, argv));
 		}
 		else
 		{
@@ -303,7 +303,7 @@ int main (int argc, char *argv[])
 #else
 	if ( interPath && Context.interpreted_script )
 	{
-		execv(interPath, CreateARGV(scrStr, argc, argv));
+		execv(interPath, CreateInterpreterARGV(interPath, scrStr, argc, argv));
 	}
 	else
 	{
