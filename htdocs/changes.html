@@ -10,6 +10,11 @@ to version.
 ../ is still there. There doesn't seem to be any need for this check as 
 it appears to be harmless. It is being removed to allow for users with 
 "./" in their home dir (for chrooting with wuftpd) to be able to use cgiwrap.
+	<LI>Added code to optionally prevent script execution if the 
+script is group or world writable. I cannot make the check for world 
+writable forced on, since on my site using AFS, the permission bits 
+aren't used, and some scripts might be marked as world writable. Can't 
+break user scripts without a major hassle.
 </UL>
 
 <P><H3>New in version 3.5:</H3><UL>
