@@ -88,7 +88,7 @@ void MSG_Plain_Footer(void)
 void MSG_Error_General(char *message)
 {
 	MSG_Header("CGIWrap Error", message);
-	printf(message);
+	printf("%s", message);
 	MSG_Footer();
 	exit(1);
 }
