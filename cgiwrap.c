@@ -237,7 +237,7 @@ int main (int argc, char *argv[])
 #if defined(CONF_PHP_NONEXEC_ONLY)
 	if ( Context.interpreted_script && Context.script_is_executable )
 	{
-		DEBUG_Msg("\tScript is executable, ignoring interpreter and using #! line.\n");
+		DEBUG_Msg("\nScript is executable, ignoring interpreter and using #! line.");
 		Context.interpreted_script = 0;
 	}
 #endif
@@ -260,7 +260,7 @@ int main (int argc, char *argv[])
 	}
 	else if ( childpid == 0 )
 	{
-		if ( interPath )
+		if ( interPath && Context.interpreted_script )
 		{
 			execv(interPath, CreateARGV(scrStr, argc, argv));
 		}
