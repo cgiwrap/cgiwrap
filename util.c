@@ -447,7 +447,6 @@ void CheckVHostUserAccess(struct passwd *user)
 	{
 		lower_http_host[i] = tolower(http_host[i]);
 	}
-	free(http_host);
 
 	DEBUG_Msg("\n");
 	DEBUG_Str("Access Control Virtual Host: ", lower_http_host);
@@ -500,11 +499,7 @@ void CheckAccess_Helper(struct passwd *user, char *allowfile, char *denyfile)
 		deny_exists = FileExists(denyfile);
 		if ( deny_exists )
 		{
-			DEBUG_Str("Deny file exists: ", denyfile);
-		}
-		else
-		{
-			DEBUG_Str("Deny file nonexistent: ", denyfile);
+			DEBUG_Str("  Deny file exists: ", denyfile);
 		}
 	}
 	if ( allowfile )
@@ -512,11 +507,7 @@ void CheckAccess_Helper(struct passwd *user, char *allowfile, char *denyfile)
 		allow_exists = FileExists(allowfile);
 		if ( allow_exists )
 		{
-			DEBUG_Str("Allow file exists: ", allowfile);
-		}
-		else
-		{
-			DEBUG_Str("Allow file nonexistent: ", allowfile);
+			DEBUG_Str("  Allow file exists: ", allowfile);
 		}
 	}
 
@@ -529,12 +520,12 @@ void CheckAccess_Helper(struct passwd *user, char *allowfile, char *denyfile)
 
 	if ( deny_exists )
 	{
-	        DEBUG_Str("Checking deny file for",user->pw_name);
+	        DEBUG_Str("  Checking deny file for",user->pw_name);
 		in_deny = UserInFile(denyfile, user->pw_name);
 	}
 	if ( allow_exists )
 	{
-	        DEBUG_Str("Checking allow file for",user->pw_name);
+	        DEBUG_Str("  Checking allow file for",user->pw_name);
 		in_allow = UserInFile(allowfile, user->pw_name);
 	}
 
@@ -1090,7 +1081,7 @@ int UserInFile(char *filename, char *user)
 		if ( !strcmp(temp,user) )
 		{
 			fclose(file);
-			DEBUG_Str("Found",user);
+			DEBUG_Str("    Found",user);
 			return 1;
 		}
 #if defined(CONF_CHECKHOST)
