@@ -2,24 +2,29 @@
 <CENTER><H2>CGIWrap - Usage with AFS</H2></CENTER>
 <HR>
 <P>
-
-<PRE>
-CGIwrap will work with AFS, with at least the following permissions:
-
-~           system:anyuser l
-public_html system:anyuser l
-cgi-bin     system:anyuser rl
-
-The scripts need to be executable by the user
-
-If you are running httpd authenticated to AFS, you can replace the 
-system:anyuser above with that userid
-
----
-
-If you are using this with AFS I'd suggest making sure to enable the AFS PAG 
+CGIwrap will work with AFS, with at least the following directory permissions:
+<P>
+<CENTER><TABLE BORDER=1 WIDTH=50%>
+	<TR><TH>Dir</TH>
+		<TH>User/Group</TH>
+		<TH>Permissions</TH></TR>
+	<TR><TD ALIGN=LEFT>~</TD>
+		<TD ALIGN=CENTER>system:anyuser</TD>
+		<TD ALIGN=CENTER>l</TD></TR>
+	<TR><TD ALIGN=LEFT>~/public_html</TD>
+		<TD ALIGN=CENTER>system:anyuser</TD>
+		<TD ALIGN=CENTER>l</TD></TR>
+	<TR><TD ALIGN=LEFT>~/public_html</TD>
+		<TD ALIGN=CENTER>system:anyuser</TD>
+		<TD ALIGN=CENTER>rl</TD></TR>
+</TABLE></CENTER>
+<P>
+The scripts need to be executable by the owner.
+<P>
+If you are running httpd authenticated to AFS, you can replace 
+system:anyuser above with that userid.
+<P>
+If you are using CGIWrap with AFS I'd suggest making sure to enable the AFS PAG 
 support in the Configure script. This automatically creates a PAG for any 
 script that is launched, that way if the script klogs, it 
 won't affect the server or other scripts.
-
-</PRE>

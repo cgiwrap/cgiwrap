@@ -1,22 +1,47 @@
+<TITLE>CGIWrap - URL Quick Reference</TITLE>
+<CENTER><H2>CGIWrap - URL Quick Reference</H2></CENTER>
+<HR><P>
 
+In all of the below examples, replace SERVER with the hostname
+and port of your webserver. Replace USER with your userid, and replace
+SCRIPT with the name of the script that is located in your cgi-bin
+directory.
+<P>
+In the below URLs you can replace "<TT>cgiwrap</TT>" according to the
+following:
 
-URL:  http://server/cgi-bin/cgiwrap/user/script
-URL:  http://server/cgi-bin/cgiwrap/~user/script
-URL:  http://server/cgi-bin/cgiwrap?user=XXXX&script=YYYY
-
-    XXXX is the user who owns the script
-    YYYY is the name of the script itself
-
+<DL>
+	<P><DT>cgiwrap
+		<DD>Normal script execution
+	
+	<P><DT>cgiwrapd
+		<DD>Executes script, but returns debugging information, also is
+		returned preformatted, so you can see the source that the script is
+		outputting.
+		
+	<P><DT>nph-cgiwrap
+	<P><DT>nph-cgiwrapd
+		<DD>Same as above, except you sometimes need to use this if your
+		script outputs binary data, such as an image counter script.
+</DL>
+	
+<H3>Standard Installation of CGIWrap</H3>
 Place your scripts in your ~/public_html/cgi-bin/ directory
+<P>
+<UL>
+	<LI>http://SERVER/cgi-bin/cgiwrap/USER/SCRIPT
+	<LI>http://SERVER/cgi-bin/cgiwrap/~USER/SCRIPT
+	<LI>http://SERVER/cgi-bin/cgiwrap?user=USER&script=SCRIPT
+</UL>
 
---- If your site has installed a copy for access controls scripts ---
+<H3>Password Protected Installation of CGIWrap</H3>
+Place your scripts in your ~/public_html/auth-cgi-bin/ directory
+<P>
+<UL>
+	<LI>http://SERVER/auth-cgi-bin/cgiwrap/USER/SCRIPT
+	<LI>http://SERVER/auth-cgi-bin/cgiwrap/~USER/SCRIPT
+	<LI>http://SERVER/auth-cgi-bin/cgiwrap?user=USER&script=SCRIPT
+</UL>
 
-URL:  http://server/auth-cgi-bin/cgiwrap/user/script
-URL:  http://server/auth-cgi-bin/cgiwrap/~user/script
-URL:  http://server/auth-cgi-bin/cgiwrap?user=XXXX&script=YYYY
 
-    XXXX is the user who owns the script
-    YYYY is the name of the script itself
-
-Place the scripts in your ~/public_html/auth-cgi-bin/ directory.
 

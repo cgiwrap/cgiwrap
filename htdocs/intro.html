@@ -1,130 +1,14 @@
+<TITLE>CGIWrap - Introduction</TITLE>
+<CENTER><H1>CGIWrap - Introduction</H1></CENTER>
+<HR><P>
 
-
-
- CCCCGGGGIIIIWWWWRRRRAAAAPPPP((((1111))))                                                       CCCCGGGGIIIIWWWWRRRRAAAAPPPP((((1111))))
-
-9
-
-
- NNNNAAAAMMMMEEEE
-      cgiwrap - CGI Wrapper for HTTPd WWW Server
-
- SSSSYYYYNNNNOOOOPPPPSSSSIIIISSSS
-      http://server:port/cgi-bin/cgiwrap?user=USERID&script=SCRIPTNAME
-      http://server:port/cgi-bin/cgiwrap/USERID/SCRIPTNAME
-      http://server:port/cgi-bin/cgiwrap/~USERID/SCRIPTNAME
-
- DDDDEEEESSSSCCCCRRRRIIIIPPPPTTTTIIIIOOOONNNN
-      CGIWrap is a gateway program that allows general users to use CGI
-      scripts and HTML forms without compromising the security of the http
-      server. Scripts are run with the permissions of the user who owns the
-      script. In addition, several security checks are performed on the
-      script, which will not be executed if any checks fail.
-
-      Cgiwrap is used via a URL in an HTML document. As distributed, cgiwrap
-      is configured to run user scripts which are located in the
-      ~/public_html/cgi-bin/ directory.
-
-      sssseeeerrrrvvvveeeerrrr::::ppppoooorrrrtttt
-           The server that the script is located on. Port is optional.
-
-      ccccggggiiii----bbbbiiiinnnn
-           The common cgi directory on the http server.
-
-      UUUUSSSSEEEERRRRIIIIDDDD
-           The userid of the user who owns the script that is to be run
-
-      SSSSCCCCRRRRIIIIPPPPTTTTNNNNAAAAMMMMEEEE
-           The actual filename of the script that is to be run.
-
- IIIINNNNSSSSTTTTRRRRUUUUCCCCTTTTIIIIOOOONNNNSSSS
-      Create the directory ~/public_html/cgi-bin
-
-      Install scripts in that directory, and make them owned and executable
-      by you.
-
-
- IIIINNNNSSSSTTTTRRRRUUUUCCCCTTTTIIIIOOOONNNNSSSS ((((AAAAFFFFSSSS))))
-      For this example, the script is "email.pl". The user id is "joeminer".
-
-      Set AFS permissions on directories
-
-      1. fs setacl ~ system:anyuser l
-
-      2. fs setacl ~/public_html system:anyuser rl
-
-      3. fs setacl ~/public_html/cgi-bin system:anyuser rl
-
-      Install the script into the cgi-bin directory, along with any related
-      files.
-
-
-9                                    - 1 -           Formatted:  July 3, 1996
-
-
-
-
-
-
- CCCCGGGGIIIIWWWWRRRRAAAAPPPP((((1111))))                                                       CCCCGGGGIIIIWWWWRRRRAAAAPPPP((((1111))))
-
-9
-
-
-      The script is executed using the following URL:
-
-      http://www.umr.edu:2520/cgi-bin/cgiwrap/joeminer/email.pl
-
- NNNNOOOOTTTTEEEESSSS
-      When using cgiwrap with AFS based accounts, you need to keep in mind
-      that scripts are run un-authenticated. This means that any files that
-      are accessed in AFS directories are accessed as "system:anyuser". This
-      is important when considering how your script will return data to you.
-      Currently, the easiest way to return data to the user is to email the
-      results of the script. Obviously, this only applies to scripts that
-      are supposed to be used for submitting data - scripts that simply
-      return information to the web client are not affected by this.
-
-      Cgiwrap can be used with forms, but it is suggested that you use the
-      "POST" method. If you use the get method, you will need to add two
-      hidden fields to your form containing the user and script name. "GET"
-      types requests are discouraged in any case due to the limited amount
-      of data that can be passed to the script.
-
-      I suggest installnig 4 copies of cgiwrap into the servers cgi-bin
-      directory.  (cgiwrap, cgiwrapd, nph-cgiwrap, nph-cgiwrapd) This will
-      allow your users to run almost any kind of script. The two ending in
-      "d" will display debugging output, which is a great aid when writing
-      CGI scripts, as you usually can't see the output of your script if it
-      screws up.
-
-
- FFFFIIIILLLLEEEESSSS
-      HTTPD/cgi-bin/cgiwrap ~USERID/public_html/cgi-bin/SCRIPTNAME
-
- AAAAUUUUTTTTHHHHOOOORRRR
-      Nathan Neulinger (nneul@umr.edu)
-
- SSSSEEEEEEEE AAAALLLLSSSSOOOO
-      Mosaic, lynx
-
-      http://sunsite.unc.edu/boutell/faq/www_faq.html
-      http://hoohoo.ncsa.uiuc.edu
-      http://www.ncsa.uiuc.edu/General/Internet/WWW/HTMLPrimer.html
-      http://www.ncsa.uiuc.edu/General/Internet/WWW/HTMLQuickRef.html
-
-
-
-
-
-
-
-
-
-9
-
-
-                                    - 2 -           Formatted:  July 3, 1996
-
-
+CGIWrap is a gateway program that allows general users to use CGI
+scripts and HTML forms without compromising the security of the http
+server. Scripts are run with the permissions of the user who owns the
+script. In addition, several security checks are performed on the
+script, which will not be executed if any checks fail.
+<P>
+CGIWrap is used via a URL in an HTML document. As distributed, cgiwrap
+is configured to run user scripts which are located in the
+~/public_html/cgi-bin/ directory.
 
