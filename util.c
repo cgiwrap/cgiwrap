@@ -445,24 +445,26 @@ char *StripPathComponents(int count, char *path)
  */
 void SetResourceLimits(void)
 {
-#if defined(CONF_USE_RLIMIT_CPU) && defined(RLIMIT_CPU)
-	/* CPU Time Limit */
-	struct rlimit cpulim = { 9, 10 	}; 
+#if defined(CONF_USE_RLIMIT_CPU || defined(CONF_USE_RLIMIT_CPU))
+	struct rlimit limstruct;
 #endif
 
-#if defined(CONF_USE_RLIMIT_VMEM) && defined(RLIMIT_VMEM)
-	/* Virtual Memory Limit */
-	struct rlimit vmemlim = { 2000000, 2500000 };
-#endif
-
+/* CPU Time Limit */
 #if defined(CONF_USE_RLIMIT_CPU) && defined(RLIMIT_CPU)
+	limstruct.rlim_cur = 9;
+	limstruct.rlim_max = 10;
+
 	DEBUG_Msg("\nSetting Limits (CPU Usage)\n");
-	setrlimit( RLIMIT_CPU, &cpulim );
+	setrlimit( RLIMIT_CPU, &limstruct );
 #endif
 
+/* Virtual Memory Limit */
 #if defined(CONF_USE_RLIMIT_VMEM) && defined(RLIMIT_VMEM)
+	limstruct.rlim_cur = 2000000;
+	limstruct.rlim_max = 2500000;
+
 	DEBUG_Msg("Setting Limits (Virtual Memory)\n");
-	setrlimit( RLIMIT_VMEM, &vmemlim );
+	setrlimit( RLIMIT_VMEM, &limstruct );
 #endif
 }
 
