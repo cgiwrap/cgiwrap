@@ -38,28 +38,28 @@ dep: Makefile
 
 install: cgiwrap
 	@DOINSTALL@ rm -f @INSTALLDIR@/cgiwrap
-	@DOINSTALL@ rm -f @INSTALLDIR@/cgiwrapd
-	@DOINSTALL@ rm -f @INSTALLDIR@/nph-cgiwrap
-	@DOINSTALL@ rm -f @INSTALLDIR@/nph-cgiwrapd
+	@DOINSTALLCGIWRAPD@ rm -f @INSTALLDIR@/cgiwrapd
+	@DOINSTALLNPH@ rm -f @INSTALLDIR@/nph-cgiwrap
+	@DOINSTALLCGIWRAPD@ @DOINSTALLNPH@ rm -f @INSTALLDIR@/nph-cgiwrapd
 	@DOINSTALLPHP@ rm -f @INSTALLDIR@/php-cgiwrap
-	@DOINSTALLPHP@ rm -f @INSTALLDIR@/php-cgiwrapd
+	@DOINSTALLCGIWRAPD@ @DOINSTALLPHP@ rm -f @INSTALLDIR@/php-cgiwrapd
 	@DOINSTALL@ cp cgiwrap @INSTALLDIR@/cgiwrap
 	@DOINSTALL@ chown root @INSTALLDIR@/cgiwrap
 	@DOINSTALL@ chgrp @INSTALLGROUP@ @INSTALLDIR@/cgiwrap
 	@DOINSTALL@ chmod @INSTALLMODE@ @INSTALLDIR@/cgiwrap
-	@DOINSTALL@ ln @INSTALLDIR@/cgiwrap @INSTALLDIR@/cgiwrapd
-	@DOINSTALL@ ln @INSTALLDIR@/cgiwrap @INSTALLDIR@/nph-cgiwrap
-	@DOINSTALL@ ln @INSTALLDIR@/cgiwrap @INSTALLDIR@/nph-cgiwrapd
+	@DOINSTALLCGIWRAPD@ ln @INSTALLDIR@/cgiwrap @INSTALLDIR@/cgiwrapd
+	@DOINSTALLNPH@ ln @INSTALLDIR@/cgiwrap @INSTALLDIR@/nph-cgiwrap
+	@DOINSTALLCGIWRAPD@ @DOINSTALLNPH@ ln @INSTALLDIR@/cgiwrap @INSTALLDIR@/nph-cgiwrapd
 	@DOINSTALLPHP@ ln @INSTALLDIR@/cgiwrap @INSTALLDIR@/php-cgiwrap
-	@DOINSTALLPHP@ ln @INSTALLDIR@/cgiwrap @INSTALLDIR@/php-cgiwrapd
+	@DOINSTALLCGIWRAPD@ @DOINSTALLPHP@ ln @INSTALLDIR@/cgiwrap @INSTALLDIR@/php-cgiwrapd
 
 uninstall:
 	@DOINSTALL@ rm -f @INSTALLDIR@/cgiwrap
 	@DOINSTALL@ rm -f @INSTALLDIR@/cgiwrapd
 	@DOINSTALL@ rm -f @INSTALLDIR@/nph-cgiwrap
 	@DOINSTALL@ rm -f @INSTALLDIR@/nph-cgiwrapd
-	@DOINSTALLPHP@ rm -f @INSTALLDIR@/php-cgiwrap
-	@DOINSTALLPHP@ rm -f @INSTALLDIR@/php-cgiwrapd
+	@DOINSTALL@ rm -f @INSTALLDIR@/php-cgiwrap
+	@DOINSTALL@ rm -f @INSTALLDIR@/php-cgiwrapd
 
 clean:
 	rm -f cgiwrap core *~ *.o *.tar Makefile.bak

@@ -430,6 +430,34 @@ AC_SUBST(INSTALLDIR)
 AC_SUBST(DOINSTALL)
 AC_SUBST(DOINSTALLPHP)
 
+AC_MSG_CHECKING(for whether to disable cgiwrapd)
+AC_ARG_WITH( cgiwrapd,
+	[ --without-cgiwrapd]
+	[ disable installation of cgiwrapd ],
+	[
+		AC_MSG_RESULT([disabled])
+		DOINSTALLCGIWRAPD="#"
+	],
+	[
+		AC_MSG_RESULT([enabled])
+		DOINSTALLCGIWRAPD=""
+	])
+AC_SUBST(DOINSTALLCGIWRAPD)
+
+AC_MSG_CHECKING(for whether to disable nph-cgiwrap)
+AC_ARG_WITH( nph,
+	[ --without-nph]
+	[ disable installation of nph-cgiwrap ],
+	[
+		AC_MSG_RESULT([disabled])
+		DOINSTALLNPH="#"
+	],
+	[
+		AC_MSG_RESULT([enabled])
+		DOINSTALLNPH=""
+	])
+AC_SUBST(DOINSTALLNPH)
+
 
 AC_MSG_CHECKING(for path to cgi scripts)
 AC_ARG_WITH( cgi-dir, 

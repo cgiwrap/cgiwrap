@@ -25,7 +25,7 @@ void MSG_Error_ExecFailed(void);
 void MSG_Error_NoSuchUser(char *user);
 void MSG_Error_NoScriptDir(void);
 void MSG_Error_ServerConfigError(void);
-void MSG_Error_UserConfigError(void);
+void MSG_Error_RequestError(void);
 
 void MSG_Info(void);
 void MSG_Error_ServerUserMismatch(void);

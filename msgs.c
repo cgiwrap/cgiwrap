@@ -428,7 +428,7 @@ void MSG_Error_ExecutionNotPermitted(char *path, char *reason)
 
 	if ( MSG_QuietErrors )
 	{
-		printf("Execution of that script is not permitted\n");
+		MSG_Error_UserConfigError();
 	}
 	else
 	{
@@ -462,8 +462,7 @@ void MSG_Error_AccessControl(char *why, char *allowfile, char *denyfile)
 
 	if ( MSG_QuietErrors )
 	{
-		printf("CGIWrap access control mechanism denied execution of this\n");
-		printf("script.\n\n");
+		MSG_Error_UserConfigError();
 	}
 	else
 	{
