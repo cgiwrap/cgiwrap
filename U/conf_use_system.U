@@ -24,7 +24,7 @@ use exec.
 
 EOM
 
-case "$d_conf_user_system" in
+case "$d_conf_use_system" in
 define) dflt='y' ;;
 undef) dflt='n' ;;
 *) dflt="n"
