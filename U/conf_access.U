@@ -51,7 +51,7 @@ start out. That way, you can cut someone off if they abuse the service.
 An option for restricting access further includes checking the remote host
 address against a range of IP addresses. This allows you to restrict cgi
 usage by a particular user to being access from only certain hosts. This
-is usefule for a situation where you only want your users making CGI
+is useful for a situation where you only want your users making CGI
 scripts that can be accessed from your domain. 
 
 The file format is one userid per line, unless you enable host checking.
