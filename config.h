@@ -78,3 +78,13 @@
    if running in debugging mode, you'll see stderr instead of having to look
    at the error_log. */
 #define REDIR_STDERR
+
+
+/* Set rlimit to limit CPU usage */
+#undef USE_RLIMIT
+#define RLIMIT_SETTING { 9, 10 }
+
+/* Set auxilliary groups */
+#define SETGROUPS
+
+

@@ -8,11 +8,14 @@ first.
 I do ask that if you make modifications, or have any improvements that you
 send them to me <nneul@umr.edu> and I will add them to the main source so
 others can benefit. If you wish to re-release a modified version of this 
-source.
+source, please contact me first.
 
 An important note is, this script makes the CGI access MORE secure, but 
 it does not make CGI access "secure". By it's very nature, CGI itself can 
 never be 100% secure, it is always dependent on the script itself.
+
+CGIWRAP Mailing List:  Send a message to listserv@rollanet.org with the line
+"subscribe CGIWRAP First Last"
 
 -- Nathan Neulinger <nneul@umr.edu>
 

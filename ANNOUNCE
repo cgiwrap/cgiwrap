@@ -1,0 +1,45 @@
+(CGIwrap 2.1 is a small fix from 2.0 that fixes couple minor cosmetic bug,
+and also has a couple additional options, such as setting the auxillary
+groups that a process is executed with, and also an option for limiting
+CPU time.)
+
+For those who are not familiar with CGIwrap - it is a small package I have
+written which provides a more secure front end for system administrators
+to allow their user's to access cgi scripts on a unix http server.
+
+CGIwrap performs a series of security checks on the scripts before
+executing them. Any script execution is done as the user who owns the
+script, and all script accesses are logged. Some of the security checks
+that are performed are:
+
+   *  if script is located in "~nneul/public_html/cgi-bin", it must be 
+owned by
+      nneul to be executable.
+
+   *  The userid and groupid of the user executing the script must match 
+those
+      of the user who owns the script.
+
+CGIwrap changed both the real and effective UIDs before running any script.
+
+The level of security, etc. can be adjusted in the source. CGIwrap is
+known to work on A/UX, HPUX, Solaris, Linux, and OSF/1. It should work on
+almost any unix system.
+
+CGIwrap is available at:
+   ftp://pluto.cc.umr.edu/pub/cgiwrap/cgiwrap-2.1.tar
+
+More information, and some sample user instructions on how to use cgiwrap
+are available at:
+   http://www.umr.edu/~cgiwrap
+
+-- Nathan
+
+------------------------------------------------------------------
+Nathan Neulinger                    Univ. of Missouri - Rolla
+EMail: nneul@umr.edu                      Computer Center
+WWW: http://www.umr.edu/~nneul      SysAdmin: pluto.cc.umr.edu
+WWW: http://pluto.cc.umr.edu          SysAdmin: rollanet.org
+------------------------------------------------------------------
+These oppinions are my own. I do not speak for Computing Services.
+

@@ -1,0 +1,146 @@
+
+
+
+Program:    cgiwrap
+Author:     Nathan Neulinger
+
+Purpose:    Gateway program for HTTPD web server which allows general
+            user access to CGI (Common Gateway Interface) scripts, without
+            having to compromise the security of the server itself.
+           
+           
+Reason for making CGIWrap available:
+====================================
+
+Currently, with the way the web server is set up, and with the way the
+code for httpd is written, there are two ways to provide a user with the
+ability to execute CGI scripts from their web pages.
+
+    1.  Give the user in question write access to the main CGI-BIN
+        directory for the web server. 
+              
+    2.  Create a directory specifically for that user to use for CGI
+        scripts, and alter the configuration of the http server to allow 
+        scripts to be executed from that directory. 
+       
+There are problems with both of these approaches however. 
+
+    1. The script is run with the privileges of the account which httpd
+    is run as. This means that you still have to implicity trust anyone
+    who has CGI script access - because their script can access
+
+    2. Any email which is sent in the script (which is a common way to use
+    the output of a form) is sent from the user that the http server is
+    running as.
+
+    3. In the second method, every time a new user wants to use CGIs, a
+    system administrator would have to change the configuration of the 
+    server. 
+
+
+Explanation of how CGIWrap works:
+=================================
+
+'cgiwrap' solves that problem, as well as eliminates any need for
+changing the configuration of the http server when another user also
+wants to be able to use CGI scripts.
+
+Cgiwrap's function is to act as a gateway for all requests that come into
+the http server to execute users' CGI scripts. It is called with a URL
+similar to the following:
+
+    http://servername/cgi-bin/cgiwrap?user=XXXXX&script=YYYYYY
+         XXXXX is the name of the user who owns the script
+        YYYYY is the name of the script to execute
+        
+User scripts are located in a subdirectory "cgi-bin" of the user's
+public_html directory. After processing the URL and extracting the name
+of the user and the name of the script from the URL, it logs the
+request into a log file, and then changes it's UID to match that user.
+
+    Each request is logged with the following information:
+    USER    SCRIPT    REMOTE-IP    REMOTE-HOST   URL-USED
+
+For example, the Student Council current has a form available on their
+web page which allows students to submit comments and suggestions to
+the student council through Mosaic or lynx. They have a script called
+"stuco-mail.pl", which is located in "/users/delta/public_html/cgi-bin"
+on pluto. The following URL is used to execute that script (in response
+to a user clicking the submit button on the suggestion form).
+
+    http://pluto.cc.umr.edu/cgi-bin/cgiwrap?user=delta&script=stuco-mail.pl
+    
+Cgiwrap's security features are configurable at compile time. Options can
+be turned on/off depending on the particular configuration desired.
+
+
+Configurable Options:
+=====================
+    Filename to use for log file.
+        Default:  /usr/adm/cgiwrap.log
+        
+    Name of subdirectory (relative to users home dir) to use for CGIs.
+        Default:  public_html/cgi-bin
+        
+        
+Installation requirements:
+==========================
+    HTTP server must be run as root to enable 'cgiwrap' to change the
+    UID and GID when executing user's scripts.
+        
+        
+Security Options:
+=================
+Note: An Error condition in the following means that cgiwrap will
+display an error message on the clients screen, and WILL NOT execute
+the CGI script in question, it will immediately exit with an error code.
+
+    * Error if the UID and GID weren't successfully changed.
+        This is to add a double layer of protection in case there is a 
+        problem changing the UID or GID.
+        
+    * Error if username specified does not match the owner of the script.
+    * Error if group of script does not match the group of user specified.
+        Prevents a user from making a symbolic or hard link to 
+        someone else's cgi script, or to a program that they do not own.
+    
+    * Error if the SetUID bit on the script is set.
+    * Error if the SetGID bit on the script is set. 
+        Prevents the script running with anyone else's privileges but the
+        person who owns it.
+    
+    * Error if script is located in a subdirectory of cgi-bin.
+        Prevents creating subdirectories in the cgi-bin directory for
+        storing scripts. 
+
+
+Problems with CgiWrap:
+======================
+
+Problem:
+    Users that are not familiar with CGI might not be able to write
+    scripts that are completely secure.
+
+Response:
+    If the user writes an insecure script, the only account that will be
+    affected is that particular users account. 
+    
+    A answer to this could also be for the computer center to provide
+    several standard scripts (one or two) that are known to be secure,
+    for standard types of form responses such as emailing the results
+    of a filled out form to the user who owns the script.
+
+
+
+Problem:
+    Users could write a script that displayed the /etc/passwd file to the
+    remote user. (Or similar)
+
+Response:
+    Users can do this anyway. Either by making a symbolic link to that
+    file in their public html directory, or simply by making a copy of
+    the file and putting it in their directory.
+
+    Users will be informed, if they use cgiwrap, that every transaction via
+    cgiwrap is logged, and that they will be responsible for what their
+    scripts do.

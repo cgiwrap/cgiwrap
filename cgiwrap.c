@@ -1,10 +1,7 @@
 /******************************************************************/
 /* CGI Wrapper Program to allow access to scripts on HTTPD server */
 /* Written by:  Nathan Neulinger  <nneul@umr.edu>                 */
-/*                                                                */
-/* Thanks to  legalize@xmission.com for sample source and         */
-/* suggestion for PATH_INFO handling                              */
-/*                                                                */
+/* Includes many fixes and improvements as suggested by users     */
 /*----------------------------------------------------------------*/
 /* Provides various levels of security depending on which options */
 /* are chosen in config.h                                         */
@@ -19,13 +16,18 @@
 /*    YYYY is the name of the script itself                       */ 
 /******************************************************************/
 
-/******************************************************************/
-/* Changes since 1.0:                                             */
-/*   Added support for PATH_INFO specification of user/script     */
-/*   Added stderr redirection to stdout                           */
-/*   Added option for doing debugging output by cmd name          */
-/*   Added option to use exec or system calls                     */
-/******************************************************************/
+/******************************************************************
+* Changes since 1.0:                                             
+*   Added support for PATH_INFO specification of user/script     
+*   Added stderr redirection to stdout                           
+*   Added option for doing debugging output by cmd name          
+*   Added option to use exec or system calls                     
+* Changes since 2.0:
+*   Fixed ~ bug						
+*   Added PATH_INFO and SCRIPT_NAME rewrite code                
+*   Added SETGROUPS option to config
+*   Added RLIMIT option to config
+******************************************************************/
 
 
 #include <stdio.h>     /* For passing data into called script */
@@ -38,8 +40,13 @@
 #include <strings.h>    /* String stuff */
 #include <sys/stat.h>  /* For file stating */
 #include <sys/time.h>  /* Time for logging stuff */
+#include <ctype.h> 
 
 #include "config.h"    /* Configuration Options */
+
+#ifdef SET_RLIMIT
+#include <sys/resource.h>	/* rlimit */
+#endif
 
 
 /* Global Variables */
@@ -205,18 +212,24 @@ void ExtractPathInfo(char **userStr, char **scrStr )
 	char *dataStr;
 	char *tempStr;
 	char *pathStr;
-	static char putEnvString[500];
+	char *buf;
+	static char putEnvString[500]; /* for PATH_INFO */
+	static char putEnvString2[500]; /* for SCRIPT_NAME */
 
 	int i;
 
 	pathStr = mystrcpy( (char *) getenv("PATH_INFO"));
 	tempStr = mystrcpy(pathStr);
 
+	DEBUG_Str("   PATH_INFO: ", (char *) getenv("PATH_INFO"));
+	DEBUG_Str("   SCRIPT_NAME: ", (char *) getenv("SCRIPT_NAME"));
+
 	*userStr = (char *) strtok(tempStr, "/"); /* Get usestring */
 	*scrStr = (char *) strtok( (char *) 0, "/"); /* Get script string */
 
 	tempStr = (char *) strtok( (char *) 0, "/");
 
+#if 0
 	if (tempStr)
 	{
 		strcpy(pathStr, "/");
@@ -226,12 +239,18 @@ void ExtractPathInfo(char **userStr, char **scrStr )
 	{
 		strcpy(pathStr, "");
 	}
+#endif
+
+/* new version 2.1 */
+	tempStr = pathStr + strlen(*userStr) + strlen(*scrStr) + 2;
+	strcpy(pathStr, tempStr ? tempStr : "");
+/**/
 
 	if (*userStr)
 	{
 		if (*userStr[0] == '~')
 		{
-			userStr++;
+			(*userStr)++;
 		}
 	}
 	
@@ -244,6 +263,22 @@ void ExtractPathInfo(char **userStr, char **scrStr )
 
 	sprintf(putEnvString, "%s=%s", "PATH_INFO", pathStr);
 	putenv(putEnvString);
+
+       DEBUG_Msg("\nAdding user and script to SCRIPT_NAME env. var.\n");
+
+       buf = (char*) malloc (strlen(getenv("SCRIPT_NAME"))
+			+strlen(*userStr)+strlen(*scrStr)+3);
+       if( !buf )
+       {
+           DoError("Couldn't malloc memory for SCRIPT_NAME buf!");
+       }
+       sprintf(buf, "%s/%s/%s", getenv("SCRIPT_NAME"), *userStr, *scrStr);
+
+       DEBUG_Str("   SCRIPT_NAME: ", buf);
+
+       sprintf(putEnvString2, "%s=%s", "SCRIPT_NAME", buf);
+       putenv(putEnvString2);
+       free(buf);
 }
 
 
@@ -301,6 +336,11 @@ void main (int argc, char *argv[])
 	int debugExtLen;
 	int cmdLen;
 	int tempLength;
+
+#ifdef SET_RLIMIT
+	struct rlimit rlim = RLIMIT_SETTING; /* Set CPU timeout */
+#endif
+
 
 /* Determine if debugging output should be done */
 #ifdef DEBUG_BY_NAME
@@ -430,6 +470,10 @@ void main (int argc, char *argv[])
 	setresuid( user->pw_uid, user->pw_uid, user->pw_uid );
 #endif
 
+#ifdef SETGROUPS
+	if ( setgroups(0, NULL) == -1 )
+		DoError("setgroups() failed!");
+#endif
 
 	DEBUG_Msg("\nUIDs/GIDs Changed To:");
 	DEBUG_Int("   RUID:", getuid());
@@ -528,6 +572,13 @@ void main (int argc, char *argv[])
 #endif
 
 
+	/*
+	 * Set CPU limit
+	 */
+#ifdef SET_RLIMIT
+	setrlimit( RLIMIT_CPU, &rlim );
+#endif
+
 
 	/***/
 	/**   Prepend "./" onto the script string so it can be executed without */
@@ -544,8 +595,10 @@ void main (int argc, char *argv[])
 	/**   can start up perl and other things... */
 	/***/
 
+	DEBUG_Str("   Exec String: ", execStr);
 	DEBUG_Msg("\n\nOutput of script follows:");
 	DEBUG_Msg("=====================================================");
+
 
 #ifdef USE_SYSTEM
 	scriptErr = system(execStr);
