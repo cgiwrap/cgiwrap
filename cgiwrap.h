@@ -8,41 +8,43 @@
 #include <signal.h>		/* For signals stuff */
 #include <errno.h>
 
-#if defined(I_STDLIB)
+#if defined(HAVE_STDLIB_H)
 #include <stdlib.h>	/* Standard library functions */
 #endif
 
-#if defined(I_PWD)
+#if defined(HAVE_PWD_H)
 #include <pwd.h>	/* For getting uids from username */
 #endif
 
-#if defined(I_UNISTD)
+#if defined(HAVE_UNISTD_H)
 #include <unistd.h>	/* Stuff for setting uid      */
 #endif
 
-#if defined(I_SYS_TYPES)
+#if defined(HAVE_SYS_TYPES_H)
 #include <sys/types.h>	/* Types for uid and stuff */
 #endif
 
-#if defined(I_LIMITS)
+#if defined(HAVE_LIMITS_H)
 #include <limits.h>	/* Limit on directory length and stuff */
 #endif
 
-#if defined(I_STRING)		/* string routines */
+#if defined(HAVE_STRING_H)		/* string routines */
 #include <string.h>
-#else
+#elif defined(HAVE_STRINGS_H) 
 #include <strings.h>
 #endif
 
-#if defined(I_SYS_TIME)
+#if defined(HAVE_SYS_TIME_H)
 #include <sys/time.h>	/* Time for logging stuff */
 #endif
 
-#if defined(I_SYS_RESOURCE)	/* For rlimit use */
+#if defined(HAVE_SYS_RESOURCE_H)	/* For rlimit use */
 #include <sys/resource.h>
 #endif
 
+#if defined(HAVE_SYSLOG_H)
 #include <syslog.h>
+#endif
 
 /*
  * Local headers for prototypes and defines

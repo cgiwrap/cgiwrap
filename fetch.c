@@ -60,7 +60,7 @@ char *FetchUserString(void)
 
 	if ( !userStr ) /* nothing at all found */
 	{
-		DoError("Couldn't find user and script name, check your URL.");
+		MSG_Error_General("Couldn't find user and script name, check your URL.");
 	}
 
 	return userStr;
@@ -115,7 +115,7 @@ char *FetchScriptString( char *basedir )
 
 	if ( !scrStr ) /* nothing at all found */
 	{
-		DoError("Couldn't find script name, check your URL.");
+		MSG_Error_General("Couldn't find script name, check your URL.");
 	}
 
 	/** Now, need to split out PATH_INFO from the script name */
@@ -139,7 +139,7 @@ char *FetchScriptString( char *basedir )
 
 	if ( max < 1 )
 	{
-		DoError("Script File Not Found!");
+		MSG_Error_General("Script File Not Found!");
 	}
 
 	/* Figure out the PATH_INFO and the script name */

@@ -1,0 +1,117 @@
+/* config.h.in.  Generated automatically from configure.in by autoheader.  */
+
+/* Define if you have the ANSI C header files.  */
+#undef STDC_HEADERS
+
+/* 
+ * httpd user check
+ */
+#undef CONF_CHECK_HTTPD_USER
+#undef CONF_HTTPD_USER 
+
+/*
+ * Script checks
+ */
+#undef CONF_CHECK_SCRUID
+#undef CONF_CHECK_SCRGID
+#undef CONF_CHECK_SCRSUID
+#undef CONF_CHECK_SCRSGID
+#undef CONF_CHECK_SCRGWRITE
+#undef CONF_CHECK_SCROWRITE
+#undef CONF_CHECK_SYMLINK
+
+/*
+ * Logging options
+ */
+#undef CONF_LOG_USEFILE
+#undef CONF_LOG_USESYSLOG
+#undef CONF_LOG_LOGFILE
+#undef CONF_LOG_LABEL
+
+/*
+ * Function availability
+ */
+#undef HAS_SIGSET
+#undef HAS_INITGROUPS
+#undef HAS_SETGROUPS
+#undef HAS_SETGID
+#undef HAS_SETUID
+#undef HAS_SETEGID
+#undef HAS_SETEUID
+#undef HAS_SETRGID
+#undef HAS_SETRUID
+#undef HAS_SETREGID
+#undef HAS_SETREUID
+#undef HAS_SETRESGID
+#undef HAS_SETRESUID
+#undef HAS_PERROR
+#undef HAS_STRDUP
+#undef HAS_SYSLOG
+#undef HAS_SETRLIMIT
+#undef HAS_STRERROR
+
+/*
+ * Various options
+ */
+#undef CONF_FIXED_PATHTRANS
+#undef CONF_REDIR_STDERR
+#undef CONF_SUBDIRS
+#undef CONF_USERDIRFILE
+#undef CONF_INITGROUPS
+#undef CONF_SETGROUPS
+#undef CONF_ALLOWFILE
+#undef CONF_DENYFILE
+#undef CONF_CHECKHOSTS
+#undef CONF_AFS_SETPAG
+#undef CONF_CGIDIR
+
+/*
+ * RLimit Options
+ */
+#undef CONF_USE_RLIMIT_ANY
+#undef CONF_USE_RLIMIT_AS
+#undef CONF_USE_RLIMIT_CPU
+#undef CONF_USE_RLIMIT_VMEM
+#undef CONF_USE_RLIMIT_FSIZE
+#undef CONF_USE_RLIMIT_DATA
+#undef CONF_USE_RLIMIT_STACK
+#undef CONF_USE_RLIMIT_CORE
+#undef CONF_USE_RLIMIT_RSS
+#undef CONF_USE_RLIMIT_NPROC
+#undef CONF_USE_RLIMIT_NOFILE
+#undef CONF_USE_RLIMIT_MEMLOCK
+
+/*
+ * OS Specific Definitions
+ */
+#undef _HPUX_SOURCE
+
+/* Define if you have the <limits.h> header file.  */
+#undef HAVE_LIMITS_H
+
+/* Define if you have the <pwd.h> header file.  */
+#undef HAVE_PWD_H
+
+/* Define if you have the <stdlib.h> header file.  */
+#undef HAVE_STDLIB_H
+
+/* Define if you have the <string.h> header file.  */
+#undef HAVE_STRING_H
+
+/* Define if you have the <strings.h> header file.  */
+#undef HAVE_STRINGS_H
+
+/* Define if you have the <sys/resource.h> header file.  */
+#undef HAVE_SYS_RESOURCE_H
+
+/* Define if you have the <sys/time.h> header file.  */
+#undef HAVE_SYS_TIME_H
+
+/* Define if you have the <sys/types.h> header file.  */
+#undef HAVE_SYS_TYPES_H
+
+/* Define if you have the <syslog.h> header file.  */
+#undef HAVE_SYSLOG_H
+
+/* Define if you have the <unistd.h> header file.  */
+#undef HAVE_UNISTD_H
