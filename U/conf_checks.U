@@ -1,9 +1,5 @@
-?MAKE:d_conf_check_gid d_conf_check_scruid d_conf_check_scrgid d_conf_check_scrsuid d_conf_check_scrsgid d_conf_check_scrmode: cat contains Setvar Myread Oldconfig 
+?MAKE:d_conf_check_scruid d_conf_check_scrgid d_conf_check_scrsuid d_conf_check_scrsgid d_conf_check_scrmode: cat contains Setvar Myread Oldconfig 
 ?MAKE:	-pick add $@ %<
-?S:d_conf_check_gid:
-?S:	If defined, cgiwrap will verify that the real and effective
-?S:	GID actually changed.
-?S:.
 ?S:d_conf_check_scruid:
 ?S:	If defined, cgiwrap will verify that owner of the script matches
 ?S:	the UID it switched to.
@@ -21,10 +17,6 @@
 ?S:d_conf_check_scrmode:
 ?S:	If defined, cgiwrap will verify that the script is executable.
 ?S:.
-?C:CONF_CHECK_GID:
-?C:	If defined, cgiwrap will verify that the real and effective
-?C:	GID actually changed.
-?C:.
 ?C:CONF_CHECK_SCRUID:
 ?C:	If defined, cgiwrap will verify that owner of the script matches
 ?C:	the UID it switched to.
@@ -42,7 +34,6 @@
 ?C:CONF_CHECK_SCRMODE:
 ?C:	If defined, cgiwrap will verify that the script is executable.
 ?C:.
-?H:#$d_conf_check_gid CONF_CHECK_GID		/**/
 ?H:#$d_conf_check_scruid CONF_CHECK_SCRUID		/**/
 ?H:#$d_conf_check_scrgid CONF_CHECK_SCRGID		/**/
 ?H:#$d_conf_check_scrsuid CONF_CHECK_SCRSUID		/**/
@@ -69,28 +60,6 @@ setgid.
 If any of these checks fail, the script will not be executed.
 
 EOM
-
-
-case "$d_conf_check_gid" in
-"") dflt='y' ;;
-"define") dflt='y' ;;
-"undef") dflt='n' ;;
-*) dflt='n' ;;
-esac
-
-
-rp="Verify that real and effective GIDs were changed?"
-. ./myread
-
-case "$ans" in
-y|Y) val="$define" ;;
-*) val="$undef" ;;
-esac
-
-set d_conf_check_gid
-eval $setvar
-
-#-------------------
 
 case "$d_conf_check_scruid" in
 "") dflt='y' ;;

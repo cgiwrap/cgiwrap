@@ -1,0 +1,34 @@
+?RCS: $Id$
+?RCS:
+?RCS: Copyright (c) 1991-1993, Raphael Manfredi
+?RCS: 
+?RCS: You may redistribute only under the terms of the Artistic Licence,
+?RCS: as specified in the README file that comes with the distribution.
+?RCS: You may reuse parts of this distribution only within the terms of
+?RCS: that same Artistic Licence; a copy of which may be found at the root
+?RCS: of the source tree for dist 3.0.
+?RCS:
+?RCS: $Log$
+?RCS: Revision 1.1  1996/05/31 15:25:07  nneul
+?RCS: Committing cgiwrap-3.11
+?RCS: Skipped the 3.1 source tar didn't have it
+?RCS:
+?RCS: Revision 3.0  1993/08/18  12:07:14  ram
+?RCS: Baseline for dist 3.0 netwide release.
+?RCS:
+?MAKE:d_sigset: Inlibc
+?MAKE:	-pick add $@ %<
+?S:d_sigset:
+?S:	This variable conditionally defines the HAS_SIGSET symbol, which
+?S:	indicates to the C program that the sigset() routine is available.
+?S:.
+?C:HAS_SIGSET:
+?C:	This symbol, if defined, indicates that the sigset routine is available.
+?C:.
+?H:#$d_sigset HAS_SIGSET		/**/
+?H:.
+?LINT:set d_sigset
+: see if sigset exists
+set sigset d_sigset
+eval $inlibc
+

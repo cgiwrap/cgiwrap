@@ -29,7 +29,13 @@ on, cgiwrap will exit.
 
 EOM
 
-dflt='y'
+case "$d_check_httpd_user" in
+'')     dflt="y" ;;
+define)	dflt="y" ;;
+undef)	dflt="n" ;;
+*)      dflt="$d_check_httpd_user" ;;
+esac
+
 rp="Verify cgiwrap executed by server?"
 . ./myread
 

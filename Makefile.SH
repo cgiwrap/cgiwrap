@@ -28,25 +28,25 @@ $spitshell >Makefile <<!GROK!THIS!
 # Other Compiler Flags
 #
 CC= $cc
-CCFLAGS= $ccflags
-CPPFLAGS= $cppflags
-LDFLAGS= $ldflags
-LIBS= $libs
-AFSCCOPTS= $afsccopts
-AFSLDOPTS= $afsldopts
-AFSLIBS= $afslibs
+CCFLAGS= $ccflags $afsccopts
+LDFLAGS= $ldflags $afsldopts
+LIBS= $afslibs $libs
+
+#
+# Object Files
+#
+OBJS=cgiwrap.o debug.o allowdeny.o util.o
 
 #
 # Dependencies and rules
 #
 all: cgiwrap
 
-.c.o:
-	$(CC) -c $(CFLAGS) $(CPPFLAGS) $(AFSCCOPTS) $<
+.c.o: cgiwrap.h config.h Makefile
+	$(CC) -c $(CFLAGS) $<
 
-cgiwrap: debug.o cgiwrap.o util.o
-	$(CC) cgiwrap.o debug.o util.o $(LDFLAGS) $(AFSLDOPTS) \
-		$(AFSLIBS) $(LIBS) -o cgiwrap
+cgiwrap: $(OBJS)
+	$(CC) $(OBJS) $(LDFLAGS) $(LIBS) -o cgiwrap
 
 clean:
 	rm -f *.o *.tar cgiwrap.cat cgiwrap core
@@ -54,12 +54,10 @@ clean:
 realclean:
 	rm -f Makefile cppstdin Wanted config.h 
 
-#
-# Dependencies to get it to rebuild if you reconfigure
-#
-debug.o: cgiwrap.h config.h Makefile
-cgiwrap.o: cgiwrap.h config.h Makefile
-util.o: cgiwrap.h config.h Makefile
+reconf: clean
+	./Configure -S
+
+remake: reconf all
 
 !GROK!THIS!
 

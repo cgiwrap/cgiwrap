@@ -10,15 +10,19 @@ Type "make"
 Copy cgiwrap executable to your servers cgi-bin directory
 
 Hardlink or symlink nph-cgiwrap, nph-cgiwrapd, cgiwrapd to cgiwrap in the 
- cgi-bin directory.
+cgi-bin directory.
 
 # THIS STEP MUST BE PERFORMED WHILE LOGGED IN AS "root"
 Make cgiwrap owned by root, executable by all, and setuid.
 	chown root cgiwrap
 	chmod 4755 cgiwrap
 
+You can, if you wish, install it with less permissive permissions. (Eg. 
+4750) But if you do this, make sure that the group of cgiwrap is the same 
+as the group that the server runs as.
 
 ---- 
+
 Special additional instructions for installing a copy of cgiwrap that 
 allows users to create access controlled scripts. For this to work, you 
 will need to have a single common password file that will be used by all 

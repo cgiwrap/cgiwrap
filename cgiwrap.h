@@ -3,37 +3,38 @@
 #include <stdio.h>		/* For passing data into called script */
 #include <ctype.h> 
 #include <sys/stat.h>		/* For file stating */
+#include <signal.h>		/* For signals stuff */
 
 #if defined(I_STDLIB)
-	#include <stdlib.h>	/* Standard library functions */
+#include <stdlib.h>	/* Standard library functions */
 #endif
 
 #if defined(I_PWD)
-	#include <pwd.h>	/* For getting uids from username */
+#include <pwd.h>	/* For getting uids from username */
 #endif
 
 #if defined(I_UNISTD)
-	#include <unistd.h>	/* Stuff for setting uid      */
+#include <unistd.h>	/* Stuff for setting uid      */
 #endif
 
 #if defined(I_SYS_TYPES)
-	#include <sys/types.h>	/* Types for uid and stuff */
+#include <sys/types.h>	/* Types for uid and stuff */
 #endif
 
 #if defined(I_LIMITS)
-	#include <limits.h>	/* Limit on directory length and stuff */
+#include <limits.h>	/* Limit on directory length and stuff */
 #endif
 
 #if defined(I_STRING)		/* string routines */
-	#include <string.h>
+#include <string.h>
 #else
-	#include <strings.h>
+#include <strings.h>
 #endif
 
 #if defined(I_SYS_TIME)
-	#include <sys/time.h>	/* Time for logging stuff */
+#include <sys/time.h>	/* Time for logging stuff */
 #endif
 
 #if defined(I_SYS_RESOURCE)	/* For rlimit use */
-	#include <sys/resource.h>
+#include <sys/resource.h>
 #endif

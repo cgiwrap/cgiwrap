@@ -5,3 +5,4 @@
 
 extern int CONF_DEBUG;
 void MyPError(void);
+char *mystrcpy(char *);

@@ -13,9 +13,9 @@
 #include <ctype.h> 
 
 #if defined(I_STRING)		/* string routines */
-	#include <string.h>
+#include <string.h>
 #else
-	#include <strings.h>
+#include <strings.h>
 #endif
 
 

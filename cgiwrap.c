@@ -17,13 +17,37 @@ extern int CONF_DEBUG;
 /***/
 void SetLimits(void)
 {
-#if defined(CONF_USE_RLIMIT) && defined(RLIMIT_CPU)
-	struct rlimit rlim = { 9, 10 }; /* Set CPU timeout */
+#if defined(CONF_USE_RLIMIT_CPU) && defined(RLIMIT_CPU)
+	struct rlimit cpulim = { 9, 10 }; /* Set CPU timeout */
+#endif
 
+#if defined(CONF_USE_RLIMIT_VMEM) && defined(RLIMIT_VMEM)
+	struct rimit vmemlim = { 2000000, 2500000 }; /* Set max VMEM */
+#endif
+
+#if defined(CONF_USE_RLIMIT_CPU) && defined(RLIMIT_CPU)
 	DEBUG_Msg("\nSetting Limits (CPU)\n");
-	setrlimit( RLIMIT_CPU, &rlim );
+	setrlimit( RLIMIT_CPU, &cpulim );
+#endif
+
+#if defined(CONF_USE_RLIMIT_CPU) && defined(RLIMIT_VMEM)
+	DEBUG_Msg("\nSetting Limits (VMEM)\n");
+	setrlimit( RLIMIT_VMEM, &vmemlim );
 #endif
 }
+
+
+/***/
+/** Set any default signals needed
+/***/
+void SetSignals(void)
+{
+#if defined(SIGXCPU) && defined(HAS_SIGSET)
+	DEBUG_Msg("\nSetting SIGXCPU to default behaviour\n");
+	sigset(SIGXCPU, SIG_DFL);
+#endif
+}
+
 
 /***/
 /** Send a content-type header if it hasn't been already
@@ -43,12 +67,12 @@ void SendHeader(char *type)
 /***/
 /**  Do an error message
 /***/
-void DoError (char *msg)
+void DoPError (char *msg)
 {
 	SendHeader("text/plain");
 	printf("\n");
 
-        printf("CGI Wrapper Error: %s \n", msg);
+        printf("CGIwrap Error: %s \n", msg);
 	printf("Error: ");
 	MyPError();
 	printf("\n");
@@ -57,12 +81,24 @@ void DoError (char *msg)
 }
 
 
+/***/
+/**  Do an error message
+/***/
+void DoError (char *msg)
+{
+	SendHeader("text/plain");
+	printf("\n");
+
+        printf("CGIwrap Error: %s \n", msg);
+        exit(1);
+}
+
 
 
 /***/
 /**   Log a request to the log file. */
 /***/
-void Log (char *user, char *script )
+void Log (char *user, char *script, char *msg)
 {
 
 	time_t timevar;
@@ -72,7 +108,7 @@ void Log (char *user, char *script )
 
 	if ( (logFile = fopen(CONF_LOGFILE, "a")) == NULL )
 	{
-		DoError("Could not open log file for appending!");
+		DoPError("Could not open log file for appending!");
 		exit(1);
 	}
 
@@ -82,12 +118,13 @@ void Log (char *user, char *script )
 	fprintf(logFile, "%s\t", NullCheck( script ) );
 	fprintf(logFile, "%s\t", NullCheck( getenv("REMOTE_HOST") ) );
 	fprintf(logFile, "%s\t", NullCheck( getenv("REMOTE_ADDR") ) );
+	fprintf(logFile, "%s\t", NullCheck( getenv("REMOTE_USER") ) );
+	fprintf(logFile, "%s\t", NullCheck( msg ) );
 
 	time(&timevar);
 	fprintf(logFile, "%s", ctime(&timevar) );
 
 	DEBUG_Msg("   Closing log file.");
-
 	fclose(logFile);
 
 	DEBUG_Msg("   Done logging request.");
@@ -95,24 +132,6 @@ void Log (char *user, char *script )
 }
 
 
-
-
-/***/
-/**   Copy a string into a newly allocated block of memory */
-/***/
-char *mystrcpy(char *str)
-{
-	char *temp;
-
-	temp = (char *) malloc ( strlen(str) + 1 );
-	if (!temp)
-	{
-		DoError("Couldn't malloc memory for string!");
-	}
-	strcpy(temp,str);
-
-	return temp;
-}
 
 
 
@@ -203,7 +222,7 @@ void ExtractPathInfo(char **userStr, char **scrStr )
 			+strlen(*userStr)+strlen(*scrStr)+3);
        if( !buf )
        {
-           DoError("Couldn't malloc memory for SCRIPT_NAME buf!");
+           DoPError("Couldn't malloc memory for SCRIPT_NAME buf!");
        }
 
        sprintf(buf, "%s/%s/%s", getenv("SCRIPT_NAME"), *userStr, *scrStr);
@@ -323,6 +342,9 @@ void main (int argc, char *argv[])
 #endif
 
 
+	/* Set any default signal behavior */
+	SetSignals();
+
 	/* Set CPU and other limits */
 	SetLimits();
 
@@ -395,6 +417,22 @@ void main (int argc, char *argv[])
 	DEBUG_StrStr("Sanitize script name:", oldscrStr, Sanitize(scrStr));
 
 
+	/***/
+	/**  Restrict users or allow users based on file containing */
+	/**  list of userids, or on NIS group */
+	/***/
+	if ( ! CheckAllowUser(userStr) )
+	{
+		Log(userStr, scrStr, "not in allow config");
+		DoError("User not in allow config.");
+	}
+
+	if ( CheckDenyUser(userStr) )
+	{
+		Log(userStr, scrStr, "user in deny config");
+		DoError("User in deny config.");
+	}
+		
 
 
 	/***/
@@ -402,7 +440,7 @@ void main (int argc, char *argv[])
 	/***/
 #if defined(CONF_LOG_REQUESTS)
 	DEBUG_Msg("\nLog Request");
-	Log(userStr, scrStr);
+	Log(userStr, scrStr, "ok");
 #endif 
 
 
@@ -429,95 +467,26 @@ void main (int argc, char *argv[])
 
 #if defined(HAS_SETGROUPS)
 	if ( setgroups(0, NULL) == -1 )
-		DoError("setgroups() failed!");
+		DoPError("setgroups() failed!");
 #endif
 
 #if defined(HAS_INITGROUPS) & defined(CONF_SETGROUPS)
 	if ( initgroups( user->pw_name, user->pw_gid ) == -1 )
-		DoError("initgroups() failed!");
+		DoPError("initgroups() failed!");
 #endif
 
 
 	/***/
 	/**   Change real&effective UIDs to match username and group of that user */
 	/***/
-
-#if defined(HAS_SETRESGID)
-	setresgid( user->pw_gid, user->pw_gid, user->pw_gid );
-#endif
-
-#if defined(HAS_SETRESUID)
-	setresuid( user->pw_uid, user->pw_uid, user->pw_uid );
-#endif
-
-#if defined(HAS_SETREGID)
-	setregid( user->pw_gid, user->pw_gid );
-#endif
-
-#if defined(HAS_SETREUID)
-	setreuid( user->pw_uid, user->pw_uid );
-#endif
-
-#if defined(HAS_SETEGID)
-	setegid( user->pw_gid );
-#endif
-
-#if defined(HAS_SETEUID)
-	seteuid( user->pw_uid );
-#endif
-
-#if defined(HAS_SETRGID)
-	setrgid( user->pw_gid );
-#endif
-
-#if defined(HAS_SETRUID)
-	setruid( user->pw_uid );
-#endif
-
-
-	DEBUG_Msg("\nUIDs/GIDs Changed To:");
-	DEBUG_Int("   RUID:", getuid());
-	DEBUG_Int("   EUID:", geteuid());
-	DEBUG_Int("   RGID:", getgid());
-	DEBUG_Int("   EGID:", getegid()); 
-
-
-	/***/
-	/**   Check if RUID and EUID actually changed */
-	/***/
-	if ( getuid() != user->pw_uid ) 
-	{
-		DoError("Real UID could not be changed!");
-	}
-	else if ( geteuid() != user->pw_uid ) 
-	{
-		DoError("Effective UID could not be changed!");
-	}
-
-
-
-	/***/
-	/**   Check if EGID and RGID actually changed */
-	/***/
-#if defined(CONF_CHECK_GID)
-	if ( getgid() != user->pw_gid )
-	{
-		DoError("Real GID could not be changed!");
-	}
-	else if ( getegid() != user->pw_gid )
-	{
-		DoError("Effective GID could not be changed!");
-	}
-#endif
-
-
+	ChangeID(user->pw_uid, user->pw_gid);
 
 	/***/
 	/**   Change to home directory of that user */
 	/***/
 	if ( chdir( homeDir ) )
 	{
-		DoError("Could not chdir to home directory!");
+		DoPError("Could not chdir to home directory!");
 	}
 
 
@@ -528,7 +497,7 @@ void main (int argc, char *argv[])
 	/***/
 	if ( chdir( CONF_CGIDIR ) )
 	{
-		DoError("Could not chdir to script directory!");
+		DoPError("Could not chdir to script directory!");
 	}
 
 	curDir = (char *) getcwd(0,200);
@@ -543,7 +512,7 @@ void main (int argc, char *argv[])
 
 	if ( statErr = stat(scrStr, &fileStat) ) 
 	{
-		DoError("Could not stat script file!");
+		DoPError("Could not stat script file!");
 	}
 
 	DEBUG_Msg("\nResults of stat:");
@@ -620,11 +589,11 @@ void main (int argc, char *argv[])
 	/***/
 
 #if defined(CONF_USE_SYSTEM)
-	#if defined(HAS_SYSTEM)
-		scriptErr = system(execStr);
-	#else
-		DoError("system() call not available");
-	#endif
+#if defined(HAS_SYSTEM)
+	scriptErr = system(execStr);
+#else
+	DoError("system() call not available");
+#endif
 #else
 	scriptErr = execv(execStr, argv);   
 #endif

@@ -1,0 +1,32 @@
+Subject: A cgiwrap log analyser script
+To: nneul@umr.edu (Nathan Neulinger)
+Date: Mon, 4 Dec 1995 13:56:19 +1100 (EST)
+From: Lawrie.Brown@adfa.oz.au
+X-Url: http://www.adfa.oz.au/~lpb/Lawrie_Brown.html
+X-The-Answer: To Life, the Universe, and Everything . . . is 42
+Mime-Version: 1.0
+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-Length: 776       
+
+Hi Nathan,
+        another quick hack I did was to write a little perl script to
+help me analyse the cgiwrap logs. It outputs a little html document
+with a table summarising each distinct script (by filename) and the
+number of times it was called. Optionally (using the -t flag) it also
+does a variant of find on the script to indicate what type of script
+it is (to help paranoid sysadmins decide whether they should check it
+for security holes or not :-)
+
+Its usage is: 
+        cgiwrap_anal [-t] [logfile]
+               -t      check and display the type of each script
+               logfile to be analysed if not the default
+
+If you decide you like it and want to include it in the distribution,
+you'll want to have Configure customise the location of perl, log_file
+and conf_cgidir
+
+Cheers
+Lawrie

@@ -22,6 +22,10 @@ Alan Weiner (alweiner@clark.net):
 dlbewley@indyunix.iupui.edu:
 	Re-brought up issue of argv[] argument passing to scripts
 
+Dr Lawrie Brown, Lecturer <Lawrie.Brown@adfa.oz.au>
+	Numerous solaris fixes and suggestions, and log analyze script
+
+
 To anyone else I might have forgotton, I'm sorry. Please let me know and I
 will add you to this list.
 

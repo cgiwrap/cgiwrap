@@ -36,8 +36,8 @@ EOM
 
 case "$d_conf_using_afs" in
 "") dflt='n' ;;
-"define") dflt='y' ;;
-"undef") dflt='n' ;;
+define) dflt='y' ;;
+undef) dflt='n' ;;
 *) dflt="n"
 esac
 

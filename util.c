@@ -18,3 +18,91 @@ void MyPError (void)
 
 	printf(" (%d)", errno);
 }
+
+
+
+/***/
+/**   Change real&effective UIDs to match username and group of that user */
+/***/
+void ChangeID (int uid, int gid)
+{
+
+#if defined(CONF_USESET)
+/* dummy dependency for the moment */
+/* will possibly be changed in future */
+#endif
+
+
+#if defined(HAS_SETGID) && defined(HAS_SETUID)
+	setgid( gid );
+	setuid( uid );
+#elif defined(HAS_SETRESGID) && defined(HAS_SETRESUID)
+	setresgid( gid, gid, gid );
+	setresuid( uid, uid, uid );
+#elif defined(HAS_SETREGID) && defined(HAS_SETREUID)
+	setregid( gid, gid );
+	setreuid( uid, uid );
+#elif defined(HAS_SETEGID) && defined(HAS_SETEUID) && defined(HAS_SETRGID) && defined(HAS_SETRUID)
+	setegid( gid );
+	setrgid( gid );
+	seteuid( uid );
+	setruid( uid );
+#else
+	DoError("Configuration Error, No Way to Change IDs");
+#endif
+
+
+	DEBUG_Msg("\nUIDs/GIDs Changed To:");
+	DEBUG_Int("   RUID:", getuid());
+	DEBUG_Int("   EUID:", geteuid());
+	DEBUG_Int("   RGID:", getgid());
+	DEBUG_Int("   EGID:", getegid()); 
+
+
+	/***/
+	/**   Check if RUID and EUID actually changed */
+	/***/
+	if ( getuid() != uid ) 
+	{
+		DoError("Real UID could not be changed!");
+	}
+	else if ( geteuid() != uid ) 
+	{
+		DoError("Effective UID could not be changed!");
+	}
+
+
+
+	/***/
+	/**   Check if EGID and RGID actually changed */
+	/***/
+	if ( getgid() != gid )
+	{
+		DoError("Real GID could not be changed!");
+	}
+	else if ( getegid() != gid )
+	{
+		DoError("Effective GID could not be changed!");
+	}
+
+}
+
+
+
+/***/
+/**   Copy a string into a newly allocated block of memory */
+/***/
+char *mystrcpy(char *str)
+{
+        char *temp;
+
+        temp = (char *) malloc ( strlen(str) + 1 );
+        if (!temp)
+        {
+                DoPError("Couldn't malloc memory for string!");
+        }
+        strcpy(temp,str);
+
+        return temp;
+}
+

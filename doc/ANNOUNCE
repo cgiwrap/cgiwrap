@@ -20,17 +20,9 @@ almost any unix system.
 CGIwrap is now available at:
    ftp://ftp.cc.umr.edu/pub/cgi/cgiwrap/
 
-It also might be available at:
-   ftp://pluto.cc.umr.edu/pub/cgi/cgiwrap
-   ftp://ftp.rollanet.org/pub/cgi/cgiwrap
-
 Other CGI scripts I have written, and some scripts that have been 
 modified to work with cgiwrap more easily are available from:
    ftp://ftp.cc.umr.edu/pub/cgi
-
-More information, and some sample user instructions on how to use cgiwrap
-are available at:
-   http://www.umr.edu/~cgiwrap
 
 To subscribe to the CGIwrap mailing list, send a message containing the line:
 
@@ -39,7 +31,7 @@ SUBSCRIBE CGIWRAP  FirstName LastName
 to <listserv@rollanet.org>. Be sure to replace FirstName and LastName 
 with your first and last names. 
 
--- Nathan (nneul@umr.edu)
+-- Nathan Neulinger (nneul@umr.edu)
 
 
 

@@ -20,7 +20,7 @@
 
 # $Id$
 #
-# Generated on Thu Nov  2 21:34:44 CST 1995 [metaconfig 3.0 PL6]
+# Generated on Thu Dec 21 18:53:44 CST 1995 [metaconfig 3.0 PL6]
 
 cat >/tmp/c1$$ <<EOF
 ARGGGHHHH!!!!!
@@ -174,8 +174,11 @@ afsldopts=''
 afslibs=''
 d_conf_afs_setpag=''
 d_conf_using_afs=''
+allowfile=''
+d_conf_allowfile=''
+d_conf_denyfile=''
+denyfile=''
 conf_cgidir=''
-d_conf_check_gid=''
 d_conf_check_scrgid=''
 d_conf_check_scrmode=''
 d_conf_check_scrsgid=''
@@ -189,7 +192,9 @@ log_file=''
 d_conf_nosubdirs=''
 d_conf_redir_stderr=''
 d_conf_setgroups=''
-d_conf_use_rlimit=''
+d_conf_useset=''
+d_conf_use_rlimit_cpu=''
+d_conf_use_rlimit_vmem=''
 d_conf_use_system=''
 contains=''
 cppminus=''
@@ -209,8 +214,11 @@ d_sysernlst=''
 d_syserrlst=''
 d_system=''
 d_initgroups=''
+d_setgid=''
 d_setgroups=''
 d_setrlimit=''
+d_setuid=''
+d_sigset=''
 i_limits=''
 d_pwage=''
 d_pwchange=''
@@ -793,6 +801,7 @@ trylist="
 Mcc
 cpp
 date
+perl
 test
 uname
 "
@@ -970,7 +979,13 @@ on, cgiwrap will exit.
 
 EOM
 
-dflt='y'
+case "$d_check_httpd_user" in
+'')     dflt="y" ;;
+define)	dflt="y" ;;
+undef)	dflt="n" ;;
+*)      dflt="$d_check_httpd_user" ;;
+esac
+
 rp="Verify cgiwrap executed by server?"
 . ./myread
 
@@ -1031,8 +1046,8 @@ EOM
 
 case "$d_conf_using_afs" in
 "") dflt='n' ;;
-"define") dflt='y' ;;
-"undef") dflt='n' ;;
+define) dflt='y' ;;
+undef) dflt='n' ;;
 *) dflt="n"
 esac
 
@@ -1122,6 +1137,138 @@ esac
 
 $cat <<'EOM'
 
+The next question(s) deal with whether you want CGIwrap to restrict it's 
+usage only to userids that are listed in a configuration file. Unless you 
+need to only allow a very small group of users to user cgiwrap, or wish 
+to deny certain users the ability to use cgiwrap, I reccomend against 
+using this feature. 
+
+There are two optional files, an allow file or a deny file. If you enable 
+the option to check the allow file, only users listed in the allow file 
+will be allowed to use CGIwrap. If you enable the option to check the 
+deny file, all userids except those that are listed in the deny file will be
+allowed to use CGIwrap.
+
+The file format is one userid per line.
+
+EOM
+
+case "$d_conf_allowfile" in
+'')       dflt='n' ;;
+define)   dflt='y' ;;
+undef)    dflt='n' ;;
+*)        dflt='n'
+esac
+
+rp="Check Allow File?"
+. ./myread
+
+case "$ans" in
+y|Y) val="$define" ;;
+*) val="$undef" ;;
+esac
+
+set d_conf_allowfile
+eval $setvar
+
+
+
+case "$d_conf_allowfile" in
+define) 
+d_conf_denyfile="$undef"
+$cat <<'EOM'
+
+Now I need to know what file contains the list of userids that are to be
+allowed to use CGIwrap. 
+
+EOM
+
+
+#
+# Get the log file name
+#
+
+	case "$allowfile" in
+	'')	dflt="/usr/adm/cgiwrap.allow" ;;
+	*)	dflt="$allowfile" ;;
+	esac
+
+	rp="What file contains the list of userids to allow?"
+	. ./myread
+
+	allowfile="$ans"
+
+;;
+
+*) ;;
+esac
+
+
+
+
+case "$d_conf_allowfile" in
+undef)
+
+	case "$d_conf_denyfile" in
+	'')       dflt='n' ;;
+	define)   dflt='y' ;;
+	undef)    dflt='n' ;;
+	*)        dflt='n'
+	esac
+
+	rp="Check Deny File?"
+	. ./myread
+	
+	case "$ans" in
+	y|Y) val="$define" ;;
+	*) val="$undef" ;;
+	esac
+	
+	set d_conf_denyfile
+	eval $setvar
+
+
+
+	case "$d_conf_denyfile" in
+	define)
+
+
+$cat <<'EOM'
+
+Now I need to know what file contains the list of userids that are to be
+denied use of CGIwrap. 
+
+EOM
+
+
+
+#
+# Get the log file name
+#
+
+		case "$denyfile" in
+		'')	dflt="/usr/adm/cgiwrap.deny" ;;
+		*)	dflt="$denyfile" ;;
+		esac
+
+		rp="What file contains the list of userids to deny?"
+		. ./myread
+
+		denyfile="$ans"
+
+	;;
+
+	*) ;;
+	esac
+
+;;
+
+*) ;;
+esac
+
+
+$cat <<'EOM'
+
 The next several questions are for enabling or disabling certain checks 
 that are made on both the cgiwrap uid change, and on the script itself.
 
@@ -1140,28 +1287,6 @@ setgid.
 If any of these checks fail, the script will not be executed.
 
 EOM
-
-
-case "$d_conf_check_gid" in
-"") dflt='y' ;;
-"define") dflt='y' ;;
-"undef") dflt='n' ;;
-*) dflt='n' ;;
-esac
-
-
-rp="Verify that real and effective GIDs were changed?"
-. ./myread
-
-case "$ans" in
-y|Y) val="$define" ;;
-*) val="$undef" ;;
-esac
-
-set d_conf_check_gid
-eval $setvar
-
-#-------------------
 
 case "$d_conf_check_scruid" in
 "") dflt='y' ;;
@@ -2334,13 +2459,23 @@ define)
 $cat <<'EOM'
 
 If you system supports the set_rlimit system call, cgiwrap can automatically
-limit the CPU usage by a cgi-script. If you know that your system 
+limit various resource usages by a cgi-script. If you know that your system 
 supports setrlimit, and you wish to enable this option, answer the next 
 question yes.
 
 EOM
 
-dflt='n'
+
+#
+# CPU Usage
+#
+case "$d_conf_use_rlimit_cpu" in
+'')	dflt="n" ;;
+define)	dflt="y" ;;
+undef)	dflt="n" ;;
+*)	dflt="n" ;;
+esac
+
 rp="Limit CPU usage with setrlimit?"
 . ./myread
 
@@ -2349,8 +2484,33 @@ y|Y) val="$define" ;;
 *) val="$undef" ;;
 esac
 
-set d_conf_use_rlimit
+set d_conf_use_rlimit_cpu
 eval $setvar
+
+
+#
+# Virtual Memory Usage
+#
+case "$d_conf_use_rlimit_vmem" in
+'')	dflt="n" ;;
+define)	dflt="y" ;;
+undef)	dflt="n" ;;
+*)	dflt="n" ;;
+esac
+
+rp="Limit Virtual Memory usage with setrlimit?"
+. ./myread
+
+case "$ans" in
+y|Y) val="$define" ;;
+*) val="$undef" ;;
+esac
+
+set d_conf_use_rlimit_vmem
+eval $setvar
+
+
+
 
 ;;
 
@@ -2392,6 +2552,124 @@ eval $setvar
 d_conf_system='' ;;
 
 esac
+: see if seteuid exists
+set seteuid d_seteuid
+eval $inlibc
+
+: see if setegid exists
+set setegid d_setegid
+eval $inlibc
+
+: see if setuid exists
+set setuid d_setuid
+eval $inlibc
+
+: see if setrgid exists
+set setgid d_setgid
+eval $inlibc
+
+: see if setruid exists
+set setruid d_setruid
+eval $inlibc
+
+: see if setrgid exists
+set setrgid d_setrgid
+eval $inlibc
+
+: see if setreuid exists
+set setreuid d_setreuid
+eval $inlibc
+set setresuid d_setresuid
+eval $inlibc
+
+: see if setregid exists
+set setregid d_setregid
+eval $inlibc
+set setresgid d_setresgid
+eval $inlibc
+
+$cat <<'EOM'
+
+In order to function, CGIwrap issues a library call to change the real 
+and effective uid and gid of the current process.
+
+Different systems have different calls available for doing this. 
+
+Your system has the following calls available:
+
+EOM
+
+d_conf_useset='define'
+
+# sete_
+if [ "$d_setegid" = "define" ]; then
+	echo "   setegid()"
+fi
+
+if [ "$d_seteuid" = "define" ]; then
+	echo "   seteuid()"
+fi
+
+# setre_
+if [ "$d_setreuid" = "define" ]; then
+	echo "   setreuid()"
+fi
+
+if [ "$d_setregid" = "define" ]; then
+	echo "   setregid()"
+fi
+
+# setres_
+if [ "$d_setresuid" = "define" ]; then
+	echo "   setresuid()"
+fi
+
+if [ "$d_setresgid" = "define" ]; then
+	echo "   setresgid()"
+fi
+
+# setr_
+if [ "$d_setruid" = "define" ]; then
+	echo "   setruid()"
+fi
+
+if [ "$d_setrgid" = "define" ]; then
+	echo "   setrgid()"
+fi
+
+# set_
+if [ "$d_setuid" = "define" ]; then
+	echo "   setuid()"
+fi
+
+if [ "$d_setgid" = "define" ]; then
+	echo "   setgid()"
+fi
+
+
+$cat <<'EOM'
+
+The CGIwrap source code uses the following logic to determine which
+set_ call to use. If this is not correct for your system, or you have 
+special needs: 1) Send me a note about it, particularly if it is a 
+problem with support for a particular machine. 2) Hand edit the config.sh 
+file to change the d_set*id to 'define' and 'undef' as appropriate for the
+configuration you desire.
+
+The first match in the following list is used:
+
+	setuid & setgid
+	setreuid & setregid
+	setresuid & setresgid
+	seteuid, setegid, setruid, & setrgid
+
+Regardless of which is chosen, CGIwrap as distributed WILL NOT allow
+the script to execute if the both the real and effective uid and gid have 
+change to those of the user owning the script. This way, even if cgiwrap 
+is configured totally wrong, it shouldn't be a security hole. 
+
+EOM
+
 $cat <<'EOM'
 
 Answer the next question yes if you want cgiwrap to log all CGI script
@@ -2442,32 +2720,8 @@ EOM
 *) ;;
 esac
 
-: see if setegid exists
-set setegid d_setegid
-eval $inlibc
-
-: see if seteuid exists
-set seteuid d_seteuid
-eval $inlibc
-
-: see if setregid exists
-set setregid d_setregid
-eval $inlibc
-set setresgid d_setresgid
-eval $inlibc
-
-: see if setreuid exists
-set setreuid d_setreuid
-eval $inlibc
-set setresuid d_setresuid
-eval $inlibc
-
-: see if setrgid exists
-set setrgid d_setrgid
-eval $inlibc
-
-: see if setruid exists
-set setruid d_setruid
+: see if sigset exists
+set sigset d_sigset
 eval $inlibc
 
 : see how we invoke the C preprocessor
@@ -3122,8 +3376,11 @@ afsldopts='$afsldopts'
 afslibs='$afslibs'
 d_conf_afs_setpag='$d_conf_afs_setpag'
 d_conf_using_afs='$d_conf_using_afs'
+allowfile='$allowfile'
+d_conf_allowfile='$d_conf_allowfile'
+d_conf_denyfile='$d_conf_denyfile'
+denyfile='$denyfile'
 conf_cgidir='$conf_cgidir'
-d_conf_check_gid='$d_conf_check_gid'
 d_conf_check_scrgid='$d_conf_check_scrgid'
 d_conf_check_scrmode='$d_conf_check_scrmode'
 d_conf_check_scrsgid='$d_conf_check_scrsgid'
@@ -3137,7 +3394,9 @@ log_file='$log_file'
 d_conf_nosubdirs='$d_conf_nosubdirs'
 d_conf_redir_stderr='$d_conf_redir_stderr'
 d_conf_setgroups='$d_conf_setgroups'
-d_conf_use_rlimit='$d_conf_use_rlimit'
+d_conf_useset='$d_conf_useset'
+d_conf_use_rlimit_cpu='$d_conf_use_rlimit_cpu'
+d_conf_use_rlimit_vmem='$d_conf_use_rlimit_vmem'
 d_conf_use_system='$d_conf_use_system'
 contains='$contains'
 cppminus='$cppminus'
@@ -3157,8 +3416,11 @@ d_sysernlst='$d_sysernlst'
 d_syserrlst='$d_syserrlst'
 d_system='$d_system'
 d_initgroups='$d_initgroups'
+d_setgid='$d_setgid'
 d_setgroups='$d_setgroups'
 d_setrlimit='$d_setrlimit'
+d_setuid='$d_setuid'
+d_sigset='$d_sigset'
 i_limits='$i_limits'
 d_pwage='$d_pwage'
 d_pwchange='$d_pwchange'

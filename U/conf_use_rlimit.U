@@ -1,14 +1,23 @@
-?MAKE:d_conf_use_rlimit: cat contains Setvar Myread Oldconfig d_setrlimit
+?MAKE:d_conf_use_rlimit_cpu d_conf_use_rlimit_vmem:cat contains Setvar Myread Oldconfig d_setrlimit
 ?MAKE:	-pick add $@ %<
-?S:d_conf_use_rlimit:
+?S:d_conf_use_rlimit_cpu:
 ?S:	Defined if you want cgiwrap to issue a set_rlimit call to limit
-?S:	the cgi script's usage of resources.
+?S:	the cgi script's usage of cpu resources.
 ?S:.
-?C:CONF_USE_RLIMIT:
+?S:d_conf_use_rlimit_vmem:
+?S:	Defined if you want cgiwrap to issue a set_rlimit call to limit
+?S:	the cgi script's usage of virtual memory resources.
+?S:.
+?C:CONF_USE_RLIMIT_CPU:
 ?C:	Defined if you want cgiwrap to issue a set_rlimit call to limit
-?C:	the cgi script's usage of resources.
+?C:	the cgi script's usage of cpu resources.
 ?C:.
-?H:#$d_conf_use_rlimit CONF_USE_RLIMIT		/**/
+?C:CONF_USE_RLIMIT_VMEM:
+?C:	Defined if you want cgiwrap to issue a set_rlimit call to limit
+?C:	the cgi script's usage of virtual memory resources.
+?C:.
+?H:#$d_conf_use_rlimit_cpu CONF_USE_RLIMIT_CPU	/**/
+?H:#$d_conf_use_rlimit_vmem CONF_USE_RLIMIT_VMEM	/**/
 ?H:.
 
 case "$d_setrlimit" in
@@ -18,13 +27,23 @@ define)
 $cat <<'EOM'
 
 If you system supports the set_rlimit system call, cgiwrap can automatically
-limit the CPU usage by a cgi-script. If you know that your system 
+limit various resource usages by a cgi-script. If you know that your system 
 supports setrlimit, and you wish to enable this option, answer the next 
 question yes.
 
 EOM
 
-dflt='n'
+
+#
+# CPU Usage
+#
+case "$d_conf_use_rlimit_cpu" in
+'')	dflt="n" ;;
+define)	dflt="y" ;;
+undef)	dflt="n" ;;
+*)	dflt="n" ;;
+esac
+
 rp="Limit CPU usage with setrlimit?"
 . ./myread
 
@@ -33,8 +52,33 @@ y|Y) val="$define" ;;
 *) val="$undef" ;;
 esac
 
-set d_conf_use_rlimit
+set d_conf_use_rlimit_cpu
 eval $setvar
+
+
+#
+# Virtual Memory Usage
+#
+case "$d_conf_use_rlimit_vmem" in
+'')	dflt="n" ;;
+define)	dflt="y" ;;
+undef)	dflt="n" ;;
+*)	dflt="n" ;;
+esac
+
+rp="Limit Virtual Memory usage with setrlimit?"
+. ./myread
+
+case "$ans" in
+y|Y) val="$define" ;;
+*) val="$undef" ;;
+esac
+
+set d_conf_use_rlimit_vmem
+eval $setvar
+
+
+
 
 ;;
 

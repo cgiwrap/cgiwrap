@@ -1,0 +1,14 @@
+The files in this directory were submitted by users of CGIwrap and are 
+not supported by me. Please direct any questions about them to the author 
+in question.
+
+-- Nathan Neulinger
+
+----------------------------------------------
+
+loganalyze.pl
+loganalyze.doc  
+	
+	CGIwrap log analysis perl script. You'll need to edit it 
+	to configure the location of the cgiwrap log file.
+

@@ -1,0 +1,157 @@
+?MAKE:d_conf_allowfile allowfile d_conf_denyfile denyfile : cat contains Setvar Myread Oldconfig 
+?MAKE:	-pick add $@ %<
+?S:d_conf_allowfile:
+?S:	Should we check an allow file
+?S:.
+?S:allowfile:
+?S:	Shell sym for allowfile filename
+?S:.
+?S:d_conf_denyfile:
+?S:	Should we check a deny file
+?S:.
+?S:denyfile:
+?S:	Shell sym for denyfile filename
+?S:.
+?C:CONF_ALLOWFILE:
+?C:	Defined to be the filename that cgiwrap checks to see what users are
+?C:	allowed to use cgiwrap scripts.
+?C:.
+?C:CONF_DENYFILE:
+?C:	Defined to be the filename that cgiwrap checks to see what users are
+?C:	not allowed to use cgiwrap scripts.
+?C:.
+?H:#$d_conf_allowfile CONF_ALLOWFILE "$allowfile"		/**/
+?H:#$d_conf_denyfile CONF_DENYFILE "$denyfile"		/**/
+?H:.
+$cat <<'EOM'
+
+The next question(s) deal with whether you want CGIwrap to restrict it's 
+usage only to userids that are listed in a configuration file. Unless you 
+need to only allow a very small group of users to user cgiwrap, or wish 
+to deny certain users the ability to use cgiwrap, I reccomend against 
+using this feature. 
+
+There are two optional files, an allow file or a deny file. If you enable 
+the option to check the allow file, only users listed in the allow file 
+will be allowed to use CGIwrap. If you enable the option to check the 
+deny file, all userids except those that are listed in the deny file will be
+allowed to use CGIwrap.
+
+The file format is one userid per line.
+
+EOM
+
+case "$d_conf_allowfile" in
+'')       dflt='n' ;;
+define)   dflt='y' ;;
+undef)    dflt='n' ;;
+*)        dflt='n'
+esac
+
+rp="Check Allow File?"
+. ./myread
+
+case "$ans" in
+y|Y) val="$define" ;;
+*) val="$undef" ;;
+esac
+
+set d_conf_allowfile
+eval $setvar
+
+
+
+case "$d_conf_allowfile" in
+define) 
+d_conf_denyfile="$undef"
+$cat <<'EOM'
+
+Now I need to know what file contains the list of userids that are to be
+allowed to use CGIwrap. 
+
+EOM
+
+
+#
+# Get the log file name
+#
+
+	case "$allowfile" in
+	'')	dflt="/usr/adm/cgiwrap.allow" ;;
+	*)	dflt="$allowfile" ;;
+	esac
+
+	rp="What file contains the list of userids to allow?"
+	. ./myread
+
+	allowfile="$ans"
+
+;;
+
+*) ;;
+esac
+
+
+
+
+case "$d_conf_allowfile" in
+undef)
+
+	case "$d_conf_denyfile" in
+	'')       dflt='n' ;;
+	define)   dflt='y' ;;
+	undef)    dflt='n' ;;
+	*)        dflt='n'
+	esac
+
+	rp="Check Deny File?"
+	. ./myread
+	
+	case "$ans" in
+	y|Y) val="$define" ;;
+	*) val="$undef" ;;
+	esac
+	
+	set d_conf_denyfile
+	eval $setvar
+
+
+
+	case "$d_conf_denyfile" in
+	define)
+
+
+$cat <<'EOM'
+
+Now I need to know what file contains the list of userids that are to be
+denied use of CGIwrap. 
+
+EOM
+
+
+
+#
+# Get the log file name
+#
+
+		case "$denyfile" in
+		'')	dflt="/usr/adm/cgiwrap.deny" ;;
+		*)	dflt="$denyfile" ;;
+		esac
+
+		rp="What file contains the list of userids to deny?"
+		. ./myread
+
+		denyfile="$ans"
+
+	;;
+
+	*) ;;
+	esac
+
+;;
+
+*) ;;
+esac
+
+

@@ -4,6 +4,27 @@
 /* Includes many fixes and improvements as suggested by users     */
 /******************************************************************/
 
+Changes since 3.1:
+   Fixed incrrectly indented # directives that were causing problems with
+some machines.
+
+Changes since 3.0:
+   Added CONF_ALLOWFILE and CONF_DENYFILE options.
+   Added logging of REMOTE_USER and a status message to the log file
+   Added an unsupported directory for user contributed scripts and add-ons
+   Restructured logic for which 'set' method gets used.
+   Removed option to not check if gid changed, it was an oversight that 
+this was left in. There isn't any case I know of that you wouldn't want 
+to check this.
+   Moved id setting routines into util.c
+   Added new source file for allow/deny code.
+   Removed some error output that didn't make sense (system error 
+messages that were getting returned when I issued a regular cgiwrap error)
+   Added a 'remake' target to the makefile which does a clean, then a 
+Configure -S, then a make all to rebuild he entire binary. This is useful 
+if you have multiple config.sh files (eg. you're building for several 
+setups from the same dir)
+
 Changes since 2.7:
    Set up Configure scripts for CGIwrap
    Renamed many of the config options to make more consistent

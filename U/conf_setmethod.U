@@ -1,0 +1,92 @@
+?MAKE:d_conf_useset : cat contains Setvar Myread Oldconfig d_seteuid d_setegid d_setuid d_setgid d_setruid d_setrgid d_setreuid d_setregid d_setresuid d_setresgid
+?MAKE:	-pick add $@ %<
+?S:d_conf_useset:
+?S:	Defined if you want cgiwrap to use the set_ calls.
+?S:.
+?C:CONF_USESET:
+?C:	Defined if you want cgiwrap to use the set_ calls.
+?C:.
+?H:#$d_conf_useset CONF_USESET           /**/
+?H:.
+$cat <<'EOM'
+
+In order to function, CGIwrap issues a library call to change the real 
+and effective uid and gid of the current process.
+
+Different systems have different calls available for doing this. 
+
+Your system has the following calls available:
+
+EOM
+
+d_conf_useset='define'
+
+# sete_
+if [ "$d_setegid" = "define" ]; then
+	echo "   setegid()"
+fi
+
+if [ "$d_seteuid" = "define" ]; then
+	echo "   seteuid()"
+fi
+
+# setre_
+if [ "$d_setreuid" = "define" ]; then
+	echo "   setreuid()"
+fi
+
+if [ "$d_setregid" = "define" ]; then
+	echo "   setregid()"
+fi
+
+# setres_
+if [ "$d_setresuid" = "define" ]; then
+	echo "   setresuid()"
+fi
+
+if [ "$d_setresgid" = "define" ]; then
+	echo "   setresgid()"
+fi
+
+# setr_
+if [ "$d_setruid" = "define" ]; then
+	echo "   setruid()"
+fi
+
+if [ "$d_setrgid" = "define" ]; then
+	echo "   setrgid()"
+fi
+
+# set_
+if [ "$d_setuid" = "define" ]; then
+	echo "   setuid()"
+fi
+
+if [ "$d_setgid" = "define" ]; then
+	echo "   setgid()"
+fi
+
+
+$cat <<'EOM'
+
+The CGIwrap source code uses the following logic to determine which
+set_ call to use. If this is not correct for your system, or you have 
+special needs: 1) Send me a note about it, particularly if it is a 
+problem with support for a particular machine. 2) Hand edit the config.sh 
+file to change the d_set*id to 'define' and 'undef' as appropriate for the
+configuration you desire.
+
+The first match in the following list is used:
+
+	setuid & setgid
+	setreuid & setregid
+	setresuid & setresgid
+	seteuid, setegid, setruid, & setrgid
+
+Regardless of which is chosen, CGIwrap as distributed WILL NOT allow
+the script to execute if the both the real and effective uid and gid have 
+change to those of the user owning the script. This way, even if cgiwrap 
+is configured totally wrong, it shouldn't be a security hole. 
+
+EOM
+
