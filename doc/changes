@@ -9,6 +9,9 @@
   
      * Fixed small problem with glibc2.1 and errno.h vs. sys/errno.h
      * Added simple chroot support for expert installations.
+     * Applied fix for path translated, removed option for not enabling
+       correct path_translated value.
+     * Added multiuser cgi script directory support.
        
   New in version 3.6.4:
   

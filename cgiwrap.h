@@ -95,6 +95,9 @@ struct cgiwrap_context
 
 	/* Previously opened log file */
 	FILE *logFile;
+
+	/* Is this script executing out of the multiuser cgi dir */
+	int multiuser_cgi_script;
 };
 extern struct cgiwrap_context Context;
 

@@ -49,14 +49,14 @@ char *FetchUserString(void)
 		}
 	}
 
-        /* Handle ~ notation */
-        if (userStr)
-        {
-                if (userStr[0] == '~')
-                {
-                        userStr++;
-                }
-        }
+/* Handle ~ notation */
+	if (userStr)
+	{
+		if (userStr[0] == '~')
+		{
+			userStr++;
+		}
+	}
 
 	if ( !userStr ) /* nothing at all found */
 	{
@@ -66,9 +66,6 @@ char *FetchUserString(void)
 	return userStr;
 }
 
-
-
-
 char *FetchScriptString( char *basedir )
 {
 	char *tempStr, *tempStr2;
@@ -76,7 +73,7 @@ char *FetchScriptString( char *basedir )
 	char *queryString;
 	char *scrStr;
 	struct stat fstat;
-	int i, max;
+	int i, max, max_user, max_multiuser;
 
 	scrStr = 0;
 	pathInfoString = getenv("PATH_INFO");
@@ -88,6 +85,8 @@ char *FetchScriptString( char *basedir )
 
 			scrStr = StripPathComponents(1,pathInfoString);
 			if ( ! strlen(scrStr) ) { scrStr = 0; }
+
+			DEBUG_Str("Extracted PATH_INFO", scrStr);
 		}
 		else
 		{
@@ -118,8 +117,12 @@ char *FetchScriptString( char *basedir )
 		MSG_Error_General("Couldn't find script name, check your URL.");
 	}
 
-	/** Now, need to split out PATH_INFO from the script name */
-	max = 0;
+	/* Initially neither a user nor a multiuser script was found */
+	max_user = 0;
+	max_multiuser = 0;
+
+	/* Split out PATH_INFO from the script name */
+	/* This pass searches the per-user script dir */
 	for (i=1; i<=(CountSubDirs(scrStr)+1) && i>0; i++)
 	{	
 		tempStr = GetPathComponents(i, scrStr);
@@ -127,7 +130,7 @@ char *FetchScriptString( char *basedir )
 
 		if ( !stat( tempStr2, &fstat ) )
 		{
-			max = i;
+			max_user = i;
 		} 		
 		else
 		{
@@ -135,11 +138,52 @@ char *FetchScriptString( char *basedir )
 		}
 		free(tempStr);
 		free(tempStr2);
-	}	
+	}
 
-	if ( max < 1 )
+#if defined(CONF_MULTIUSER_CGI_DIR)
+	/* Split out PATH_INFO from the script name */
+	/* This pass searches the per-user script dir */
+	for (i=1; i<=(CountSubDirs(scrStr)+1) && i>0; i++)
+	{	
+		tempStr = GetPathComponents(i, scrStr);
+		tempStr2 = BuildScriptPath(CONF_MULTIUSER_CGI_DIR,tempStr);
+
+		if ( !stat( tempStr2, &fstat ) )
+		{
+			max_multiuser = i;
+		} 		
+		else
+		{
+			i = -1;
+		}
+		free(tempStr);
+		free(tempStr2);
+	}
+#endif
+
+
+#if !defined(CONF_MULTIUSER_CGI_DIR)
+	if ( max_user < 1 )
+#else
+	if ( max_user < 1 && max_multiuser < 1 )
+#endif	
 	{
 		MSG_Error_General("Script File Not Found!");
+	}
+
+	/* Indicate to rest of cgiwrap which script was chosen */
+	/* Only use the multiuser one if it is more specific (more dirs in path) */
+#if defined(CONF_MULTIUSER_CGI_DIR)
+	if ( max_multiuser > 0 && max_multiuser > max_user )
+	{
+		DEBUG_Msg("Using multiuser cgi script.\n");
+		Context.multiuser_cgi_script = 1;
+		max = max_multiuser;
+	}
+	else
+#endif
+	{
+		max = max_user;
 	}
 
 	/* Figure out the PATH_INFO and the script name */

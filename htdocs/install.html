@@ -96,6 +96,13 @@ server's cgi-bin directory
 <DT>--with-cgi-dir=PATH
 <DD>path relative to home dir for cgi scripts
 
+<DT><B>--with-multiuser-cgi-dir=PATH</B>
+<DD>define a central cgi script directory that is searched if the script
+is not found in a user directory. This can be used to make a single script
+available that will run as any user, however, this can be very dangerous
+if you're not extremely careful designing your script. Do not enable
+this unless you know what you're doing. It is not needed for normal usage.
+
 <DT><B>--with-httpd-user=USER</B>
 <DD>define what userid the web server is running as - this is required
 
@@ -155,9 +162,6 @@ for more details.
 
 <DT>--with-rewrite=FILE
 <DD>use a file to rewrite user directories
-
-<DT>--without-fixed-path-translated
-<DD>don't fix the PATH_TRANSLATED variable (pre 3.5 behavior)
 
 <DT>--with-setenv-path=STRING
 <DD>set PATH environment variable to STRING

@@ -75,7 +75,6 @@
  * Various options
  */
 #undef CONF_MINIMUM_UID
-#undef CONF_FIXED_PATHTRANS
 #undef CONF_REDIR_STDERR
 #undef CONF_SUBDIRS
 #undef CONF_USERDIRFILE
@@ -87,6 +86,7 @@
 #undef CONF_CHECKSHELL
 #undef CONF_AFS_SETPAG
 #undef CONF_CGIDIR
+#undef CONF_MULTIUSER_CGI_DIR
 
 /*
  * RLimit Options

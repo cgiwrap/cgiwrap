@@ -31,6 +31,9 @@ int main (int argc, char *argv[])
 	time_t etime;
 	time_t elap_time;
 #endif
+	
+	/* Initially not a multiuser cgi script */
+	Context.multiuser_cgi_script = 0;
 
 	/* Determine if debugging output should be done */
 	if ( strlen(argv[0]) >= 1 )
@@ -107,14 +110,32 @@ int main (int argc, char *argv[])
 	DEBUG_Msg("");
 	cgiBaseDir = GetBaseDirectory(user);	
 	DEBUG_Str("Script Base Directory: ", cgiBaseDir);
+#if defined(CONF_MULTIUSER_CGI_DIR)
+	DEBUG_Str("MultiUser Script Base Directory: ", CONF_MULTIUSER_CGI_DIR);
+	if ( !DirExists(cgiBaseDir) &&
+		!DirExists(CONF_MULTIUSER_CGI_DIR) )
+#else
 	if ( !DirExists(cgiBaseDir) )
+#endif
 	{
 		MSG_Error_NoScriptDir();
 	}
 
 	/* Get the script name from the given data */
+DEBUG_Msg("\tFetching script string\n");
 	scrStr = FetchScriptString(cgiBaseDir);
-	scriptPath = BuildScriptPath(cgiBaseDir,scrStr);
+DEBUG_Msg("\tBuilding script path\n");
+#ifdef CONF_MULTIUSER_CGI_DIR
+	if ( Context.multiuser_cgi_script )
+	{
+		scriptPath = BuildScriptPath(CONF_MULTIUSER_CGI_DIR,scrStr);
+	}
+	else
+#endif
+	{
+		scriptPath = BuildScriptPath(cgiBaseDir,scrStr);
+	}
+DEBUG_Msg("\tCondensing slashes.\n");
 	Context.scriptFullPath = CondenseSlashes(scriptPath);
 	Context.scriptRelativePath = CondenseSlashes(scrStr);
 
@@ -125,7 +146,16 @@ int main (int argc, char *argv[])
 	DEBUG_Msg("\nFixing Environment Variables.");
 	SetScriptName(userStr, scrStr);
 	SetScriptFilename( scriptPath );
-	SetPathTranslated( cgiBaseDir, scriptPath );
+#if defined(CONF_MULTIUSER_CGI_DIR)
+	if ( Context.multiuser_cgi_script )
+	{
+		SetPathTranslated( CONF_MULTIUSER_CGI_DIR, scriptPath );
+	}
+	else
+#endif
+	{
+		SetPathTranslated( cgiBaseDir, scriptPath );
+	}
 
 	/* Output the modified environment variables */
 	OutputEnvironment();
@@ -154,7 +184,7 @@ int main (int argc, char *argv[])
 	/* Change real and effective user and group id's to match this user */
 	ChangeID(user);
 
-	/* Change to the user's cgi-bin directory */
+	/* Change to the directory the cgi script is in */
 	ChangeToCGIDir(scriptPath);
 
 	/* Check to see if ok to execute script file */
@@ -163,13 +193,6 @@ int main (int argc, char *argv[])
 	/* Perform any AFS related tasks before executing script */
 	Create_AFS_PAG();
 	
-#if 0
-	/* disabled, now using F_SETFD to set close-on-exec */
-	/* Close the log files - some thought to doing this below 
-		so could log failure */	
-	LogEnd();
-#endif
-
 	/* Execute the script */
 	DEBUG_Msg("\n\n");
 	DEBUG_Msg("Output of script follows:");

@@ -90,6 +90,14 @@
    --with-cgi-dir=PATH
           path relative to home dir for cgi scripts
           
+   --with-multiuser-cgi-dir=PATH
+          define a central cgi script directory that is searched if the
+          script is not found in a user directory. This can be used to
+          make a single script available that will run as any user,
+          however, this can be very dangerous if you're not extremely
+          careful designing your script. Do not enable this unless you
+          know what you're doing. It is not needed for normal usage.
+          
    --with-httpd-user=USER
           define what userid the web server is running as - this is
           required
@@ -151,9 +159,6 @@
           
    --with-rewrite=FILE
           use a file to rewrite user directories
-          
-   --without-fixed-path-translated
-          don't fix the PATH_TRANSLATED variable (pre 3.5 behavior)
           
    --with-setenv-path=STRING
           set PATH environment variable to STRING

@@ -325,7 +325,34 @@ AC_ARG_WITH( httpd-user,
 AC_DEFINE_UNQUOTED(CONF_HTTPD_USER, "$withval")
 AC_MSG_RESULT([server running as "$withval"])
 
+dnl
+dnl Checking for whether to have a multiuser cgi dir
+dnl
+AC_MSG_CHECKING(for multiuser-cgi-dir)
+AC_ARG_WITH( multiuser-cgi-dir, 
+	[  --with-multiuser-cgi-dir=PATH  (disabled)]
+	[  define a central shared cgi directory that acts as a fallback ]
+	[  directory to search if the cgi script is not found in the user's ]
+	[  own cgi directory. This can be dangerous if not used properly. ],
+	[ 
+		if test "x$withval" = xyes; then
+			AC_MSG_RESULT([must specify path, disabled.])
+		elif test "x$withval" = xno; then
+			AC_MSG_RESULT([must specify path, disabled.])
+		elif test "x$withval" = x; then
+			AC_MSG_RESULT([must specify path, disabled.])
+		else
+			AC_MSG_RESULT([$withval])
+			AC_DEFINE_UNQUOTED(CONF_MULTIUSER_CGI_DIR, "$withval")
+		fi
+	],
+	[ 
+		AC_MSG_RESULT([disabled.])
+	])
 
+dnl
+dnl Checking for what server userid cgiwrap will run as
+dnl
 AC_MSG_CHECKING(for check-httpd-user)
 AC_ARG_WITH( check-httpd-user, 
 	[  --without-check-httpd-user]

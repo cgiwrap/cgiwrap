@@ -367,7 +367,7 @@ void CheckScriptFile(void)
 
 
 #if defined(CONF_CHECK_SCRUID)
-	if (fileStat.st_uid != Context.user.pw_uid)
+	if (!Context.multiuser_cgi_script && fileStat.st_uid != Context.user.pw_uid)
 	{
 		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script does not have same UID");
@@ -376,7 +376,7 @@ void CheckScriptFile(void)
 
 
 #if defined(CONF_CHECK_SCRGID)
-	if (fileStat.st_gid != Context.user.pw_gid)
+	if (!Context.multiuser_cgi_script && fileStat.st_gid != Context.user.pw_gid)
 	{
 		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script does not have same GID");
