@@ -670,28 +670,6 @@ AC_ARG_WITH( rewrite,
 		AC_MSG_RESULT([disabled, no rewrite file will be used])
 	])
 
-
-dnl
-dnl Option to disable the fixed PATH_TRANSLATED support for
-dnl compatability with older versions of cgiwrap
-dnl
-AC_MSG_CHECKING(for fixed-path-translated)
-AC_ARG_WITH( fixed-path-translated,
-	[  --without-fixed-path-translated]
-	[  Don't fix the PATH_TRANSLATED variable (pre 3.5 behavior)],
-	[
-		if test "x$withval" != xno; then
-			AC_DEFINE(CONF_FIXED_PATHTRANS)
-			AC_MSG_RESULT([enabled, PATH_TRANSLATED will be set correctly])
-		else
-			AC_MSG_RESULT([disabled])
-		fi
-	],
-	[
-		AC_DEFINE(CONF_FIXED_PATHTRANS)
-		AC_MSG_RESULT([enabled])
-	])
-
 dnl
 dnl Environment variable definitions
 dnl

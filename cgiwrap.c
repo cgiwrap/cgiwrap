@@ -125,7 +125,7 @@ int main (int argc, char *argv[])
 	DEBUG_Msg("\nFixing Environment Variables.");
 	SetScriptName(userStr, scrStr);
 	SetScriptFilename( scriptPath );
-	SetPathTranslated( scriptPath );
+	SetPathTranslated( cgiBaseDir, scriptPath );
 
 	/* Output the modified environment variables */
 	OutputEnvironment();

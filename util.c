@@ -175,6 +175,7 @@ void OutputEnvironment(void)
  	DEBUG_Msg("Environment Variables:");  
 	DEBUG_Str("     QUERY_STRING:", (char *) getenv("QUERY_STRING") );
         DEBUG_Str("      SCRIPT_NAME:", (char *) getenv("SCRIPT_NAME") );
+        DEBUG_Str("  SCRIPT_FILENAME:", (char *) getenv("SCRIPT_FILENAME") );
         DEBUG_Str("        PATH_INFO:", (char *) getenv("PATH_INFO") );
         DEBUG_Str("  PATH_TRANSLATED:", (char *) getenv("PATH_TRANSLATED") );
         DEBUG_Str("      REMOTE_USER:", (char *) getenv("REMOTE_USER") );
@@ -983,23 +984,13 @@ void SetScriptFilename (char *scriptPath)
 /*
  * Set the correct PATH_TRANSLATED environment variable
  */
-void SetPathTranslated( char *scriptPath )
+void SetPathTranslated( char *cgiBaseDir, char *scriptPath )
 {
-#ifndef CONF_FIXED_PATHTRANS
-	char *buf;
-	buf = (char *) SafeMalloc( strlen("PATH_TRANSLATED") +
-		strlen(scriptPath) + 5, "new PATH_TRANSLATED environment variable");
-
-	sprintf(buf, "%s=%s", "PATH_TRANSLATED", scriptPath); 
-	SafePutenv(buf, "set PATH_TRANSLATED environment variable");
-
-#else
-	char *buf, *docroot, *pathinfo;
+	char *buf, *pathinfo;
 	
-	docroot = getenv("DOCUMENT_ROOT");
 	pathinfo = getenv("PATH_INFO");
 
-	if ( !docroot || !pathinfo )
+	if ( !pathinfo )
 	{
 		SafePutenv("PATH_TRANSLATED=", 
 			"set PATH_TRANSLATED environment variable");
@@ -1007,13 +998,11 @@ void SetPathTranslated( char *scriptPath )
 	}
 
 	buf = (char *) SafeMalloc( strlen("PATH_TRANSLATED") +
-		strlen(docroot) + strlen(pathinfo) + 5, 
+		strlen(cgiBaseDir) + strlen(pathinfo) + 5, 
 		"new PATH_TRANSLATED environment variable");
 
-	sprintf(buf, "%s=%s%s", "PATH_TRANSLATED", docroot, pathinfo); 
+	sprintf(buf, "%s=%s%s", "PATH_TRANSLATED", cgiBaseDir, pathinfo); 
 	putenv(buf);
-#endif
-
 }
 
 
