@@ -332,6 +332,7 @@ void ChangeToCGIDir(char *scriptPath)
 void CheckUser(struct passwd *user)
 {
 #if defined(CONF_CHECKHOST)
+	DEBUG_Msg("Checking remote host information.");
 	if ( ( !getenv("REMOTE_ADDR") ) || (getenv("REMOTE_ADDR")[0] == '\0') )
 	{
 		Log(user->pw_name, "-", "no remote host");
@@ -341,6 +342,7 @@ void CheckUser(struct passwd *user)
 
 
 #if defined(CONF_MINIMUM_UID)
+	DEBUG_Msg("Checking user minimum uid.");
 	if ( user->pw_uid < CONF_MINIMUM_UID )
 	{
 		Log(user->pw_name, "-", "uid less than minimum");
@@ -350,6 +352,7 @@ void CheckUser(struct passwd *user)
 #endif
 
 #if defined(CONF_MINIMUM_GID)
+	DEBUG_Msg("Checking user minimum gid.");
 	if ( user->pw_gid < CONF_MINIMUM_GID )
 	{
 		Log(user->pw_name, "-", "gid less than minimum");
@@ -363,6 +366,7 @@ void CheckUser(struct passwd *user)
 	char *sh, *getusershell();
 	int found = 0;
 
+	DEBUG_Msg("Checking user shell.");
 	while ( sh = getusershell() )
 	{
 		if (0 == strcmp( sh, user->pw_shell ))
@@ -380,15 +384,8 @@ void CheckUser(struct passwd *user)
 	}
 #endif
 
-#if defined(CONF_CHECKHOST)
-	if ( ( !getenv("REMOTE_ADDR") ) || (getenv("REMOTE_ADDR")[0] == '\0') )
-	{
-		Log(user->pw_name, "-", "no remote host");
-		MSG_Error_General("Cannot determine if your host is allowed to run this script.");
-	}
-#endif
-
 #if defined(CONF_REQUIRE_REDIRECT_URL)
+	DEBUG_Msg("Checking for required REDIRECT_URL.");
 	if ( ( !getenv("REDIRECT_URL") ) || (getenv("REDIRECT_URL")[0] == '\0') )
 	{
 		Log(user->pw_name, "-", "no redirect url");
@@ -411,9 +408,11 @@ void CheckUserAccess(struct passwd *user)
 	
 #if defined(CONF_DENYFILE)
 	denyfile = CONF_DENYFILE;
+	DEBUG_Str("Global Deny File: ", denyfile);
 #endif
 #if defined(CONF_ALLOWILE)
 	allowfile = CONF_ALLOWFILE;
+	DEBUG_Str("Global Allow File: ", allowfile);
 #endif
 
 	CheckAccess_Helper(user, allowfile, denyfile);
@@ -449,7 +448,8 @@ void CheckVHostUserAccess(struct passwd *user)
 	}
 	free(http_host);
 
-	DEBUG_Str("   Access Control Virtual Host: ", lower_http_host);
+	DEBUG_Msg("\n");
+	DEBUG_Str("Access Control Virtual Host: ", lower_http_host);
 
 	/* Now build the two filenames */	
 #if defined(CONF_VHOST_ALLOWDIR)
@@ -459,7 +459,7 @@ void CheckVHostUserAccess(struct passwd *user)
 	strcat(allowfile, "/");
 	strcat(allowfile, lower_http_host);
 
-	DEBUG_Str("      VHost Allow File: ", allowfile);
+	DEBUG_Str("     VHost Allow File: ", allowfile);
 #endif
 
 #if defined(CONF_VHOST_DENYDIR)
@@ -469,7 +469,7 @@ void CheckVHostUserAccess(struct passwd *user)
 	strcat(denyfile, "/");
 	strcat(denyfile, lower_http_host);
 
-	DEBUG_Str("      VHost Deny File: ", denyfile);
+	DEBUG_Str("     VHost Deny File: ", denyfile);
 #endif
 
 	CheckAccess_Helper(user, allowfile, denyfile);
@@ -491,6 +491,8 @@ void CheckAccess_Helper(struct passwd *user, char *allowfile, char *denyfile)
 	{
 		return;
 	}
+
+	DEBUG_Msg("\nChecking Access Files:");
 
 	if ( denyfile )
 	{
