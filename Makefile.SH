@@ -28,6 +28,7 @@ $spitshell >Makefile <<!GROK!THIS!
 # Other Compiler Flags
 #
 CC= $cc
+CCDEBUG= $optimize
 CCFLAGS= $ccflags $afsccopts
 LDFLAGS= $ldflags $afsldopts
 LIBS= $afslibs $libs
@@ -35,7 +36,7 @@ LIBS= $afslibs $libs
 #
 # Object Files
 #
-OBJS=cgiwrap.o debug.o allowdeny.o util.o
+OBJS=cgiwrap.o debug.o util.o fetch.o stdutil.o
 
 #
 # Dependencies and rules
@@ -43,10 +44,10 @@ OBJS=cgiwrap.o debug.o allowdeny.o util.o
 all: cgiwrap
 
 .c.o: cgiwrap.h config.h Makefile
-	$(CC) -c $(CFLAGS) $<
+	\$(CC) \$(CCDEBUG) -c \$(CCFLAGS) \$<
 
-cgiwrap: $(OBJS)
-	$(CC) $(OBJS) $(LDFLAGS) $(LIBS) -o cgiwrap
+cgiwrap: \$(OBJS)
+	\$(CC) \$(OBJS) \$(LDFLAGS) \$(LIBS) -o cgiwrap
 
 clean:
 	rm -f *.o *.tar cgiwrap.cat cgiwrap core

@@ -1,11 +1,8 @@
-/******************************************************************/
-/* CGI Wrapper Program to allow access to scripts on HTTPD server */
-/* Written by:  Nathan Neulinger  <nneul@umr.edu>                 */
-/******************************************************************/
 
-URL:  http://server/cgi-bin/cgiwrap?user=XXXX&script=YYYY
+
 URL:  http://server/cgi-bin/cgiwrap/user/script
 URL:  http://server/cgi-bin/cgiwrap/~user/script
+URL:  http://server/cgi-bin/cgiwrap?user=XXXX&script=YYYY
 
     XXXX is the user who owns the script
     YYYY is the name of the script itself
@@ -14,9 +11,9 @@ Place your scripts in your ~/public_html/cgi-bin/ directory
 
 --- If your site has installed a copy for access controls scripts ---
 
-URL:  http://server/auth-cgi-bin/cgiwrap?user=XXXX&script=YYYY
 URL:  http://server/auth-cgi-bin/cgiwrap/user/script
 URL:  http://server/auth-cgi-bin/cgiwrap/~user/script
+URL:  http://server/auth-cgi-bin/cgiwrap?user=XXXX&script=YYYY
 
     XXXX is the user who owns the script
     YYYY is the name of the script itself

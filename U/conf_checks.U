@@ -1,4 +1,4 @@
-?MAKE:d_conf_check_scruid d_conf_check_scrgid d_conf_check_scrsuid d_conf_check_scrsgid d_conf_check_scrmode: cat contains Setvar Myread Oldconfig 
+?MAKE:d_conf_check_scruid d_conf_check_scrgid d_conf_check_scrsuid d_conf_check_scrsgid : cat contains Setvar Myread Oldconfig 
 ?MAKE:	-pick add $@ %<
 ?S:d_conf_check_scruid:
 ?S:	If defined, cgiwrap will verify that owner of the script matches
@@ -14,9 +14,6 @@
 ?S:d_conf_check_scrsgid:
 ?S:	If defined, cgiwrap will verify that the script is not set-gid
 ?S:.
-?S:d_conf_check_scrmode:
-?S:	If defined, cgiwrap will verify that the script is executable.
-?S:.
 ?C:CONF_CHECK_SCRUID:
 ?C:	If defined, cgiwrap will verify that owner of the script matches
 ?C:	the UID it switched to.
@@ -31,41 +28,31 @@
 ?C:CONF_CHECK_SCRSGID:
 ?C:	If defined, cgiwrap will verify that the script is not set-gid
 ?C:.
-?C:CONF_CHECK_SCRMODE:
-?C:	If defined, cgiwrap will verify that the script is executable.
-?C:.
 ?H:#$d_conf_check_scruid CONF_CHECK_SCRUID		/**/
 ?H:#$d_conf_check_scrgid CONF_CHECK_SCRGID		/**/
 ?H:#$d_conf_check_scrsuid CONF_CHECK_SCRSUID		/**/
 ?H:#$d_conf_check_scrsgid CONF_CHECK_SCRSGID		/**/
-?H:#$d_conf_check_scrmode CONF_CHECK_SCRMODE		/**/
 ?H:.
 $cat <<'EOM'
 
 The next several questions are for enabling or disabling certain checks 
-that are made on both the cgiwrap uid change, and on the script itself.
+that are made on the script before allowing it to be executed.
 
-The first two checks are for verifying that the UID and GID actually
-changed. The UID check is not configurable, it is always made. The others
-are configurable however. This is the most important security portion of
-cgiwrap.  Do not turn these checks off unless you have a very important
-reason to do so. The GID check is probably less important than the UID
-check, but both of them are very important to leave turned on. 
+You can enable the check to prevent the script from executing if any of 
+the following are true:
+	o Script's owner does not match user
+	o Script's group does not match user
+	o Script is setuid
+	o Script is setgid
 
-The other four five checks deal with the script itself, such as verifying
-that the script is actually owned by the user and group cgiwrap is
-switching to, the script is executable, the script is not setuid or
-setgid. 
-
-If any of these checks fail, the script will not be executed.
+If any of the chosen checks fail, the script will not be executed, and an
+error message will be returned to the user.
 
 EOM
 
 case "$d_conf_check_scruid" in
-"") dflt='y' ;;
-"define") dflt='y' ;;
-"undef") dflt='n' ;;
-*) dflt='n' ;;
+undef) dflt='n' ;;
+*) dflt='y' ;;
 esac
 
 rp="Check if script is owned by this user?"
@@ -82,10 +69,8 @@ eval $setvar
 #-------------------
 
 case "$d_conf_check_scrgid" in
-"") dflt='y' ;;
-"define") dflt='y' ;;
-"undef") dflt='n' ;;
-*) dflt='n' ;;
+undef) dflt='n' ;;
+*) dflt='y' ;;
 esac
 
 rp="Check if script's group matches this user?"
@@ -102,10 +87,8 @@ eval $setvar
 #-------------------
 
 case "$d_conf_check_scrsuid" in
-"") dflt='y' ;;
-"define") dflt='y' ;;
-"undef") dflt='n' ;;
-*) dflt='n' ;;
+undef) dflt='n' ;;
+*) dflt='y' ;;
 esac
 
 rp="Check if script is set-uid?"
@@ -122,10 +105,8 @@ eval $setvar
 #-------------------
 
 case "$d_conf_check_scrsgid" in
-"") dflt='y' ;;
-"define") dflt='y' ;;
-"undef") dflt='n' ;;
-*) dflt='n' ;;
+undef) dflt='n' ;;
+*) dflt='y' ;;
 esac
 
 rp="Check if script is set-gid?"
@@ -137,26 +118,6 @@ y|Y) val="$define" ;;
 esac
 
 set d_conf_check_scrsgid
-eval $setvar
-
-#-------------------
-
-case "$d_conf_check_scrmode" in
-"") dflt='y' ;;
-"define") dflt='y' ;;
-"undef") dflt='n' ;;
-*) dflt='n' ;;
-esac
-
-rp="Check if script is executable?"
-. ./myread
-
-case "$ans" in
-y|Y) val="$define" ;;
-*) val="$undef" ;;
-esac
-
-set d_conf_check_scrmode
 eval $setvar
 
 

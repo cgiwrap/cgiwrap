@@ -11,4 +11,3 @@ loganalyze.doc
 	
 	CGIwrap log analysis perl script. You'll need to edit it 
 	to configure the location of the cgiwrap log file.
-

@@ -15,9 +15,17 @@ to stdout. This means that users can debug their scripts from the web
 browser instead of having to look at the server's error_log to see the error
 output from their scripts. I reccomend you leave this as yes.
 
+This feature has actually turned out to be one of the more handy 
+capabilities of CGIwrap, particularly when combined with the debugging mode.
+
 EOM
 
-dflt='y'
+case "$d_conf_redir_stderr" in
+define) dflt='y' ;;
+undef) dflt='n' ;;
+*) dflt="y"
+esac
+
 rp="Redirect standard error"
 . ./myread
 

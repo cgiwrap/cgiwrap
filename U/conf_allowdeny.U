@@ -26,10 +26,10 @@
 $cat <<'EOM'
 
 The next question(s) deal with whether you want CGIwrap to restrict it's 
-usage only to userids that are listed in a configuration file. Unless you 
-need to only allow a very small group of users to user cgiwrap, or wish 
-to deny certain users the ability to use cgiwrap, I reccomend against 
-using this feature. 
+usage only to userids that are listed in a configuration file.  I 
+generally enable checking the deny file, and then set up an empty deny 
+file. This way, if for some reason I need to temporarily disable a user, 
+I can just add them to the deny file without any fuss.
 
 There are two optional files, an allow file or a deny file. If you enable 
 the option to check the allow file, only users listed in the allow file 
@@ -42,7 +42,6 @@ The file format is one userid per line.
 EOM
 
 case "$d_conf_allowfile" in
-'')       dflt='n' ;;
 define)   dflt='y' ;;
 undef)    dflt='n' ;;
 *)        dflt='n'

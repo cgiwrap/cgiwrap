@@ -9,9 +9,8 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log$
-?RCS: Revision 1.1  1996/05/31 15:25:06  nneul
-?RCS: Committing cgiwrap-3.11
-?RCS: Skipped the 3.1 source tar didn't have it
+?RCS: Revision 1.2  1996/05/31 15:37:14  nneul
+?RCS: Committing cgiwrap-3.21 source tree
 ?RCS:
 ?RCS: Revision 3.0  1993/08/18  12:07:14  ram
 ?RCS: Baseline for dist 3.0 netwide release.

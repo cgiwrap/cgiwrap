@@ -159,75 +159,6 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
  */
 #$i_unistd I_UNISTD		/**/
 
-/* CAN_PROTOTYPE:
- *	If defined, this macro indicates that the C compiler can handle
- *	function prototypes.
- */
-/* DOTS:
- *	This macro is used to specify the ... in function prototypes which
- *	have arbitrary additional arguments.
- */
-/* NXT_ARG:
- *	This macro is used to separate arguments in the declared argument list.
- */
-/* P_FUNC:
- *	This macro is used to declare "private" (static) functions.
- *	It takes three arguments: the function type and name, a parenthesized
- *	traditional (comma separated) argument list, and the declared argument
- *	list (in which arguments are separated with NXT_ARG, and additional
- *	arbitrary arguments are specified with DOTS).  For example:
- *
- *		P_FUNC(int foo, (bar, baz), int bar NXT_ARG char *baz[])
- */
-/* P_FUNC_VOID:
- *	This macro is used to declare "private" (static) functions that have
- *	no arguments.  The macro takes one argument: the function type and name.
- *	For example:
- *
- *		P_FUNC_VOID(int subr)
- */
-/* V_FUNC:
- *	This macro is used to declare "public" (non-static) functions.
- *	It takes three arguments: the function type and name, a parenthesized
- *	traditional (comma separated) argument list, and the declared argument
- *	list (in which arguments are separated with NXT_ARG, and additional
- *	arbitrary arguments are specified with DOTS).  For example:
- *
- *		V_FUNC(int main, (argc, argv), int argc NXT_ARG char *argv[])
- */
-/* V_FUNC_VOID:
- *	This macro is used to declare "public" (non-static) functions that have
- *	no arguments.  The macro takes one argument: the function type and name.
- *	For example:
- *
- *		V_FUNC_VOID(int fork)
- */
-/* _:
- *	This macro is used to declare function parameters for folks who want
- *	to make declarations with prototypes using a different style than
- *	the above macros.  Use double parentheses.  For example:
- *
- *		int main _((int argc, char *argv[]));
- */
-#$prototype	CAN_PROTOTYPE	/**/
-#ifdef CAN_PROTOTYPE
-#define	NXT_ARG ,
-#define	DOTS , ...
-#define	V_FUNC(name, arglist, args)name(args)
-#define	P_FUNC(name, arglist, args)static name(args)
-#define	V_FUNC_VOID(name)name(void)
-#define	P_FUNC_VOID(name)static name(void)
-#define	_(args) args
-#else
-#define	NXT_ARG ;
-#define	DOTS
-#define	V_FUNC(name, arglist, args)name arglist args;
-#define	P_FUNC(name, arglist, args)static name arglist args;
-#define	V_FUNC_VOID(name)name()
-#define	P_FUNC_VOID(name)static name()
-#define	_(args) ()
-#endif
-
 /* VOIDFLAGS:
  *	This symbol indicates how much support of the void type is given by this
  *	compiler.  What various bits mean:
@@ -289,14 +220,10 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
 /* CONF_CHECK_SCRSGID:
  *	If defined, cgiwrap will verify that the script is not set-gid
  */
-/* CONF_CHECK_SCRMODE:
- *	If defined, cgiwrap will verify that the script is executable.
- */
 #$d_conf_check_scruid CONF_CHECK_SCRUID		/**/
 #$d_conf_check_scrgid CONF_CHECK_SCRGID		/**/
 #$d_conf_check_scrsuid CONF_CHECK_SCRSUID		/**/
 #$d_conf_check_scrsgid CONF_CHECK_SCRSGID		/**/
-#$d_conf_check_scrmode CONF_CHECK_SCRMODE		/**/
 
 /* CONF_HTTPD_USER:
  *	This symbol contains the userid that the web server runs as.
@@ -316,11 +243,11 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
 #$d_log_requests CONF_LOG_REQUESTS		/**/
 #define CONF_LOGFILE "$log_file"		/**/
 
-/* CONF_NOSUBDIRS:
- *	Defined if you don't want to allow users to store cgi scripts
- *	in a subdirectory under their cgi-bin directory.
+/* CONF_SUBDIRS:
+ *	Defined if you want to allow users to store cgi scripts
+ *	in subdirectories under their cgi-bin directory.
  */
-#$d_conf_nosubdirs CONF_NOSUBDIRS		/**/
+#$d_conf_subdirs CONF_SUBDIRS		/**/
 
 /* CONF_REDIR_STDERR:
  *	Sgould cgiwrap redirect stderr from scripts to stdout
@@ -381,6 +308,10 @@ sed <<!GROK!THIS! >config.h -e 's!^#undef!/\*#define!' -e 's!^#un-def!#undef!'
  *	This symbol, if defined, indicates that the sigset routine is available.
  */
 #$d_sigset HAS_SIGSET		/**/
+
+/* HAS_STRDUP:
+ */
+#$d_strdup HAS_STRDUP		/**/
 
 #endif
 !GROK!THIS!

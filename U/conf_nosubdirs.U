@@ -1,42 +1,38 @@
-?MAKE:d_conf_nosubdirs: cat contains Setvar Myread Oldconfig 
+?MAKE:d_conf_subdirs: cat contains Setvar Myread Oldconfig 
 ?MAKE:	-pick add $@ %<
-?S:d_conf_nosubdirs:
-?S:	Defined if you don't want to allow users to store cgi scripts
-?S:	in a subdirectory under their cgi-bin directory.
+?S:d_conf_subdirs:
+?S:	Defined if you want to allow users to store cgi scripts
+?S:	in subdirectories under their cgi-bin directory.
 ?S:.
-?C:CONF_NOSUBDIRS:
-?C:	Defined if you don't want to allow users to store cgi scripts
-?C:	in a subdirectory under their cgi-bin directory.
+?C:CONF_SUBDIRS:
+?C:	Defined if you want to allow users to store cgi scripts
+?C:	in subdirectories under their cgi-bin directory.
 ?C:.
-?H:#$d_conf_nosubdirs CONF_NOSUBDIRS		/**/
+?H:#$d_conf_subdirs CONF_SUBDIRS		/**/
 ?H:.
 $cat <<'EOM'
 
-You need to decide now if you want to allow your users to put cgi scripts in
-subdirectories under cgi-bin. Note, this will only work with the URL 
-notation:  
-
-	/cgi-bin/cgiwrap?user=userid&script=scriptname
-
-
-It will not work (currently) with the URL:
-
-	/cgi-bin/cgiwrap/userid/scriptname
-
-I reccomend turning answering this question no until I get subdirectories 
-working for both URL formats.
+CGIwrap has the capability of allowing users to store scripts in 
+subdirectories of their cgi-bin directory. You need to decide whether
+or not you wish to allow this. I reccomend allowing it, it is extremely
+convenient when you start to develop alot of scripts.
 
 EOM
 
-dflt='n'
+case "$d_conf_subdirs" in
+define) dflt='y' ;;
+undef) dflt='n' ;;
+*) dflt="y"
+esac
+
 rp="Allow users to store scripts in subdirectories of cgi-bin?"
 . ./myread
 
 case "$ans" in
-y|Y) val="$undef" ;;
-*) val="$define" ;;
+y|Y) val="$define" ;;
+*) val="$undef" ;;
 esac
 
-set d_conf_nosubdirs
+set d_conf_subdirs
 eval $setvar
 

@@ -3,7 +3,6 @@
 >CONF_CGIDIR
 >CONF_CHECK_HTTPD_USER
 >CONF_CHECK_SCRGID
->CONF_CHECK_SCRMODE
 >CONF_CHECK_SCRSGID
 >CONF_CHECK_SCRSUID
 >CONF_CHECK_SCRUID
@@ -11,9 +10,9 @@
 >CONF_HTTPD_USER
 >CONF_LOGFILE
 >CONF_LOG_REQUESTS
->CONF_NOSUBDIRS
 >CONF_REDIR_STDERR
 >CONF_SETGROUPS
+>CONF_SUBDIRS
 >CONF_USESET
 >CONF_USE_RLIMIT_CPU
 >CONF_USE_RLIMIT_VMEM
@@ -31,6 +30,7 @@
 >HAS_SETRUID
 >HAS_SETUID
 >HAS_SIGSET
+>HAS_STRDUP
 >HAS_STRERROR
 >HAS_SYSTEM
 >HAS_SYS_ERRLIST
@@ -42,7 +42,6 @@
 >I_SYS_TIME
 >I_SYS_TYPES
 >I_UNISTD
->_
 >strerror
 >void
 afsccopts
@@ -56,14 +55,13 @@ d_check_httpd_user
 d_conf_afs_setpag
 d_conf_allowfile
 d_conf_check_scrgid
-d_conf_check_scrmode
 d_conf_check_scrsgid
 d_conf_check_scrsuid
 d_conf_check_scruid
 d_conf_denyfile
-d_conf_nosubdirs
 d_conf_redir_stderr
 d_conf_setgroups
+d_conf_subdirs
 d_conf_use_rlimit_cpu
 d_conf_use_rlimit_vmem
 d_conf_use_system
@@ -82,6 +80,7 @@ d_setrgid
 d_setruid
 d_setuid
 d_sigset
+d_strdup
 d_strerrm
 d_strerror
 d_syserrlst
@@ -101,7 +100,7 @@ i_unistd
 ldflags
 libs
 log_file
+optimize
 perl
-prototype
 spitshell
 voidflags

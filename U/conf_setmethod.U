@@ -85,8 +85,9 @@ The first match in the following list is used:
 
 Regardless of which is chosen, CGIwrap as distributed WILL NOT allow
 the script to execute if the both the real and effective uid and gid have 
-change to those of the user owning the script. This way, even if cgiwrap 
-is configured totally wrong, it shouldn't be a security hole. 
+not been successfully changed to those of the user owning the script. 
+This is the case REGARDLESS of what options or setting have been chosen 
+in this Configure script.
 
 EOM
 

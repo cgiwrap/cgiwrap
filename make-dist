@@ -1,3 +1,4 @@
 #!/bin/csh
 
-makedist -c ../cgiwrap-3.11
+metaconfig
+makedist -c ../cgiwrap-3.21

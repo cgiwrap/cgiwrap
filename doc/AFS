@@ -12,8 +12,8 @@ system:anyuser above with that userid
 
 ---
 
-If you are using this with AFS I'd suggest making sure to use the AFS PAG 
-support in the config file. This automatically creates a PAG for any 
-script that is launched, that way if the user klog's or something, it 
+If you are using this with AFS I'd suggest making sure to enable the AFS PAG 
+support in the Configure script. This automatically creates a PAG for any 
+script that is launched, that way if the script klogs, it 
 won't affect the server or other scripts.
 

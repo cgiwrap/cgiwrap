@@ -24,7 +24,12 @@ use exec.
 
 EOM
 
-dflt='n'
+case "$d_conf_user_system" in
+define) dflt='y' ;;
+undef) dflt='n' ;;
+*) dflt="n"
+esac
+
 rp="Use system() instead of exec()?"
 . ./myread
 

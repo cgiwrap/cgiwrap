@@ -38,3 +38,12 @@
 #if defined(I_SYS_RESOURCE)	/* For rlimit use */
 #include <sys/resource.h>
 #endif
+
+/*
+ * Local headers for prototypes and defines
+ */ 
+#include "util.h"
+#include "debug.h"
+#include "fetch.h"
+#include "stdutil.h"
+

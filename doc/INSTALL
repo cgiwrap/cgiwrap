@@ -1,10 +1,8 @@
 Installation Instructions:
 -------------------------
-
 Look at NOTES to see if there are any hints for your platform.
 
-Run the Configure script.
-
+Type "./Configure" and answer the questions.
 Type "make"
 
 Copy cgiwrap executable to your servers cgi-bin directory

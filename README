@@ -1,13 +1,63 @@
 README for CGIwrap:
 -------------------
 
-Read the NOTES and other documentation files in the Docs subdirectory, it
-may have specific suggestions or restrictions for your
-architecture/platform. 
+This is CGI-Wrap - a gateway that allows more secure user access to CGI 
+programs on an HTTPd server than is provided by the http server itself. The
+primary function of CGIwrap is to make certain that any CGI script runs with
+the permissions of the user who installed it, and not those of the server.
+
+CGIwrap works with NCSA httpd, Apache, CERN httpd, NetSite Commerce and
+Communications servers, and probably any other Unix based web server 
+software that supports CGI.
+
+This code may be freely copied and distributed as long as the documentation
+and README files are kept intact. You may not modify and redistribute 
+CGIwrap without my permission. Permission is granted to include CGIwrap on
+any CD-ROM or online software collection as long as I get a complimentary
+copy of the CD-ROM, or at the very least, you send me an order form.
+ 
+An important note is, this script makes the CGI access MORE secure, but 
+it does not make CGI "secure". By it's very nature, CGI itself can 
+never be 100% secure, it is always dependent on the script itself. It is
+always a good idea to pay attention to the various unix security and CGI
+authoring news groups. If in doubt, show your scripts to someone who is more
+experienced, they might catch something you missed.
+
+ -- Nathan Neulinger (nneul@umr.edu)
 
 
-The Basics:
------------
+Installation Instructions:
+--------------------------
+Read doc/NOTES for suggestions and restrictions for specific architectures.
+Read doc/INSTALL for compilation and installation instructions
 
-To compile, just run Configure, answer the questions, and then type make.
-Then read the instructions in doc/INSTALL to install the resulting binary.
+
+Quick Install:
+--------------
+	Type "./Configure"
+	Answer the questions
+	Type "make"
+	Copy cgiwrap to your cgi-bin directory
+	Make symlinks to cgiwrap: cgiwrapd/nph-cgiwrap/nph-cgiwrapd
+	Make it owned by root, and mode 4755. (or 4750 if httpd in own group)
+	
+	
+Mailing List:
+-------------
+To subscribe to the CGIwrap mailing list, which has discussion about CGIwrap, 
+hints and tips, and announcements of new releases: Send an email message
+to "listserv@rollanet.org" containing:
+
+	SUBSCRIBE CGIWRAP FirstName LastName
+	
+To unsubscribe from the list: Send an email message, from the address you are
+subscribe at, to "listserv@rollanet.org" containing:
+
+	UNSUBSCRIBE CGIWRAP 
+
+
+FTP Site:
+---------
+The current version of CGIwrap is available from:
+
+ftp://ftp.cc.umr.edu/pub/cgi/cgiwrap/

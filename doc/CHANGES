@@ -1,11 +1,30 @@
-/******************************************************************/
-/* CGI Wrapper Program to allow access to scripts on HTTPD server */
-/* Written by:  Nathan Neulinger  <nneul@umr.edu>                 */
-/* Includes many fixes and improvements as suggested by users     */
-/******************************************************************/
+Log of Changes to CGIwrap:
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+Changes since 3.2:
+   Rlimit defines weren't set properly when rlimit not available - fixed
+   The optimizer/debugger flag wasn't being used in the makefile -- fixed
+   Defaults for checks (y/n) were not being set - fixed
+   
+
+Changes since 3.11:
+   MAJOR code cleanup and simplification. The code should be ALOT easier to 
+read and understand.
+   Fixed the problem in the Makefile on certain architectures with the $(var)
+not being escaped properly. This should solve problems with Linux 
+machines and BSD machines that I know of.
+   Changes way PATH_INFO is modified, CGIwrap will now correct SCRIPT_NAME 
+for ?user=USER&script=SCRIPT type requests as well as /user/script type 
+requests.
+   Subdirectories are now supported for both types of requests
+   Debugging output has been condensed and is a little easier to read.
+   Documentation has been reworked, it should be a little easier to use.
+   Fixed prototypes for all the functions in the cgiwrap source.
+   Removed a few unnecessary routines
+   Changed "mystrcpy" to be "strdup", and is compiled only if the current 
+architecture does not have strdup available in it's standard library.
 
 Changes since 3.1:
-   Fixed incrrectly indented # directives that were causing problems with
+   Fixed incorrectly indented # directives that were causing problems with
 some machines.
 
 Changes since 3.0:

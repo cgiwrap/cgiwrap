@@ -1,6 +1,4 @@
-BLURB
 README
-doc/ANNOUNCE
 doc/AFS
 doc/CHANGES
 doc/INSTALL
@@ -13,14 +11,16 @@ doc/COMMENTS
 unsup/README
 unsup/loganalyze.doc
 unsup/loganalyze.pl.SH
-allowdeny.c
-allowdeny.h
 cgiwrap.c
 cgiwrap.h
 debug.c
 debug.h
 util.h
 util.c
+fetch.c
+fetch.h
+stdutil.c
+stdutil.h
 Makefile.SH
 Configure                    Portability tool
 config_h.SH                  Produces config.h
