@@ -148,12 +148,29 @@ char **CreateARGV( char *scrStr, int argc, char *argv[])
 char **CreateInterpreterARGV( char *interp, char *scrStr, int argc, char *argv[])
 {
 	char **temp;
-	int i;
+	int i, cnt;
 
 	temp = (char **) SafeMalloc( (argc+2) * sizeof(char *), "ARGV array");
 
 	temp[0] = interp;
-	temp[1] = StripPathComponents( CountSubDirs(scrStr) - 1, scrStr );
+
+	cnt = CountSubDirs(scrStr);
+	if ( cnt < 1 )
+	{
+		temp[1] = scrStr;
+	}
+	else
+	{
+		char *newpath = StripPathComponents( cnt, scrStr );
+		if ( newpath[0] == '/' )
+		{
+			temp[1] = newpath + 1;
+		}
+		else
+		{
+			temp[1] = newpath;
+		}
+	}
 	temp[argc+1] = 0;
 
 	for (i=1; i<argc; i++)
