@@ -11,6 +11,7 @@ doc/COMMENTS
 unsup/README
 unsup/loganalyze.doc
 unsup/loganalyze.pl.SH
+unsup/bconf.pl.SH
 cgiwrap.c
 cgiwrap.h
 debug.c
