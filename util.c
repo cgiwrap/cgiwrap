@@ -341,20 +341,20 @@ void CheckScriptFile(void)
 			"Script file not found.");
 	}
 
-#if defined(CONF_CHECK_SYMLINK)
 	if ( lstat(Context.scriptFullPath, &fileLStat) )
 	{
 		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script file not found.");
 	}
 
+#if defined(CONF_CHECK_SYMLINK)
 	if ( S_ISLNK(fileLStat.st_mode) )
 	{
 		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script is a symbolic link");
 	}
 #endif		
-	
+
 	if ( !S_ISREG(fileStat.st_mode) )
 	{
 		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
@@ -369,10 +369,21 @@ void CheckScriptFile(void)
 
 
 #if defined(CONF_CHECK_SCRUID)
-	if (!Context.multiuser_cgi_script && fileStat.st_uid != Context.user.pw_uid)
+	if (!S_ISLNK(fileLStat.st_mode))
 	{
-		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
-			"Script does not have same UID");
+		if (!Context.multiuser_cgi_script && fileStat.st_uid != Context.user.pw_uid)
+		{
+			MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
+				"Script does not have same UID");
+		}
+	}
+	else
+	{
+		if (!Context.multiuser_cgi_script && fileLStat.st_uid != Context.user.pw_uid)
+		{
+			MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
+				"Symlink to script does not have same UID");
+		}
 	}
 #endif
 
