@@ -25,7 +25,6 @@ char *StripPathComponents(int count, char *path);
 void ChangeID ( struct passwd *user);
 void ChangeAuxGroups(struct passwd *user);
 int UserInFile(char *filename, char *user);
-void SendHeader(char *type);
 void DoPError (char *msg);
 void DoError (char *msg);
 void Log (char *user, char *script, char *msg);

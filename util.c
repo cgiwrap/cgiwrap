@@ -344,7 +344,10 @@ void VerifyExecutingUser(void)
 
 	if ( getuid() != user->pw_uid )
 	{
-		DoError("Real UID does not match configured server userid!.");
+		MSG_Error_ServerUserWrong();
+		exit(0);
+/*		DoError("Real UID does not match configured server 
+userid!."); */
 	}
 #endif
 }
@@ -644,27 +647,11 @@ int UserInFile(char *filename, char *user)
 
 
 /*
- * Send a Content-Type header if one hasn't already be sent
- */
-void SendHeader(char *type)
-{
-	static int done = 0;
-
-	if ( !done )
-	{
-		printf ("Content-Type: %s\n", type);
-		done = 1;
-	}
-}
-
-
-/*
  * Output an error message with system error message string
  */
 void DoPError (char *msg)
 {
-	SendHeader("text/plain");
-	printf("\n");
+	MSG_ContentType("text/plain");
 
 	printf("CGIwrap Error: %s\n", msg);
 
@@ -685,8 +672,7 @@ void DoPError (char *msg)
  */
 void DoError (char *msg)
 {
-	SendHeader("text/plain");
-	printf("\n");
+	MSG_ContentType("text/plain");
 
 	printf("CGIwrap Error: %s \n", msg);
 	exit(1);

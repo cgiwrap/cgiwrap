@@ -22,19 +22,22 @@ void main (int argc, char *argv[])
 	if ( strlen(argv[0]) >= 1 )
 	{
 		CONF_DEBUG = !strcmp( argv[0] + strlen(argv[0]) - 1, "d");
+		if (CONF_DEBUG)
+		{
+			MSG_HTMLMessages = 0;
+		}
 	}
 
 	/* Output a status header if running in NoParseHeaders mode */
 	if ( !strncmp(argv[0], "nph-", 4) )
 	{
-		DEBUG_Msg("HTTP/1.0 200 Ok");
+		MSG_Need_NPH_Header = 1;
 	}
 	
 	/* Output a Content-type header if in debugging mode */
 	if ( CONF_DEBUG )
 	{
-		SendHeader("text/plain");
-		printf("\n");
+		MSG_ContentType("text/plain");
 	}
 
 	/* Redirect stderr to stdout */
