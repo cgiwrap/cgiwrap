@@ -77,7 +77,7 @@ void main (int argc, char *argv[])
 
 	/* Determine the base directory where this user's CGI scripts
 		are to be stored */
-	DEBUG_Str("");
+	DEBUG_Msg("");
 	cgiBaseDir = GetBaseDirectory(user);	
 	DEBUG_Str("Script Base Directory", cgiBaseDir);
 	if ( !DirExists(cgiBaseDir) )

@@ -647,7 +647,7 @@ void DoPError (char *msg)
 
 #if defined(HAS_STRERROR)
 	printf("Error: %s (%d)\n", strerror(errno), errno);
-#else if defined(HAS_PERROR)
+#elif defined(HAS_PERROR)
 	perror("Error");
 #else
 	printf("Error: %d\n", errno);
