@@ -33,6 +33,7 @@ void ChangeToCGIDir(char *scriptPath);
 void DoError (char *msg);
 void Log (char *user, char *script, char *msg);
 void SetScriptName(char *userStr, char *scrStr );
+void SetScriptFilename(char *scriptPath );
 void SetPathTranslated(char *scriptPath);
 void Create_AFS_PAG(void);
 char *GetUserDir(char *user);

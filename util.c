@@ -959,6 +959,28 @@ void SetScriptName(char *userStr, char *scrStr )
 
 
 /*
+ * Set the correct SCRIPT_FILENAME environment variable (PHP uses this)
+ */
+void SetScriptFilename (char *scriptPath) 
+{
+	char *buf;
+  char *name;
+
+	name = getenv ("SCRIPT_FILENAME");
+	if ( name ) {
+		/* only set SCRIPT_FILENAME if it was already set */
+
+		buf = (char*) SafeMalloc (strlen("SCRIPT_FILENAME") +
+		    + strlen(scriptPath) + 5, "new SCRIPT_FILENAME environment variable");
+
+		sprintf(buf, "%s=%s", "SCRIPT_FILENAME", scriptPath);
+		SafePutenv(buf, "set SCRIPT_NAME environment variable");
+	}
+}
+
+
+
+/*
  * Set the correct PATH_TRANSLATED environment variable
  */
 void SetPathTranslated( char *scriptPath )

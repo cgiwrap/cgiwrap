@@ -124,8 +124,9 @@ int main (int argc, char *argv[])
 	/* Set the Correct Values of environment variables */
 	DEBUG_Msg("\nFixing Environment Variables.");
 	SetScriptName(userStr, scrStr);
+	SetScriptFilename( scriptPath );
 	SetPathTranslated( scriptPath );
-	
+
 	/* Output the modified environment variables */
 	OutputEnvironment();
 
