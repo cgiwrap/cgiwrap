@@ -213,7 +213,7 @@ void MSG_Info(void)
 	      printf("%sServer Administrator/Contact%s: %s\n", 
 		      prefix, suffix, HTMLEncode(getenv("SERVER_ADMIN")));
 	}
-	if ( getenv("SERVER_NAME") )
+	if ( ! MSG_QuietErrors && getenv("SERVER_NAME") )
 	{
 	      printf("%sServer Name%s: %s\n", 
 		      prefix, suffix, HTMLEncode(getenv("SERVER_NAME")));
@@ -287,7 +287,7 @@ void MSG_Info(void)
 				prefix, suffix, HTMLEncode(getenv("QUERY_STRING")));
 		}
 	}
-	if ( getenv("PATH_INFO") )
+	if ( ! MSG_QuietErrors && getenv("PATH_INFO") )
 	{
 		if ( strlen(getenv("PATH_INFO")) > 0)
 		{	
