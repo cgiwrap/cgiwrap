@@ -39,3 +39,15 @@
           The book is pretty good, at least in the copy I got, they say
           that CGIwrap is included on the CD, but I can't find it
           anywhere.
+          
+Other References
+
+     * Special Edition, Using Perl for Web Programming, Ch. 9
+     * Perl 5 By Example, Ch 9.
+     * SD Magazine Feature - Safe CGI Scripting
+     * WWW Security FAQ - CGI Scripts
+     * CGI Developers Guide - Ch. 9
+     * Notes on the Security of a UNIX Web Server
+     * Boxed and Wrapped - Lincoln D. Stein
+     * CGI FAQ
+     * Maximum Security - Hackers Guide to Protecting...

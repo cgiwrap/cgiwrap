@@ -97,3 +97,18 @@
           For some situations, simply adding " -- " to the end of the
           first line of the script will cause the error to go away,
           sometimes not.
+          
+   How do I use cgiwrapd on a Cobalt RaQ?
+          cgiwrapd is still there, it just isn't directly obvious how to
+          use it. If you normally call your script as
+          
+          http://www.site1.com/test.cgi
+          
+          you can call it as
+          
+          http://www.site1.com/cgiwrapDir/cgiwrapd/test.cgi
+          
+          to run it under cgiwrapd. Basically they ScriptAlias
+          "cgiwrapDir" to the directory where cgiwrap is installed.
+          
+          Chris Adams

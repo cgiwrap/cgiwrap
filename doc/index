@@ -7,33 +7,23 @@
   General Information
   
         Introduction
-                
         Frequently Asked Questions
-                
         Mailing List Info
-                
         How to get CGIWrap
-                
         Source Code Change Log
-                
         Stuff still to be done
-                
         Year 2000 Issues
                 
         Acknowledgements
-                
         Publications mentioning CGIwrap
-                
         Comments
                 
         Author's Home Page
-                
         Mailing List Archive (FindMail)
                 
   User CGI Execution
   
         Account Setup
-                
         Quick Reference to URLs
                 
   Compilation, Installation, and Administration
@@ -43,13 +33,9 @@
           web server machines.
           
         Installation and Configuration
-                
         Access Control Files (allow/deny)
-                
         Compilation Notes
-                
         Use of CGIWrap with AFS
-                
         Tips and Tricks
      _________________________________________________________________
    
