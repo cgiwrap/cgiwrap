@@ -1,13 +1,5 @@
-?MAKE:d_conf_useset : cat contains Setvar Myread Oldconfig d_seteuid d_setegid d_setuid d_setgid d_setruid d_setrgid d_setreuid d_setregid d_setresuid d_setresgid
+?MAKE:d_conf_setmethod : cat d_seteuid d_setegid d_setuid d_setgid d_setruid d_setrgid d_setreuid d_setregid d_setresuid d_setresgid
 ?MAKE:	-pick add $@ %<
-?S:d_conf_useset:
-?S:	Defined if you want cgiwrap to use the set_ calls.
-?S:.
-?C:CONF_USESET:
-?C:	Defined if you want cgiwrap to use the set_ calls.
-?C:.
-?H:#$d_conf_useset CONF_USESET           /**/
-?H:.
 $cat <<'EOM'
 
 In order to function, CGIwrap issues a library call to change the real 
@@ -18,8 +10,6 @@ Different systems have different calls available for doing this.
 Your system has the following calls available:
 
 EOM
-
-d_conf_useset='define'
 
 # sete_
 if [ "$d_setegid" = "define" ]; then
