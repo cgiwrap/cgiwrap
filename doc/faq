@@ -1,20 +1,24 @@
 
                     CGIWrap - Frequently Asked Questions
+                                      
      _________________________________________________________________
-   
+                                      
   General Questions
   
    How do I subscribe/unsubscribe from the CGIWrap mailing list?
           To subscribe, send a note containing "subscribe cgiwrap" to
-          listserv@rollanet.org.
+          _listserv@rollanet.org_.
+          
           
           To unsubscribe, send a note containing "unsubscribe cgiwrap" to
-          listserv@rollanet.org from the account that is subscribed to
+          _listserv@rollanet.org_ from the account that is subscribed to
           the list.
           
+          
           If you are unable to subscribe or unsubscribe, send a note to
-          me at nneul@umr.edu. Please do not send subscribe/unsubscribe
+          me at nneul@umr.edu. _Please_ do not send subscribe/unsubscribe
           messages to the list.
+          
           
           More information on the mailing list is available here.
           
@@ -42,14 +46,17 @@
           change to the server's cgi-bin directory, and issue the
           commands:
           
+
         chown root cgiwrap
         chmod 4755 cgiwrap
 
    How do I use CGIwrap with server side includes
           This is not supported by all web servers, but with Apache, use:
           
+
         <!--#include virtual="/cgi-bin/cgiwrap/user/script...."-->
 
+   
           One of the problems is that this often is a security hole
           unless you can enable server side exec/virtual include only of
           executables that are in ExecCGI capable directories.

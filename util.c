@@ -26,6 +26,19 @@ char *SafeMalloc(size_t size, char *what)
 }
 
 /*
+ * Safe putenv
+ */
+void SafePutenv(char * string, char *what)
+{
+	if (putenv(string) != 0) 
+	{
+		char msg[500];
+		sprintf(msg, "Malloc failure caused putenv() failure for (%s).\n", what);
+		MSG_Error_SystemError(msg);
+	}
+}
+
+/*
  * Build the ARGV array for passing to the called script
  */
 char **CreateARGV( char *scrStr, int argc, char *argv[])
@@ -46,24 +59,6 @@ char **CreateARGV( char *scrStr, int argc, char *argv[])
 	return temp;
 }
 
-/*
- * Strip one string from the beginning of another string
- */
-char *StripPrefix( char *stringToStrip, char *stripFrom )
-{
-	if ( !stringToStrip ) { return stripFrom; }
-	if ( !stripFrom ) { return ""; }
-
-	if ( strlen(stripFrom) >= strlen(stringToStrip) )
-	{
-		if (!strncmp(stringToStrip, stripFrom, strlen(stringToStrip)))
-		{
-			return stripFrom + strlen(stringToStrip);
-		}
-	}
-
-	return stripFrom;
-}
 
 /*
  *   Extract and return the value portion of a key=value pair found in a string
@@ -136,8 +131,8 @@ char *CondenseSlashes(char *path)
 
 	for (i=0, j=0; i<strlen(path); i++)
 	{
-		if ( !((path[i] == '/') & 
-			((path[i+1] == '/') | (path[i+1] == '\0')) ))
+		if ( !((path[i] == '/') &&
+			((path[i+1] == '/') || (path[i+1] == '\0')) ))
 		{
 			tmp[j++] = path[i];
 		}
@@ -205,7 +200,10 @@ void ChangeToCGIDir(char *scriptPath)
 	strcat(tempstring, tempdir);
 
 	DEBUG_Str("\nChanging current directory to", tempstring);
-	chdir(tempstring);
+	if (chdir(tempstring) == -1) 
+	{
+		MSG_Error_SystemError("Cannot change to user's CGI directory via chdir()!");
+	}
 
 	free(tempdir);
 	free(tempstring);
@@ -221,7 +219,7 @@ void CheckUser(struct passwd *user)
 	int in_deny, in_allow;	
 
 #if defined(CONF_CHECKHOST)
-	if ( ( !getenv("REMOTE_ADDR") ) | (getenv("REMOTE_ADDR")[0] == '\0') )
+	if ( ( !getenv("REMOTE_ADDR") ) || (getenv("REMOTE_ADDR")[0] == '\0') )
 	{
 		Log(user->pw_name, "-", "no remote host");
 		MSG_Error_General("Your host (null) is not allowed to run this");
@@ -318,40 +316,40 @@ void CheckScriptFile(void)
 	{
 		Log(Context.user.pw_name, Context.scriptFullPath, 
 			"script in subdir not allowed");
-		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Scripts in subdirectories are not allowed");
 	}
 #endif
 
 	if ( stat(Context.scriptFullPath, &fileStat) )
 	{
-		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script file not found.");
 	}
 
 #if defined(CONF_CHECK_SYMLINK)
 	if ( lstat(Context.scriptFullPath, &fileLStat) )
 	{
-		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script file not found.");
 	}
 
 	if ( S_ISLNK(fileLStat.st_mode) )
 	{
-		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script is a symbolic link");
 	}
 #endif		
 	
 	if ( !S_ISREG(fileStat.st_mode) )
 	{
-		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script is not a regular file");
 	}
 
 	if (!(fileStat.st_mode & S_IXUSR))
 	{
-		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script is not executable. Issue 'chmod 755 filename'");
 	}
 
@@ -359,7 +357,7 @@ void CheckScriptFile(void)
 #if defined(CONF_CHECK_SCRUID)
 	if (fileStat.st_uid != Context.user.pw_uid)
 	{
-		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script does not have same UID");
 	}
 #endif
@@ -368,7 +366,7 @@ void CheckScriptFile(void)
 #if defined(CONF_CHECK_SCRGID)
 	if (fileStat.st_gid != Context.user.pw_gid)
 	{
-		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script does not have same GID");
 	}
 #endif
@@ -377,7 +375,7 @@ void CheckScriptFile(void)
 #if defined(CONF_CHECK_SCRSUID)
 	if (fileStat.st_mode & S_ISUID)
 	{
-		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script is setuid");
 	}
 #endif
@@ -386,7 +384,7 @@ void CheckScriptFile(void)
 #if defined(CONF_CHECK_SCRSGID)
 	if (fileStat.st_mode & S_ISGID)
 	{
-		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script is setgid");
 	}
 #endif
@@ -394,7 +392,7 @@ void CheckScriptFile(void)
 #if defined(CONF_CHECK_SCRGWRITE)
 	if (fileStat.st_mode & S_IWGRP)
 	{
-		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script is group writable.");
 	}
 #endif
@@ -402,7 +400,7 @@ void CheckScriptFile(void)
 #if defined(CONF_CHECK_SCROWRITE)
 	if (fileStat.st_mode & S_IWOTH)
 	{
-		MSG_Error_ExecutionNotPermitted(Context.scriptFullPath,
+		MSG_Error_ExecutionNotPermitted(Context.scriptRelativePath,
 			"Script is world writable.");
 	}
 #endif
@@ -502,7 +500,7 @@ char *GetPathComponents(int count, char *path)
 char *StripPathComponents(int count, char *path)
 {
 	char *tmp;
-	int i, j, found;
+	int i, found;
 	int done;
 	int len;
 
@@ -525,7 +523,6 @@ char *StripPathComponents(int count, char *path)
 
 	
 	/* Now, skip over a certain number of components */
-	j = 0;
 	found = 0;
 	while ( i<len && found < count)
 	{
@@ -548,7 +545,7 @@ void SetEnvironmentVariables(void)
 {
 #if defined(CONF_SETENV_ANY)
 	int i;
-	char msg[200];
+	char msg[500];
 
 	struct cgiwrap_setenv_table
 	{
@@ -573,7 +570,8 @@ void SetEnvironmentVariables(void)
 		DEBUG_Msg(msg);
 
 #if defined(HAS_PUTENV)
-		putenv(cgiwrap_setenvs[i].setstring);
+		SafePutenv(cgiwrap_setenvs[i].setstring, 
+			"set environment variable");
 #endif
 	}
 #endif
@@ -739,16 +737,12 @@ int UserInFile(char *filename, char *user)
 	FILE *file;
 	char temp[HUGE_STRING_LEN], *tmpuser;
 #if defined(CONF_CHECKHOST)
-	int unlen,remote_addr[4],spec_mask[4],spec_addr[4];
+	int count, remote_addr[4],spec_mask[4],spec_addr[4];
 	char *i;
 #endif
 	int j;
 
 #if defined(CONF_CHECKHOST)
-	spec_mask[0]=255; 
-	spec_mask[1]=255; 
-	spec_mask[2]=255; 
-	spec_mask[3]=255;
 	if (sscanf(getenv("REMOTE_ADDR"),"%d.%d.%d.%d",
 		&remote_addr[0],&remote_addr[1],
 		&remote_addr[2],&remote_addr[3]) != 4 )
@@ -792,12 +786,21 @@ int UserInFile(char *filename, char *user)
 		{
 			while (i != NULL)
 			{
+				spec_mask[0]=255; 
+				spec_mask[1]=255; 
+				spec_mask[2]=255; 
+				spec_mask[3]=255;
 				i++;
-				sscanf(i,"%d.%d.%d.%d/%d.%d.%d.%d",
+				count = sscanf(i,"%d.%d.%d.%d/%d.%d.%d.%d",
 					&spec_addr[0], &spec_addr[1],
 					&spec_addr[2], &spec_addr[3],
 					&spec_mask[0], &spec_mask[1],
 					&spec_mask[2], &spec_mask[3]);
+
+				if (count != 4 && count != 8) {
+					Log(user, "-", "incorrectly formatted allow/deny line");
+					MSG_Error_General("Invalid line in access control file");
+				}
 
 				if (((spec_mask[0] & spec_addr[0]) == (spec_mask[0] & remote_addr[0])) &&
 					((spec_mask[1] & spec_addr[1]) == (spec_mask[1] & remote_addr[1])) &&
@@ -838,7 +841,10 @@ void LogInit (void)
 		MSG_Error_SystemError("Could not open log file for appending!");
 	}
 	/* set the close-on-exec flag for logfd */
-	fcntl(logfd, F_SETFD, 1);
+	if (fcntl(logfd, F_SETFD, 1) == -1) 
+	{
+		MSG_Error_SystemError("Could not set close-on-exec flag for log file!");
+	}
 
 	/* open a file pointer from that file descriptor */
 	logFile = fdopen(logfd, "a");
@@ -923,7 +929,7 @@ void SetScriptName(char *userStr, char *scrStr )
 
 	sprintf(buf, "%s=%s/%s/%s", "SCRIPT_NAME", 
 	    getenv("SCRIPT_NAME"), userStr, scrStr);
-	putenv(buf);
+	SafePutenv(buf, "set SCRIPT_NAME environment variable");
 }
 
 
@@ -938,7 +944,7 @@ void SetPathTranslated( char *scriptPath )
 		strlen(scriptPath) + 5, "new PATH_TRANSLATED environment variable");
 
 	sprintf(buf, "%s=%s", "PATH_TRANSLATED", scriptPath); 
-	putenv(buf);
+	SafePutenv(buf, "set PATH_TRANSLATED environment variable");
 
 #else
 	char *buf, *docroot, *pathinfo;
@@ -948,7 +954,8 @@ void SetPathTranslated( char *scriptPath )
 
 	if ( !docroot || !pathinfo )
 	{
-		putenv("PATH_TRANSLATED=");
+		SafePutenv("PATH_TRANSLATED=", 
+			"set PATH_TRANSLATED environment variable");
 		return;
 	}
 

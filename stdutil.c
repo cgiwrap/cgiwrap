@@ -15,11 +15,7 @@ char *strdup(char *str)
 {
 	char *temp;
 
-	temp = (char *) malloc ( strlen(str) + 1 );
-	if (!temp)
-	{
-		MSG_Error_SystemError("Couldn't malloc memory for string!");
-	}
+	temp = (char *) SafeMalloc ( strlen(str) + 1, "strdup" );
 	strcpy(temp,str);
 
 	return temp;

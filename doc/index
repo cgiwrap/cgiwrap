@@ -2,8 +2,9 @@
                                   CGIWrap
                                       
                               User CGI Access
+                                      
      _________________________________________________________________
-   
+                                      
   General Information
   
         Introduction
@@ -51,8 +52,9 @@
         Use of CGIWrap with AFS
                 
         Tips and Tricks
+                
      _________________________________________________________________
-   
+                                      
    If you have any questions about CGIwrap, please direct them to the
    mailing list (you have to subscribe first though) or to the author,
    Nathan Neulinger <nneul@umr.edu>

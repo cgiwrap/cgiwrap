@@ -144,7 +144,8 @@ char *FetchScriptString( char *basedir )
 
 	/* Figure out the PATH_INFO and the script name */
 	tempStr = StripPathComponents(max, scrStr);
-	tempStr2 = (char *) malloc( strlen(tempStr) + 12 );
+	tempStr2 = (char *) SafeMalloc( strlen(tempStr) + 12, 
+		"PATH_INFO environment variable" );
 	if ( !strcmp("", tempStr) )
 	{
 		strcpy(tempStr2, "PATH_INFO=");
@@ -153,7 +154,7 @@ char *FetchScriptString( char *basedir )
 	{
 		sprintf(tempStr2, "PATH_INFO=/%s", tempStr);
 	}
-	putenv(tempStr2);
+	SafePutenv(tempStr2, "set PATH_INFO environment variable");
 	free(tempStr);
 
 	return GetPathComponents(max, scrStr);

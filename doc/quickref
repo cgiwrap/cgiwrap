@@ -1,7 +1,8 @@
 
                        CGIWrap - URL Quick Reference
+                                      
      _________________________________________________________________
-   
+                                      
    In all of the below examples, replace SERVER with the hostname and
    port of your webserver. Replace USER with your userid, and replace
    SCRIPT with the name of the script that is located in your cgi-bin
@@ -61,6 +62,6 @@
   Notes
   
    The syntax examples above using user= and script= are carryovers from
-   the original versions of CGIwrap, and are not really needed. I highly
+   the original versions of CGIwrap, and are not really needed. I _highly_
    reccomend you don't use them, the other examples are much clearer and
    easier to use.
