@@ -19,7 +19,7 @@ char **CreateARGV( char *scrStr, int argc, char *argv[])
 
 	if ( !temp )
 	{
-		DoPError("Couldn't malloc() memory for argv array\n");
+		MSG_Error_SystemError("Couldn't malloc() memory for argv array\n");
 	}
 	
 	temp[0] = StripPathComponents( CountSubDirs(scrStr), scrStr );
@@ -161,68 +161,74 @@ void ChangeToCGIDir(char *scriptPath)
 	tempstring[1] = 0;
 	strcat(tempstring, tempdir);
 
-	DEBUG_Str("\nChanging Current Directory to", tempstring);
+	DEBUG_Str("\nChanging current directory to", tempstring);
 	chdir(tempstring);
 
 	free(tempdir);
 	free(tempstring);
 }
 
-
 /*
  * Perform checks on the userid 
  */
 void CheckUser(struct passwd *user)
 {
-	int deny_exists, allow_exists;
+#if defined(CONF_DENYFILE) || defined(CONF_ALLOWFILE)
+	int deny_exists=0, allow_exists=0;
 	int in_deny, in_allow;	
 
-#if defined(CONF_ACCESS)
 #if defined(CONF_CHECKHOST)
 	if ( ( !getenv("REMOTE_ADDR") ) | (getenv("REMOTE_ADDR")[0] == '\0') )
 	{
 		Log(user->pw_name, "-", "no remote host");
-		DoError("Your host (null) is not allowed to run this");
+		MSG_Error_General("Your host (null) is not allowed to run this");
 	}
 #endif
 
+#if defined(CONF_DENYFILE)
 	deny_exists = FileExists(CONF_DENYFILE);
+#endif
+#if defined(CONF_ALLOWFILE)
 	allow_exists = FileExists(CONF_ALLOWFILE);
+#endif
 	in_deny = 0;
 	in_allow = 0;
 
+#if defined(CONF_DENYFILE)
 	if ( deny_exists )
 	{
 		in_deny = UserInFile(CONF_DENYFILE, user->pw_name);
 	}
-
+#endif
+#if defined(CONF_DENYFILE)
 	if ( allow_exists )
 	{
 		in_allow = UserInFile(CONF_ALLOWFILE, user->pw_name);
 	}
+#endif
 
 	if ( !deny_exists && !allow_exists )
 	{
 		Log(user->pw_name, "-", "access control files not found");
-		DoError("Access control files not found!");
+		MSG_Error_General("Access control files not found!");
 	}
 
 	if ( in_allow && in_deny )
 	{
 		Log(user->pw_name, "-", "user in both allow and deny files");
-		DoError("User is both allowed and denied!");
+		MSG_Error_General("User is both allowed and denied!");
 	}
 
 	if ( allow_exists && !in_allow )
 	{
 		Log(user->pw_name, "-", "user not in allow file");
-		DoError("User not in allow file!");
+		MSG_Error_General("User not in allow file!");
 	}
 
 	if ( deny_exists && in_deny )
 	{
 		Log(user->pw_name, "-", "user in deny file");
-		DoError("User in deny file!");
+		MSG_Error_General("User in deny file!");
 	}
 #endif
 }
@@ -240,8 +246,7 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 
 	if ( CheckPath(scriptPath) )
 	{
-		MSG_Error_ExecutionNotPermitted("Script path contains illegal components")
-		exit(0);
+		MSG_Error_ExecutionNotPermitted("Script path contains illegal components");
 	}
 	
 #if !defined(CONF_SUBDIRS)
@@ -249,49 +254,43 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 	if ( CountSubDirs(scriptPath) > 0 )
 	{
 		Log(user->pw_name, scriptPath, "script in subdir not allowed");
-		MSG_Error_ExecutionNotPermitted("Scripts in subdirectories are not allowed")
-		exit(0);
+		MSG_Error_ExecutionNotPermitted("Scripts in subdirectories are not allowed");
 	}
 #endif
 
 	if ( stat(scriptPath, &fileStat) )
 	{
-		MSG_Error_ExecutionNotPermitted("Script file not found.")
-		exit(0);
+		MSG_Error_ExecutionNotPermitted("Script file not found.");
 	}
 
 #if defined(CONF_CHECK_SYMLINK)
 	if ( lstat(scriptPath, &fileLStat) )
 	{
-		MSG_Error_ExecutionNotPermitted("Script file not found.")
-		exit(0);
+		MSG_Error_ExecutionNotPermitted("Script file not found.");
 	}
 
 	if ( S_ISLNK(fileLStat.st_mode) )
 	{
-		MSG_Error_ExecutionNotPermitted("Script is a symbolic link")
-		exit(0);
+		MSG_Error_ExecutionNotPermitted("Script is a symbolic link");
 	}
 #endif		
 	
 	if ( !S_ISREG(fileStat.st_mode) )
 	{
-		MSG_Error_ExecutionNotPermitted("Script is not a regular file")
-		exit(0);
+		MSG_Error_ExecutionNotPermitted("Script is not a regular file");
 	}
 
 	if (!(fileStat.st_mode & S_IXUSR))
 	{
-		sprintf(tempErrString, "Script is not executable. Issue chmod 755 %s", 
-			scriptPath);
-		DoError(tempErrString);
+		sprintf(tempErrString, "Script is not executable. Issue chmod 755 %s", scriptPath);
+		MSG_Error_General(tempErrString);
 	}
 
 
 #if defined(CONF_CHECK_SCRUID)
 	if (fileStat.st_uid != user->pw_uid)
 	{
-		DoError("Script does not have same UID");
+		MSG_Error_ExecutionNotPermitted("Script does not have same UID");
 	}
 #endif
 
@@ -299,7 +298,7 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 #if defined(CONF_CHECK_SCRGID)
 	if (fileStat.st_gid != user->pw_gid)
 	{
-		DoError("Script does not have same GID");
+		MSG_Error_ExecutionNotPermitted("Script does not have same GID");
 	}
 #endif
 
@@ -307,11 +306,7 @@ void CheckScriptFile(struct passwd *user, char *scriptPath)
 #if defined(CONF_CHECK_SCRSUID)
 	if (fileStat.st_mode & S_ISUID)
 	{
-		MSG_Error_ExecutionNotPermitted("Script is Set-GID")
-		exit(0);
-void MSG_Error_ExecutionNotPermission(char *reason)
-		DoError("Script is 
-SUID - Will not Execute!");
+		MSG_Error_ExecutionNotPermitted("Script is setuid");
 	}
 #endif
 
@@ -319,24 +314,21 @@ SUID - Will not Execute!");
 #if defined(CONF_CHECK_SCRSGID)
 	if (fileStat.st_mode & S_ISGID)
 	{
-		MSG_Error_ExecutionNotPermitted("Script is Set-GID.")
-		exit(0);
+		MSG_Error_ExecutionNotPermitted("Script is setgid");
 	}
 #endif
 
 #if defined(CONF_CHECK_SCRGWRITE)
 	if (fileStat.st_mode & S_IWGRP)
 	{
-		MSG_Error_ExecutionNotPermitted("Script is group writable.")
-		exit(0);
-		DoError("Script is group writable - Will not Execute!");
+		MSG_Error_ExecutionNotPermitted("Script is group writable.");
 	}
 #endif
 
 #if defined(CONF_CHECK_SCROWRITE)
 	if (fileStat.st_mode & S_IWOTH)
 	{
-		DoError("Script is world writable - Will not Execute!");
+		MSG_Error_ExecutionNotPermitted("Script is world writable.");
 	}
 #endif
 }
@@ -352,17 +344,12 @@ void VerifyExecutingUser(void)
 
         if ( !(user = getpwnam(CONF_HTTPD_USER)) )
         {
-                DoError("Configured server userid not found.");
+                MSG_Error_General("Configured server userid not found.");
         }
 
 	if ( getuid() != user->pw_uid )
 	{
-		MSG_Error_General("CGIWrap Error: Server UserID Mismatch",
-			"The userid that the web server ran cgiwrap as does not match the\n"
-			"userid that was configured into the cgiwrap executable.\n\n"
-			"This is a configuration/setup problem with cgiwrap on this server.\n"
-			"Please contact the server administrator.\n");
-		exit(0);
+		MSG_Error_ServerUserWrong();
 	}
 #endif
 }
@@ -378,7 +365,7 @@ char *BuildScriptPath(char *basedir, char *scrStr)
 
 	if ( !tmp )
 	{
-		DoPError("Couldn't malloc memory for scriptPath");
+		MSG_Error_SystemError("Couldn't malloc memory for scriptPath");
 	}
 
 	sprintf(tmp, "%s/%s", basedir, scrStr);
@@ -489,26 +476,63 @@ char *StripPathComponents(int count, char *path)
  */
 void SetResourceLimits(void)
 {
-#if defined(CONF_USE_RLIMIT_CPU) || defined(CONF_USE_RLIMIT_CPU)
+#if defined(CONF_USE_RLIMIT_ANY)
 	struct rlimit limstruct;
-#endif
+	int i;
+	char msg[200];
 
-/* CPU Time Limit */
+	struct cgiwrap_rlimit_table
+	{
+		int which;
+		char *label;
+		long value;
+	} cgiwrap_rlimits[] = {
 #if defined(CONF_USE_RLIMIT_CPU) && defined(RLIMIT_CPU)
-	limstruct.rlim_cur = 9;
-	limstruct.rlim_max = 10;
-
-	DEBUG_Msg("\nSetting Limits (CPU Usage)\n");
-	setrlimit( RLIMIT_CPU, &limstruct );
+		{RLIMIT_CPU, "cpu time", CONF_USE_RLIMIT_CPU},
 #endif
-
-/* Virtual Memory Limit */
 #if defined(CONF_USE_RLIMIT_VMEM) && defined(RLIMIT_VMEM)
-	limstruct.rlim_cur = 2000000;
-	limstruct.rlim_max = 2500000;
+		{RLIMIT_VMEM, "virtual memory", CONF_USE_RLIMIT_VMEM},
+#endif
+#if defined(CONF_USE_RLIMIT_FSIZE) && defined(RLIMIT_FSIZE)
+		{RLIMIT_FSIZE, "writable file size", CONF_USE_RLIMIT_FSIZE},
+#endif
+#if defined(CONF_USE_RLIMIT_DATA) && defined(RLIMIT_DATA)
+		{RLIMIT_DATA, "data size", CONF_USE_RLIMIT_DATA},
+#endif
+#if defined(CONF_USE_RLIMIT_STACK) && defined(RLIMIT_STACK)
+		{RLIMIT_STACK, "stack size", CONF_USE_RLIMIT_STACK},
+#endif
+#if defined(CONF_USE_RLIMIT_AS) && defined(RLIMIT_AS)
+		{RLIMIT_AS, "total available memory", CONF_USE_RLIMIT_AS},
+#endif
+#if defined(CONF_USE_RLIMIT_CORE) && defined(RLIMIT_CORE)
+		{RLIMIT_CORE, "core file size", CONF_USE_RLIMIT_CORE},
+#endif
+#if defined(CONF_USE_RLIMIT_RSS) && defined(RLIMIT_RSS)
+		{RLIMIT_RSS, "resident set size", CONF_USE_RLIMIT_RSS},
+#endif
+#if defined(CONF_USE_RLIMIT_NPROC) && defined(RLIMIT_NPROC)
+		{RLIMIT_NPROC, "number of processes", CONF_USE_RLIMIT_NPROC},
+#endif
+#if defined(CONF_USE_RLIMIT_NOFILE) && defined(RLIMIT_NOFILE)
+		{RLIMIT_NOFILE, "number of open files", CONF_USE_RLIMIT_NOFILE},
+#endif
+#if defined(CONF_USE_RLIMIT_MEMLOCK) && defined(RLIMIT_MEMLOCK)
+		{RLIMIT_MEMLOCK, "lockable memory", CONF_USE_RLIMIT_MEMLOCK},
+#endif
+		{0,0,0}
+	};
 
-	DEBUG_Msg("Setting Limits (Virtual Memory)\n");
-	setrlimit( RLIMIT_VMEM, &limstruct );
+	for (i=0; cgiwrap_rlimits[i].label; i++)
+	{
+		limstruct.rlim_cur = cgiwrap_rlimits[i].value;
+		limstruct.rlim_max = cgiwrap_rlimits[i].value;
+
+		sprintf(msg, "\nSetting Limit: %s\n", cgiwrap_rlimits[i].label);
+		DEBUG_Msg(msg);
+
+		setrlimit(cgiwrap_rlimits[i].which, &limstruct);
+	}
 #endif
 }
 
@@ -547,7 +571,7 @@ void ChangeID ( struct passwd *user)
 	seteuid( user->pw_uid );
 	setruid( user->pw_uid );
 #else
-	DoError("Configuration Error, No Way to Change IDs");
+	MSG_Error_General("Configuration Error, No Way to Change IDs");
 #endif
 
 
@@ -563,19 +587,19 @@ void ChangeID ( struct passwd *user)
 	/***/
 	if ( getuid() != user->pw_uid )
 	{
-		DoError("Real UID could not be changed!");
+		MSG_Error_General("Real UID could not be changed!");
 	}
 	if ( geteuid() != user->pw_uid )
 	{
-		DoError("Effective UID could not be changed!");
+		MSG_Error_General("Effective UID could not be changed!");
 	}
 	if ( getgid() != user->pw_gid )
 	{
-		DoError("Real GID could not be changed!");
+		MSG_Error_General("Real GID could not be changed!");
 	}
 	if ( getegid() != user->pw_gid )
 	{
-		DoError("Effective GID could not be changed!");
+		MSG_Error_General("Effective GID could not be changed!");
 	}
 }
 
@@ -586,12 +610,12 @@ void ChangeAuxGroups(struct passwd *user)
 {
 #if defined(HAS_SETGROUPS) && defined(CONF_SETGROUPS)
 	if ( setgroups(0, NULL) == -1 )
-		DoPError("setgroups() failed!");
+		MSG_Error_SystemError("setgroups() failed!");
 #endif
 
 #if defined(HAS_INITGROUPS) && defined(CONF_INITGROUPS)
 	if ( initgroups( user->pw_name, user->pw_gid ) == -1 )
-		DoPError("initgroups() failed!");
+		MSG_Error_SystemError("initgroups() failed!");
 #endif
 }
 
@@ -615,13 +639,13 @@ int UserInFile(char *filename, char *user)
               &addr[0],&addr[1],&addr[2],&addr[3]) != 4 )
       {
               Log(user, "-", "no remote host");
-              DoError("Your host (undetermined) is not allowed to run this");
+              MSG_Error_General("Your host is not allowed to run this");
       }
 #endif
 
 	if ( (file=fopen(filename,"r")) == NULL )
 	{
-		DoPError("Couldn't Open User List File");
+		MSG_Error_SystemError("Couldn't Open User List File");
 	}
 
 	while ( !feof(file) )
@@ -662,46 +686,16 @@ int UserInFile(char *filename, char *user)
 
 
 /*
- * Output an error message with system error message string
- */
-void DoPError (char *msg)
-{
-	MSG_ContentType("text/plain");
-
-	printf("CGIwrap Error: %s\n", msg);
-
-#if defined(HAS_STRERROR)
-	printf("Error: %s (%d)\n", strerror(errno), errno);
-#elif defined(HAS_PERROR)
-	perror("Error");
-#else
-	printf("Error: %d\n", errno);
-#endif
-
-	exit(1);
-}
-
-
-/*
- * Output a error message
- */
-void DoError (char *msg)
-{
-	MSG_ContentType("text/plain");
-
-	printf("CGIwrap Error: %s \n", msg);
-	exit(1);
-}
-
-
-/*
  * Add an entry to the log file
  */
 void Log (char *user, char *script, char *msg)
 {
 	time_t timevar;
-	FILE *logFile;
 	char *timeString;
+#if defined(CONF_LOG_USEFILE)
+	FILE *logFile;
+	int logfd;
+#endif
 
 	time(&timevar);
 	timeString = ctime(&timevar);
@@ -711,9 +705,15 @@ void Log (char *user, char *script, char *msg)
 #if defined(CONF_LOG_USEFILE)
 	DEBUG_Msg("Logging Request (File)");
 
-	if ( (logFile = fopen(CONF_LOG_LOGFILE, "a")) == NULL )
+	logfd = open(CONF_LOG_LOGFILE, O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
+	if ( !logfd )
 	{
-		DoPError("Could not open log file for appending!");
+		MSG_Error_SystemError("Could not open log file for appending!");
+	}
+	logFile = fdopen(logfd, "a");
+	if ( !logFile )
+	{
+		MSG_Error_SystemError("Could not open file stream from file descriptor!");
 	}
 	
 	fprintf(logFile, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
@@ -726,6 +726,7 @@ void Log (char *user, char *script, char *msg)
 		NullCheck( timeString ) );
 
 	fclose(logFile);
+	close(logfd);
 #endif
 #if defined(CONF_LOG_USESYSLOG) && defined(HAS_SYSLOG)
 	DEBUG_Msg("Logging Request (syslog)");
@@ -759,7 +760,7 @@ void SetScriptName(char *userStr, char *scrStr )
 
 	if( !buf )
 	{
-		DoPError("Couldn't malloc memory for SCRIPT_NAME buf!");
+		MSG_Error_SystemError("Couldn't malloc memory for SCRIPT_NAME buf!");
 	}
 
 	sprintf(buf, "%s=%s/%s/%s", "SCRIPT_NAME", 
@@ -780,7 +781,7 @@ void SetPathTranslated( char *scriptPath )
 
 	if( !buf )
 	{
-		DoPError("Couldn't malloc memory for PATH_TRANSLATED buf!");
+		MSG_Error_SystemError("Couldn't malloc memory for PATH_TRANSLATED buf!");
 	}
 
 	sprintf(buf, "%s=%s", "PATH_TRANSLATED", scriptPath); 
@@ -803,7 +804,7 @@ void SetPathTranslated( char *scriptPath )
 
 	if( !buf )
 	{
-		DoPError("Couldn't malloc memory for PATH_TRANSLATED buf!");
+		MSG_Error_SystemError("Couldn't malloc memory for PATH_TRANSLATED buf!");
 	}
 
 	sprintf(buf, "%s=%s%s", "PATH_TRANSLATED", docroot, pathinfo); 
@@ -820,6 +821,9 @@ void SetPathTranslated( char *scriptPath )
  * might make. It also prevents the script from inheriting the servers
  * authentication if it is running authenticated
  */
+#if defined(CONF_AFS_SETPAG)
+	void setpag(void);
+#endif
 void Create_AFS_PAG(void)
 {
 #if defined(CONF_AFS_SETPAG)
@@ -834,16 +838,16 @@ void Create_AFS_PAG(void)
  */
 char *GetUserDir(char *user)
 {
+#if defined(CONF_USERDIRFILE)
 	FILE *file;
 	static char temp[500];
 	int i, j;
 
-#if defined(CONF_USERDIRFILE)
-	DEBUG_Msg("\nProcessing User Directory Configuration File.");
+	DEBUG_Msg("\nProcessing user directory configuration file.");
 
 	if ( (file=fopen(CONF_USERDIRFILE,"r")) == NULL )
 	{
-		DoPError("Couldn't Open User Directory Config File");
+		MSG_Error_SystemError("Couldn't open user directory config file");
 	}
 
 	temp[0]=0;
@@ -878,9 +882,7 @@ char *GetUserDir(char *user)
  */
 char *GetBaseDirectory(struct passwd *user)
 {
-	char *tmp;
-	char *userdir;
-	char *basedir;
+	char *userdir, *basedir;
 
 	userdir = GetUserDir(user->pw_name);
 
@@ -888,12 +890,11 @@ char *GetBaseDirectory(struct passwd *user)
 	{
 		DEBUG_Msg("Using configured base directory.\n");
 		basedir = (char *) malloc( strlen(userdir) + 4 );
-		strcpy(basedir, userdir);
-
 		if ( !basedir )
 		{
-			DoPError("Couldn't malloc memory for basedir");
+			MSG_Error_SystemError("Couldn't malloc memory for basedir");
 		}
+		strcpy(basedir, userdir);
 	}
 	else
 	{
@@ -902,9 +903,8 @@ char *GetBaseDirectory(struct passwd *user)
 		
 		if ( !basedir )
 		{
-			DoPError("Couldn't malloc memory for basedir");
+			MSG_Error_SystemError("Couldn't malloc memory for basedir");
 		}
-
 		sprintf(basedir, "%s/%s", user->pw_dir, CONF_CGIDIR);
 	}
 

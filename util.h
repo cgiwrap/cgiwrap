@@ -26,6 +26,7 @@ void ChangeID ( struct passwd *user);
 void ChangeAuxGroups(struct passwd *user);
 int UserInFile(char *filename, char *user);
 void DoPError (char *msg);
+void ChangeToCGIDir(char *scriptPath);
 void DoError (char *msg);
 void Log (char *user, char *script, char *msg);
 void SetScriptName(char *userStr, char *scrStr );

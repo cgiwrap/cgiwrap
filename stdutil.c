@@ -18,7 +18,7 @@ char *strdup(char *str)
 	temp = (char *) malloc ( strlen(str) + 1 );
 	if (!temp)
 	{
-		DoPError("Couldn't malloc memory for string!");
+		MSG_Error_SystemError("Couldn't malloc memory for string!");
 	}
 	strcpy(temp,str);
 

@@ -1,4 +1,0 @@
-#!/bin/csh
-
-metaconfig -m
-makedist -c ../cgiwrap-3.6

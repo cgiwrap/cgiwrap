@@ -1,0 +1,602 @@
+dnl Process this file with autoconf to produce a configure script
+AC_INIT(cgiwrap.h)
+AC_CONFIG_AUX_DIR(.)
+AC_CANONICAL_SYSTEM
+AC_CONFIG_HEADER(config.h)
+
+AC_PROG_CC
+AC_PROG_MAKE_SET
+
+dnl
+dnl Path to perl unsup stuff
+dnl
+AC_ARG_WITH( perl, 
+	[  --with-perl=PATH]
+	[  path to perl executable to use], 
+	[
+		AC_MSG_CHECKING(for perl)
+		if test x$withval != x; then
+			PATH_PROG_PERL=$withval
+			AC_MSG_RESULT($withval)
+		else
+			AC_MSG_RESULT(not found)
+		fi
+	],
+	[
+		AC_PATH_PROG(PATH_PROG_PERL, perl, no)
+	])
+
+
+
+dnl
+dnl Check needed library functions
+dnl
+AC_CHECK_FUNC(sigset,[AC_DEFINE(HAS_SIGSET)])
+AC_CHECK_FUNC(initgroups, [AC_DEFINE(HAS_INITGROUPS)])
+AC_CHECK_FUNC(setgroups, [AC_DEFINE(HAS_SETGROUPS)])
+AC_CHECK_FUNC(setgid, [AC_DEFINE(HAS_SETGID)])
+AC_CHECK_FUNC(setuid, [AC_DEFINE(HAS_SETUID)])
+AC_CHECK_FUNC(setegid, [AC_DEFINE(HAS_SETEGID)])
+AC_CHECK_FUNC(seteuid, [AC_DEFINE(HAS_SETEUID)])
+AC_CHECK_FUNC(setrgid, [AC_DEFINE(HAS_SETRGID)])
+AC_CHECK_FUNC(setruid, [AC_DEFINE(HAS_SETRUID)])
+AC_CHECK_FUNC(setregid, [AC_DEFINE(HAS_SETREGID)])
+AC_CHECK_FUNC(setreuid, [AC_DEFINE(HAS_SETREUID)])
+AC_CHECK_FUNC(setresgid, [AC_DEFINE(HAS_SETRESGID)])
+AC_CHECK_FUNC(setresuid, [AC_DEFINE(HAS_SETRESUID)])
+AC_CHECK_FUNC(perror, [AC_DEFINE(HAS_PERROR)])
+AC_CHECK_FUNC(strerror, [AC_DEFINE(HAS_STRERROR)])
+AC_CHECK_FUNC(strdup, [AC_DEFINE(HAS_STRDUP)])
+AC_CHECK_FUNC(syslog, [AC_DEFINE(HAS_SYSLOG)])
+AC_CHECK_FUNC(setrlimit, [AC_DEFINE(HAS_SETRLIMIT)])
+
+
+dnl
+dnl Path of installation group
+dnl
+AC_MSG_CHECKING(for installation group)
+AC_ARG_WITH( install-group, 
+	[  --with-install-group=GROUP  (root)]
+	[  group to install cgiwrap as],
+	[
+		if test x$withval = xyes; then
+			withval=root
+		fi
+		if test x$withval = xno; then
+			withval=root
+		fi
+		if test x$withval = x; then
+			withval=root
+		fi
+
+		INSTALLGROUP=$withval
+	],
+	[
+		withval=root
+		INSTALLGROUP=$withval
+	])
+AC_MSG_RESULT($withval)
+AC_SUBST(INSTALLGROUP)
+
+AC_MSG_CHECKING(for installation directory)
+AC_ARG_WITH( install-dir, 
+	[  --with-install-dir=PATH]
+	[  path to installation directory],
+	[
+		if test x$withval != x; then
+			INSTALLDIR=$withval
+			DOINSTALL=""
+			AC_MSG_RESULT($withval)
+		else
+			AC_MSG_RESULT(not found)
+			DOINSTALL="#"
+		fi
+	],
+	[
+		AC_MSG_RESULT([not found])
+		DOINSTALL="#"
+	])
+AC_SUBST(INSTALLDIR)
+AC_SUBST(DOINSTALL)
+
+AC_MSG_CHECKING(for path to cgi scripts)
+AC_ARG_WITH( cgi-dir, 
+	[  --with-cgi-dir=PATH  (public_html/cgi-bin)]
+	[  path relative to home dir for cgi scripts], 
+	[
+		if test x$withval != xno; then
+			AC_DEFINE_UNQUOTED(CONF_CGIDIR, "${withval}")
+			AC_MSG_RESULT([$withval])
+		else
+			AC_MSG_ERROR([must be defined])
+		fi
+	],
+	[
+		AC_MSG_RESULT([public_html/cgi-bin])
+		AC_DEFINE_UNQUOTED(CONF_CGIDIR,"public_html/cgi-bin")
+	])
+
+
+dnl
+dnl Checking for what server userid cgiwrap will run as
+dnl
+AC_MSG_CHECKING(for httpd-user)
+AC_ARG_WITH( httpd-user, 
+	[  --with-httpd-user=USER  (http)]
+	[  define what userid the web server is running as], 
+	[ 
+		if test x$withval = xyes; then
+			withval=http
+		fi
+		if test x$withval = xno; then
+			withval=http
+		fi
+		if test x$withval = x; then
+			withval=http
+		fi
+	],
+	[ 
+		withval=http
+	])
+AC_DEFINE_UNQUOTED(CONF_HTTPD_USER, "${withval}")
+AC_MSG_RESULT([server running as "${withval}"])
+
+
+AC_MSG_CHECKING(for check-httpd-user)
+AC_ARG_WITH( check-httpd-user, 
+	[  --with-check-httpd-user]
+	[  dont't check to make sure cgiwrap is being run by server userid], 
+	[
+		AC_MSG_RESULT([disabled, server userid will be checked])
+		INSTALLMODE=4750
+	],
+	[
+		AC_DEFINE(CONF_CHECK_HTTPD_USER)
+		AC_MSG_RESULT([enabled, be sure to restrict permissions])
+		INSTALLMODE=4755
+	])
+AC_SUBST(INSTALLMODE)
+
+
+dnl
+dnl Various cgi-script permission checks
+dnl The DEFINE is in the 'not-found' section of the macro
+dnl
+AC_MSG_CHECKING(for check-owner)
+AC_ARG_WITH( check-owner, 
+	[  --without-check-owner]
+	[  disable check for matching owner],
+	[
+		if test x$withval != xno; then
+			AC_DEFINE(CONF_CHECK_SCRUID)
+			AC_MSG_RESULT([enabled, owner of script must match])
+		else
+			AC_MSG_RESULT([disabled, owner of script can be different])
+		fi
+	],
+	[
+		AC_DEFINE(CONF_CHECK_SCRUID)
+		AC_MSG_RESULT([enabled, owner of script must match])
+	])
+
+AC_MSG_CHECKING(for check-group)
+AC_ARG_WITH( check-group, 
+	[  --without-check-group]
+	[  disable check for matching group],
+	[
+		if test x$withval != xno; then
+			AC_DEFINE(CONF_CHECK_SCRGID)
+			AC_MSG_RESULT([enabled, group of script must match])
+		else
+			AC_MSG_RESULT([disabled, group of script can be different])
+		fi
+	],
+	[
+		AC_DEFINE(CONF_CHECK_SCRGID)
+		AC_MSG_RESULT([enabled, group of script must match])
+	])
+
+AC_MSG_CHECKING(for check-setuid)
+AC_ARG_WITH( check-setuid, 
+	[  --without-check-setuid]
+	[  disable check for setuid script],
+	[
+		if test x$withval != xno; then
+			AC_DEFINE(CONF_CHECK_SCRSUID)
+			AC_MSG_RESULT([enabled, script cannot be setuid])
+		else
+			AC_MSG_RESULT([disabled, script can be setuid])
+		fi
+	],
+	[
+		AC_MSG_RESULT([enabled, script cannot be setuid])
+		AC_DEFINE(CONF_CHECK_SCRSUID)		
+	])
+
+AC_MSG_CHECKING(for check-setgid)
+AC_ARG_WITH( check-setgid, 
+	[  --without-check-setgid]
+	[  disable check for setgid script],
+	[
+		if test x$withval != xno; then
+			AC_DEFINE(CONF_CHECK_SCRSGID)
+			AC_MSG_RESULT([enabled, script cannot be setuid])
+		else
+			AC_MSG_RESULT([disabled, script can be setgid])
+		fi
+	],
+	[
+		AC_MSG_RESULT([enabled, script cannot be setgid])
+		AC_DEFINE(CONF_CHECK_SCRSGID)		
+	])
+
+AC_MSG_CHECKING(for check-group-writable)
+AC_ARG_WITH( check-group-writable, 
+	[  --without-check-group-writable]
+	[  disable check for group writable script],
+	[
+		if test x$withval != xno; then
+			AC_DEFINE(CONF_CHECK_SCRGWRITE)
+			AC_MSG_RESULT([enabled, script cannot be group writable])
+		else
+			AC_MSG_RESULT([disabled, script can be group writable])
+		fi
+	],
+	[
+		AC_DEFINE(CONF_CHECK_SCRGWRITE)
+		AC_MSG_RESULT([enabled, script cannot be group writable])
+	])
+
+AC_MSG_CHECKING(for check-world-writable)
+AC_ARG_WITH( check-world-writable, 
+	[  --without-check-world-writable]
+	[  disable check for world writable script],
+	[
+		if test x$withval != xno; then
+			AC_DEFINE(CONF_CHECK_SCROWRITE)
+			AC_MSG_RESULT([enabled, script cannot be world writable])
+		else
+			AC_MSG_RESULT([disabled, script can be world writable])
+		fi
+	],
+	[
+		AC_DEFINE(CONF_CHECK_SCROWRITE)
+		AC_MSG_RESULT([enabled, script cannot be world writable])
+	])
+
+AC_MSG_CHECKING(for check-symlink)
+AC_ARG_WITH( check-symlink,
+	[  --without-check-symlink]
+	[  disable check for symlinked script],
+	[
+		if test x$withval != xno; then
+			AC_DEFINE(CONF_CHECK_SYMLINK)
+			AC_MSG_RESULT([enabled, script cannot be a symlink])
+		else
+			AC_MSG_RESULT([disabled, script can be a symlink])
+		fi
+	],
+	[
+		AC_MSG_RESULT([enabled, script cannot be a symlink])
+		AC_DEFINE(CONF_CHECK_SYMLINK)
+	])
+
+
+dnl
+dnl Options for logging script execution
+dnl
+AC_MSG_CHECKING(for logging-syslog)
+AC_ARG_WITH( logging-syslog,
+	[  --with-logging-syslog=LABEL]
+	[  enable logging script execution to syslog],
+	[
+		if test x$withval != xno; then
+			AC_DEFINE(CONF_LOG_USESYSLOG)
+			AC_DEFINE_UNQUOTED(CONF_LOG_LABEL, "${withval}")
+			AC_MSG_RESULT([enabled, label is '${withval}'])
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
+	])
+
+AC_MSG_CHECKING(for logging-file)
+AC_ARG_WITH( logging-file,
+	[  --with-logging-file=FILE  (/usr/adm/cgiwrap.log)]
+	[  enable logging script execution to file],
+	[
+		AC_DEFINE_UNQUOTED(CONF_LOG_LOGFILE, "/usr/adm/cgiwrap.log")
+		if test x$withval != xno; then
+			AC_DEFINE(CONF_LOG_USEFILE)
+			AC_DEFINE_UNQUOTED(CONF_LOG_LOGFILE, "${withval}")
+			AC_MSG_RESULT([enabled, logging to file ${withval}])
+		else
+			AC_MSG_RESULT(disabled)
+		fi
+	],
+	[
+		AC_MSG_RESULT(disabled)
+	])
+
+
+dnl
+dnl Option to not allow scripts in subdirectories
+dnl
+AC_MSG_CHECKING(for script-subdirs)
+AC_ARG_WITH( script-subdirs,
+	[  --without-script-subdirs]
+	[  prevent users from storing scripts in subdirs],
+	[
+		if test x$withval != xno; then
+			AC_DEFINE(CONF_SUBDIRS)
+			AC_MSG_RESULT([enabled, scripts allowed in subdirectories])
+		else
+			AC_MSG_RESULT([disabled, scripts not allowed in subdirectories])
+		fi
+	],
+	[
+		AC_DEFINE(CONF_SUBDIRS)
+		AC_MSG_RESULT([enabled, scripts allowed in subdirectories])
+	])
+
+
+dnl
+dnl Option to not redirect the stderr output
+dnl
+AC_MSG_CHECKING(for redirect-stderr)
+AC_ARG_WITH( redirect-stderr,
+	[  --without-redirect-stderr]
+	[  don't redirect stderr to stdout in scripts],
+	[
+		if test x$withval != xno; then
+			AC_DEFINE(CONF_REDIR_STDERR)
+			AC_MSG_RESULT([enabled, stderr output will go to stdout])
+		else
+			AC_MSG_RESULT([disabled, server will get stderr output])
+		fi
+	],
+	[
+		AC_DEFINE(CONF_REDIR_STDERR)
+		AC_MSG_RESULT([enabled, stderr output will go to stdout])
+	])
+
+
+dnl
+dnl Options for clearing/setting a user's auxilliary (/etc/groups) groups
+dnl
+AC_MSG_CHECKING(for initgroups)
+AC_ARG_WITH( initgroups,
+	[  --with-initgroups]
+	[  use initgroups() to clear non-userid auxilliary groups],
+	[
+		if test x$withval != xno; then
+			AC_DEFINE(CONF_INITGROUPS)
+			AC_MSG_RESULT([enabled, aux groups will be cleared])
+		else
+			AC_MSG_RESULT([disabled, aux groups will not be cleared])
+		fi
+	],
+	[
+			AC_MSG_RESULT([disabled, aux groups will not be cleared])
+	])
+
+AC_MSG_CHECKING(for setgroups)
+AC_ARG_WITH( setgroups,
+	[  --with-setgroups]
+	[  use setgroups() to add userid's auxilliary groups],
+	[
+		if test x$withval != xno; then
+			AC_DEFINE(CONF_SETGROUPS)
+			AC_MSG_RESULT([enabled, aux groups will be set])
+		else
+			AC_MSG_RESULT([disabled, aux groups will not be set])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled, aux groups will not be set])
+	])
+
+
+dnl
+dnl Option for enabling and specifying the user dir rewrite file
+dnl
+AC_MSG_CHECKING(for user directory rewrite)
+AC_ARG_WITH( rewrite,
+	[  --with-rewrite=FILE]
+	[  use a file to rewrite user directories],
+	[
+		if test x$withval != xno; then
+			AC_DEFINE_UNQUOTED(CONF_USERDIRFILE, "${withval}")
+			AC_MSG_RESULT([enabled, rewrite file is ${withval}])
+		else
+			AC_MSG_RESULT([disabled, no rewrite file will be used])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled, no rewrite file will be used])
+	])
+
+
+dnl
+dnl Option to disable the fixed PATH_TRANSLATED support for
+dnl compatability with older versions of cgiwrap
+dnl
+AC_MSG_CHECKING(for fixed-path-translated)
+AC_ARG_WITH( fixed-path-translated,
+	[  --without-fixed-path-translated]
+	[  Don't fix the PATH_TRANSLATED variable (pre 3.5 behavior)],
+	[
+		if test x$withval != xno; then
+			AC_DEFINE(CONF_FIXED_PATHTRANS)
+			AC_MSG_RESULT([enabled, PATH_TRANSLATED will be set correctly])
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_DEFINE(CONF_FIXED_PATHTRANS)
+		AC_MSG_RESULT([enabled])
+	])
+
+
+dnl
+dnl Resource limits for those who want to use them
+dnl
+dnl CGIWRAP_RLIMIT(cpu,CPU,SECONDS,[cpu seconds],10,[cpu usage])
+
+AC_DEFUN(CGIWRAP_RLIMIT,[
+	AC_MSG_CHECKING(for limit rlimit-$1)
+	AC_ARG_WITH( rlimit-$1,
+	[  --with-rlimit-$1=$3  ($5)]
+        [  limit $6 with setrlimit],
+	[
+		if test x$withval = xyes; then
+			withval=$5
+		fi
+		if test x$withval = x; then
+			withval=$5
+		fi
+		if test x$withval != xno; then
+			AC_DEFINE(CONF_USE_RLIMIT_ANY)
+			AC_DEFINE_UNQUOTED(CONF_USE_RLIMIT_$2, ${withval})
+			AC_MSG_RESULT([${withval} $4])
+		else
+			AC_MSG_RESULT([none])
+		fi
+	],
+	[
+		AC_MSG_RESULT([none])
+	])
+])
+
+CGIWRAP_RLIMIT(cpu,CPU,SECONDS,[cpu seconds],10,[cpu time])
+CGIWRAP_RLIMIT(vmem,VMEM,BYTES,[bytes],2500000,[total virtual memory])
+CGIWRAP_RLIMIT(as,AS,BYTES,[bytes],2500000,[total available memory])
+CGIWRAP_RLIMIT(fsize,FSIZE,BYTES,[bytes],2500000,[writable file size])
+CGIWRAP_RLIMIT(data,DATA,BYTES,[bytes],2500000,[data segment size])
+CGIWRAP_RLIMIT(stack,STACK,BYTES,[bytes],2500000,[stack segment size])
+CGIWRAP_RLIMIT(core,CORE,BYTES,[bytes],2500000,[core file size])
+CGIWRAP_RLIMIT(rss,RSS,BYTES,[bytes],2500000,[resident set size])
+CGIWRAP_RLIMIT(nproc,NPROC,COUNT,[processes],32,[number of processes])
+CGIWRAP_RLIMIT(nofile,NOFILE,COUNT,[files],32,[number of open files])
+CGIWRAP_RLIMIT(memlock,MEMLOCK,BYTES,[bytes],2500000,[lockable memory])
+
+
+
+
+dnl
+dnl Options for access control files
+dnl
+
+AC_MSG_CHECKING(for allow-file)
+AC_ARG_WITH( allow-file,
+	[  --with-allow-file=FILE  (/usr/adm/cgiwrap.allow)]
+	[  limit cgiwrap usage],
+	[
+		if test x$withval = x; then
+			withval="/usr/adm/cgiwrap.allow"
+		fi
+		if test x$withval != xno; then
+			AC_DEFINE_UNQUOTED(CONF_ALLOWFILE, ${withval})
+			AC_MSG_RESULT([enabled, file is ${withval}])
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
+	])
+
+AC_MSG_CHECKING(for deny-file)
+AC_ARG_WITH( deny-file,
+	[  --with-deny-file=FILE  (/usr/adm/cgiwrap.deny)]
+	[  limit cgiwrap usage],
+	[
+		if test x$withval = x; then
+			withval="/usr/adm/cgiwrap.deny"
+		fi
+		if test x$withval != xno; then
+			AC_DEFINE_UNQUOTED(CONF_DENYFILE, ${withval})
+			AC_MSG_RESULT([enabled, file is ${withval}])
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
+	])
+
+AC_MSG_CHECKING(for host checking)
+AC_ARG_WITH( host-checking,
+	[  --with-host-checking]
+	[  allow specifying hosts in allow/deny files],
+	[
+		if test x$withval != xno; then
+			AC_DEFINE_UNQUOTED(CONF_CHECKHOST, ${withval})
+			AC_MSG_RESULT([enabled])
+		else
+			AC_MSG_RESULT([disabled])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
+	])
+
+dnl
+dnl Options for AFS PAG support
+dnl
+AC_MSG_CHECKING([for afs setpag() support])
+AC_ARG_WITH( afs,
+	[  --with-afs=DIR  (/usr/afsws)]
+	[  enable afs setpag() support],
+	[
+		if test x$withval = xno; then
+			AC_MSG_RESULT([disabled])
+		else
+			if test x$withval = x; then
+				withval="/usr/afsws"
+			fi
+			if test x$withval = xyes; then
+				withval="/usr/afsws"
+			fi
+			AFSDIR=$withval
+			AFSCFLAGS="-I${AFSDIR}/include"
+			AFSLDFLAGS="-L${AFSDIR}/lib -L${AFSDIR}/lib/afs"
+			AFSLIBS="-lsys -lrx -llwp ${AFSDIR}/lib/afs/util.a"
+			AC_DEFINE(CONF_AFS_SETPAG)
+			AC_MSG_RESULT([enabled, afs dir is $withval])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled])
+	])
+AC_SUBST(AFSDIR)
+AC_SUBST(AFSLDFLAGS)
+AC_SUBST(AFSCFLAGS)
+AC_SUBST(AFSLIBS)
+
+
+dnl
+dnl Special stuff for particular O/S's
+dnl
+AC_MSG_CHECKING(for OS specific flags/options)
+os_specific_msg="none needed"
+case $target_os in
+	hpux* )	
+		AC_DEFINE(_HPUX_SOURCE)
+		LIBS="$LIBS -lBSD"
+		os_specific_msg="HPUX_SOURCE"
+	;;
+esac
+AC_MSG_RESULT([$os_specific_msg])
+
+
+AC_HEADER_STDC
+AC_CHECK_HEADERS(limits.h stdlib.h pwd.h string.h strings.h)
+AC_CHECK_HEADERS(sys/resource.h sys/types.h sys/time.h unistd.h)
+AC_CHECK_HEADERS(syslog.h)
+
+
+AC_OUTPUT(Makefile unsup/loganalyze.pl)

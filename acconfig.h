@@ -1,0 +1,82 @@
+/* 
+ * httpd user check
+ */
+#undef CONF_CHECK_HTTPD_USER
+#undef CONF_HTTPD_USER 
+
+/*
+ * Script checks
+ */
+#undef CONF_CHECK_SCRUID
+#undef CONF_CHECK_SCRGID
+#undef CONF_CHECK_SCRSUID
+#undef CONF_CHECK_SCRSGID
+#undef CONF_CHECK_SCRGWRITE
+#undef CONF_CHECK_SCROWRITE
+#undef CONF_CHECK_SYMLINK
+
+/*
+ * Logging options
+ */
+#undef CONF_LOG_USEFILE
+#undef CONF_LOG_USESYSLOG
+#undef CONF_LOG_LOGFILE
+#undef CONF_LOG_LABEL
+
+/*
+ * Function availability
+ */
+#undef HAS_SIGSET
+#undef HAS_INITGROUPS
+#undef HAS_SETGROUPS
+#undef HAS_SETGID
+#undef HAS_SETUID
+#undef HAS_SETEGID
+#undef HAS_SETEUID
+#undef HAS_SETRGID
+#undef HAS_SETRUID
+#undef HAS_SETREGID
+#undef HAS_SETREUID
+#undef HAS_SETRESGID
+#undef HAS_SETRESUID
+#undef HAS_PERROR
+#undef HAS_STRDUP
+#undef HAS_SYSLOG
+#undef HAS_SETRLIMIT
+#undef HAS_STRERROR
+
+/*
+ * Various options
+ */
+#undef CONF_FIXED_PATHTRANS
+#undef CONF_REDIR_STDERR
+#undef CONF_SUBDIRS
+#undef CONF_USERDIRFILE
+#undef CONF_INITGROUPS
+#undef CONF_SETGROUPS
+#undef CONF_ALLOWFILE
+#undef CONF_DENYFILE
+#undef CONF_CHECKHOSTS
+#undef CONF_AFS_SETPAG
+#undef CONF_CGIDIR
+
+/*
+ * RLimit Options
+ */
+#undef CONF_USE_RLIMIT_ANY
+#undef CONF_USE_RLIMIT_AS
+#undef CONF_USE_RLIMIT_CPU
+#undef CONF_USE_RLIMIT_VMEM
+#undef CONF_USE_RLIMIT_FSIZE
+#undef CONF_USE_RLIMIT_DATA
+#undef CONF_USE_RLIMIT_STACK
+#undef CONF_USE_RLIMIT_CORE
+#undef CONF_USE_RLIMIT_RSS
+#undef CONF_USE_RLIMIT_NPROC
+#undef CONF_USE_RLIMIT_NOFILE
+#undef CONF_USE_RLIMIT_MEMLOCK
+
+/*
+ * OS Specific Definitions
+ */
+#undef _HPUX_SOURCE
