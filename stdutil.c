@@ -1,4 +1,3 @@
-
 static char *rcsid="$Id$";
 
 /**
