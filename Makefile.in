@@ -6,17 +6,17 @@
 #
 # Compiler definitions and flags
 #
+VERSION=@VERSION@
+SHELL=/bin/sh
+
 srcdir=@srcdir@
 VPATH=@srcdir@
 @SET_MAKE@
+
 CC=@CC@
 CFLAGS=@GCC_WALL_OPT@ @CFLAGS@ @CPPFLAGS@
 LDFLAGS=@LDFLAGS@ @AFSLDFLAGS@
 LIBS=@AFSLIBS@ @LIBS@
-
-#
-# Object Files
-#
 OBJS=cgiwrap.o debug.o util.o fetch.o stdutil.o msgs.o
 
 #
@@ -24,15 +24,24 @@ OBJS=cgiwrap.o debug.o util.o fetch.o stdutil.o msgs.o
 #
 all: cgiwrap
 
-.c.o: cgiwrap.h config.h Makefile
-	$(CC) -c $(CFLAGS) $<
+.c.o:
+	$(CC) -c $(CFLAGS) -I. -I$(srcdir) $<
+
+cgiwrap: $(OBJS)
+	$(CC) -o cgiwrap $(OBJS) $(LDFLAGS) $(LIBS)
+
+dep: Makefile
+	mv Makefile Makefile.bak
+	awk -f $(srcdir)/depend.awk < Makefile.bak > Makefile
+	echo '# DO NOT REMOVE THIS LINE' >> Makefile
+	$(CC) -MM -I. -I$(srcdir) $(srcdir)/*.c >> Makefile
 
 install: cgiwrap
 	@DOINSTALL@ rm -f @INSTALLDIR@/cgiwrap
 	@DOINSTALL@ rm -f @INSTALLDIR@/cgiwrapd
 	@DOINSTALL@ rm -f @INSTALLDIR@/nph-cgiwrap
 	@DOINSTALL@ rm -f @INSTALLDIR@/nph-cgiwrapd
-	@DOINSTALL@ cp $(srcdir)/cgiwrap @INSTALLDIR@/cgiwrap
+	@DOINSTALL@ cp cgiwrap @INSTALLDIR@/cgiwrap
 	@DOINSTALL@ chown root @INSTALLDIR@/cgiwrap
 	@DOINSTALL@ chgrp @INSTALLGROUP@ @INSTALLDIR@/cgiwrap
 	@DOINSTALL@ chmod @INSTALLMODE@ @INSTALLDIR@/cgiwrap
@@ -40,8 +49,11 @@ install: cgiwrap
 	@DOINSTALL@ ln @INSTALLDIR@/cgiwrap @INSTALLDIR@/nph-cgiwrap
 	@DOINSTALL@ ln @INSTALLDIR@/cgiwrap @INSTALLDIR@/nph-cgiwrapd
 
-cgiwrap: config.h $(OBJS)
-	$(CC) $(OBJS) $(LDFLAGS) $(LIBS) -o cgiwrap
+uninstall:
+	@DOINSTALL@ rm -f @INSTALLDIR@/cgiwrap
+	@DOINSTALL@ rm -f @INSTALLDIR@/cgiwrapd
+	@DOINSTALL@ rm -f @INSTALLDIR@/nph-cgiwrap
+	@DOINSTALL@ rm -f @INSTALLDIR@/nph-cgiwrapd
 
 clean:
 	rm -f cgiwrap core *~ *.o *.tar Makefile.bak
@@ -51,32 +63,20 @@ distclean: clean
 	rm -f unsup/loganalyze.pl
 
 #
-# Source file dependencies
-#
-cgiwrap.o: config.h cgiwrap.h cgiwrap.c
-debug.o: config.h cgiwrap.h debug.c
-util.o: config.h cgiwrap.h util.c
-fetch.o: config.h cgiwrap.h fetch.c
-stdutil.o: config.h cgiwrap.h stdutil.c
-msgs.o: config.h cgiwrap.h msgs.c
-
-#
 # Dependencies for developing cgiwrap
 #
-VERSION=3.6beta4
+allconf: configure config.h.in Makefile
 
-allconf: configure config.h.in Makefile config.h
-
-configure: configure.in
+$(srcdir)/configure: $(srcdir)/configure.in
 	autoconf
 
-Makefile: Makefile.in
+Makefile: $(srcdir)/Makefile.in
 	./config.status
 
-config.h.in: acconfig.h
+config.h.in: $(srcdir)/acconfig.h
 	autoheader
 
-config.h: config.h.in
+config.h: $(srcdir)/config.h.in
 	./config.status
 
 docs: Makefile
@@ -105,3 +105,15 @@ tardist: dist
 	
 commit: configure config.h.in docs
 	cvs commit -m "" .
+
+#
+# Source file dependencies, replaced by 'make dep'
+#
+# DO NOT REMOVE THIS LINE
+cgiwrap.o: config.h cgiwrap.h cgiwrap.c
+debug.o: config.h cgiwrap.h debug.c
+util.o: config.h cgiwrap.h util.c
+fetch.o: config.h cgiwrap.h fetch.c
+stdutil.o: config.h cgiwrap.h stdutil.c
+msgs.o: config.h cgiwrap.h msgs.c
+

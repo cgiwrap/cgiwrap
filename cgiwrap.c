@@ -15,7 +15,7 @@ struct cgiwrap_context Context;
 /*
  * Main program
  */
-void main (int argc, char *argv[])
+int main (int argc, char *argv[])
 {
 	char *userStr; /* User name */
 	char *scrStr; /* Name of script */
@@ -146,4 +146,5 @@ void main (int argc, char *argv[])
 
 	execv(scriptPath, CreateARGV(scrStr, argc,argv));
 	MSG_Error_ExecFailed();
+	exit(1);
 }

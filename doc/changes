@@ -53,6 +53,14 @@
        file.
      * Finished splitting up logging functions and changes to use the
        Context structure.
+     * Minor changes to the makefile, including telling it to use the
+       CFLAGS, and improving the tardist target.
+     * Moved extra flag stuff for AFS into it's own section and only run
+       it if needed for AFS support.
+     * Not sure why, but 3.6 works with AIX 4, 3.5 did not.
+     * Cleaned up Makefile, finished support for building in a separate
+       directory from the source, added a 'dep' target using depend.awk
+       from mutt distribution.
        
   New in version 3.5:
   
@@ -69,7 +77,7 @@
        
   New in version 3.4:
   
-     * Fixed typo "&" instead of "&&" in setgroups stuff
+     * Fixed typo "& instead of "&& in setgroups stuff
      * Added cgiwrap.aliases option to rewrite home dirs of users.
      * Moved entire cgiwrap source build tree to CVS, will make tracking
        changes easier.

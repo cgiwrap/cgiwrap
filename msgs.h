@@ -26,3 +26,4 @@ void MSG_Error_NoScriptDir(void);
 void MSG_Info(void);
 void MSG_Error_ServerUserMismatch(void);
 void MSG_Error_ServerUserNotFound(void);
+void MSG_BoxedText(char *string);

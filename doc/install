@@ -7,9 +7,16 @@
   
    Look at the notes to see if there are any hints for your platform.
           
-   Type "./Configure" and answer the questions.
+   Issue "./configure --help" to find out the various configuration
+          options. You will need to specify some of them. At the very
+          least, you will want to specify "--with-httpd-user=USERID".
+          
+   Type "./configure -options-".
           
    Type "make"
+          
+   If you specified the installation directory in the options, you can
+          type "make install" to do all the following steps.
           
    Copy cgiwrap executable to your servers cgi-bin directory
           
@@ -32,23 +39,62 @@
           (Eg. 4750) But if you do this, make sure that the group of
           cgiwrap is the same as the group that the server runs as.
           
+   *VERY IMPORTANT* - Do NOT allow any user to run scripts directly out
+          of the main cgi-bin directory, as this will allow them to use
+          cgiwrap to run any of the other users scripts.
+          
+  Configuration Options
+  
+   The following are options available with the 'configure' command.
+   Items in boldface are highly recommended. Defaults can be seen by
+   issuing './configure --help' or by looking at the 'config.h' file
+   after you have run 'configure'.
+   
+   At an absolute minimum, you will probably want to specify the
+   '--with-install-dir' and '--with-httpd-user' options.
+   
    --with-perl=PATH
           path to perl executable to use
           
-   --with-install-group=GROUP (root)
+   --with-local-contact-name=NAME
+          Specify the name of the local contact
+          
+   _--with-local-contact-email_
+          Specify the local contact's email address
+          
+   --with-local-contact-phone
+          Specify the local contact's phone number
+          
+   --with-local-contact-url
+          Specify a URL for the local contact
+          
+   --with-local-site-url
+          Specify a URL for this site
+          
+   _--with-local-doc-url_
+          Specify a URL for a local copy of the cgiwrap docs
+          
+   --with-wall
+          Add the '-Wall' option for compilation with gcc, this is
+          intended primarily for development debugging.
+          
+   --with-install-group=GROUP
           group to install cgiwrap as
           
-   --with-install-dir=PATH
-          path to installation directory
+   _--with-install-dir=PATH_
+          path to installation directory - this should be the path to
+          your server's cgi-bin directory
           
-   --with-cgi-dir=PATH (public_html/cgi-bin)
+   --with-cgi-dir=PATH
           path relative to home dir for cgi scripts
           
-   --with-httpd-user=USER (http)
-          define what userid the web server is running as
+   _--with-httpd-user=USER_
+          define what userid the web server is running as - this is
+          required
           
-   --with-check-httpd-user
-          dont't check to make sure cgiwrap is being run by server userid
+   --without-check-httpd-user
+          don't check to make sure cgiwrap is being run by server userid
+          - this is not recommended
           
    --without-check-owner
           disable check for matching owner
@@ -71,10 +117,13 @@
    --without-check-symlink
           disable check for symlinked script
           
+   --with-minimum-uid=UID Set the minimum uid of user that can use
+          cgiwrap.
+          
    --with-logging-syslog=LABEL
           enable logging script execution to syslog
           
-   --with-logging-file=FILE (/usr/adm/cgiwrap.log)
+   --with-logging-file=FILE
           enable logging script execution to file
           
    --without-script-subdirs
@@ -102,49 +151,49 @@
    --with-setenv-tz=STRING
           set TZ environment variable to STRING
           
-   --with-rlimit-cpu=SECONDS (10)
+   --with-rlimit-cpu=SECONDS
           limit cpu time with setrlimit
           
-   --with-rlimit-vmem=BYTES (2500000)
+   --with-rlimit-vmem=BYTES
           limit total virtual memory with setrlimit
           
-   --with-rlimit-as=BYTES (2500000)
+   --with-rlimit-as=BYTES
           limit total available memory with setrlimit
           
-   --with-rlimit-fsize=BYTES (2500000)
+   --with-rlimit-fsize=BYTES
           limit writable file size with setrlimit
           
-   --with-rlimit-data=BYTES (2500000)
+   --with-rlimit-data=BYTES
           limit data segment size with setrlimit
           
-   --with-rlimit-stack=BYTES (2500000)
+   --with-rlimit-stack=BYTES
           limit stack segment size with setrlimit
           
-   --with-rlimit-core=BYTES (2500000)
+   --with-rlimit-core=BYTES
           limit core file size with setrlimit
           
-   --with-rlimit-rss=BYTES (2500000)
+   --with-rlimit-rss=BYTES
           limit resident set size with setrlimit
           
-   --with-rlimit-nproc=COUNT (32)
+   --with-rlimit-nproc=COUNT
           limit number of processes with setrlimit
           
-   --with-rlimit-nofile=COUNT (32)
+   --with-rlimit-nofile=COUNT
           limit number of open files with setrlimit
           
-   --with-rlimit-memlock=BYTES (2500000)
+   --with-rlimit-memlock=BYTES
           limit lockable memory with setrlimit
           
-   --with-allow-file=FILE (/usr/adm/cgiwrap.allow)
+   --with-allow-file=FILE
           limit cgiwrap usage
           
-   --with-deny-file=FILE (/usr/adm/cgiwrap.deny)
+   --with-deny-file=FILE
           limit cgiwrap usage
           
    --with-host-checking
           allow specifying hosts in allow/deny files
           
-   --with-afs=DIR (/usr/afsws)
+   --with-afs=DIR
           enable afs setpag() support
           
      _________________________________________________________________
@@ -186,4 +235,4 @@
    create the necessary files.
    
    If you enabled the user directory rewriting feature, you need to
-   create the configuration file that you specified in the Configure run.
+   create the configuration file that you specified in the configure run.

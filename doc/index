@@ -27,8 +27,18 @@
                 
         Author's Home Page
                 
+  User CGI Execution
+  
+        Account Setup
+                
+        Quick Reference to URLs
+                
   Compilation, Installation, and Administration
   
+          This section is for people who are installing CGIWrap. This is
+          for server administrators and people who have root access on
+          web server machines.
+          
         Installation and Configuration
                 
         Compilation Notes
@@ -36,12 +46,6 @@
         Use of CGIWrap with AFS
                 
         Tips and Tricks
-                
-  User CGI Execution
-  
-        Account Setup
-                
-        Quick Reference to URLs
                 
      _________________________________________________________________
                                       

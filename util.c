@@ -107,11 +107,12 @@ char *GetValue( char *keyword, char *string )
  */
 int CheckPath(char *path)
 {
-	int i;
+	int i,c;
 
 	for (i=0; i< strlen(path); i++)
 	{
-		if ( !isprint(path[i]) || isspace(path[i]) )
+		c = path[i];
+		if ( !isprint(c) || isspace(c) )
 		{
 			return 1;
 		}

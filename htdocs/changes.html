@@ -50,6 +50,14 @@ Seth Chaiklin <seth@psy.au.dk>. Also fixed quoting in the configure.in related
 to log file.
 	<LI>Finished splitting up logging functions and changes to use the 
 Context structure.
+	<LI>Minor changes to the makefile, including telling it to use
+the CFLAGS, and improving the tardist target.
+	<LI>Moved extra flag stuff for AFS into it's own section and only
+run it if needed for AFS support.
+	<LI>Not sure why, but 3.6 works with AIX 4, 3.5 did not.
+	<LI>Cleaned up Makefile, finished support for building in a 
+separate directory from the source, added a 'dep' target using depend.awk
+from mutt distribution.
 </UL>
 
 <P><H3>New in version 3.5:</H3><UL>

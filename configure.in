@@ -4,131 +4,11 @@ AC_CONFIG_AUX_DIR(.)
 AC_CANONICAL_SYSTEM
 AC_CONFIG_HEADER(config.h)
 
+VERSION="3.6beta5"
+AC_SUBST(VERSION)
+
 AC_PROG_CC
 AC_PROG_MAKE_SET
-
-dnl
-dnl Information options
-dnl
-AC_MSG_CHECKING(for local contact name)
-AC_ARG_WITH( local-contact-name, 
-	[  --with-local-contact-name=NAME]
-	[  define name of local contact], 
-	[ 
-		if test "x$withval" = xyes; then
-			AC_MSG_RESULT([disabled, must specify value])
-		elif test "x$withval" = xno; then
-			AC_MSG_RESULT([disabled, must specify value])
-		elif test "x$withval" = x; then
-			AC_MSG_RESULT([disabled, must specify value])
-		else
-			AC_MSG_RESULT($withval)
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_NAME,"$withval")
-		fi
-	],
-	[ 
-		AC_MSG_RESULT([disabled])
-	])
-
-AC_MSG_CHECKING(for local contact email)
-AC_ARG_WITH( local-contact-email, 
-	[  --with-local-contact-email=ADDRESS]
-	[  define email address of local contact], 
-	[ 
-		if test "x$withval" = xyes; then
-			AC_MSG_RESULT([disabled, must specify value])
-		elif test "x$withval" = xno; then
-			AC_MSG_RESULT([disabled, must specify value])
-		elif test "x$withval" = x; then
-			AC_MSG_RESULT([disabled, must specify value])
-		else
-			AC_MSG_RESULT($withval)
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_EMAIL,"$withval")
-		fi
-	],
-	[ 
-		AC_MSG_RESULT([disabled])
-	])
-
-AC_MSG_CHECKING(for local contact phone)
-AC_ARG_WITH( local-contact-phone, 
-	[  --with-local-contact-phone=PHONE]
-	[  define phone number of local contact], 
-	[ 
-		if test "x$withval" = xyes; then
-			AC_MSG_RESULT([disabled, must specify value])
-		elif test "x$withval" = xno; then
-			AC_MSG_RESULT([disabled, must specify value])
-		elif test "x$withval" = x; then
-			AC_MSG_RESULT([disabled, must specify value])
-		else
-			AC_MSG_RESULT($withval)
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_PHONE,"$withval")
-		fi
-	],
-	[ 
-		AC_MSG_RESULT([disabled])
-	])
-
-AC_MSG_CHECKING(for local contact url)
-AC_ARG_WITH( local-contact-url, 
-	[  --with-local-contact-url=URL]
-	[  define url of local contact], 
-	[ 
-		if test "x$withval" = xyes; then
-			AC_MSG_RESULT([disabled, must specify value])
-		elif test "x$withval" = xno; then
-			AC_MSG_RESULT([disabled, must specify value])
-		elif test "x$withval" = x; then
-			AC_MSG_RESULT([disabled, must specify value])
-		else
-			AC_MSG_RESULT($withval)
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_URL,"$withval")
-		fi
-	],
-	[ 
-		AC_MSG_RESULT([disabled])
-	])
-
-AC_MSG_CHECKING(for local site url)
-AC_ARG_WITH( local-site-url, 
-	[  --with-local-site-url=URL]
-	[  define url of local site], 
-	[ 
-		if test "x$withval" = xyes; then
-			AC_MSG_RESULT([disabled, must specify value])
-		elif test "x$withval" = xno; then
-			AC_MSG_RESULT([disabled, must specify value])
-		elif test "x$withval" = x; then
-			AC_MSG_RESULT([disabled, must specify value])
-		else
-			AC_MSG_RESULT($withval)
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_SITE_URL,"$withval")
-		fi
-	],
-	[ 
-		AC_MSG_RESULT([disabled])
-	])
-
-AC_MSG_CHECKING(for local cgiwrap docs)
-AC_ARG_WITH( local-doc-url, 
-	[  --with-local-doc-url=URL]
-	[  define url of local cgiwrap documentation], 
-	[ 
-		if test "x$withval" = xyes; then
-			AC_MSG_RESULT([disabled, must specify value])
-		elif test "x$withval" = xno; then
-			AC_MSG_RESULT([disabled, must specify value])
-		elif test "x$withval" = x; then
-			AC_MSG_RESULT([disabled, must specify value])
-		else
-			AC_MSG_RESULT($withval)
-			AC_DEFINE_UNQUOTED(CONF_LOCAL_DOC_URL,"$withval")
-		fi
-	],
-	[ 
-		AC_MSG_RESULT([disabled])
-	])
 
 
 dnl
@@ -174,6 +54,136 @@ AC_CHECK_FUNC(strdup, [AC_DEFINE(HAS_STRDUP)])
 AC_CHECK_FUNC(syslog, [AC_DEFINE(HAS_SYSLOG)])
 AC_CHECK_FUNC(setrlimit, [AC_DEFINE(HAS_SETRLIMIT)])
 AC_CHECK_FUNC(putenv, [AC_DEFINE(HAS_PUTENV)])
+
+
+dnl
+dnl Information options
+dnl
+AC_MSG_CHECKING(for local contact name)
+AC_ARG_WITH( local-contact-name, 
+	[  --with-local-contact-name=NAME]
+	[  define name of local contact], 
+	[ 
+		if test "x$withval" = xyes; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test "x$withval" = xno; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test "x$withval" = x; then
+			AC_MSG_RESULT([disabled, must specify value])
+		else
+			AC_MSG_RESULT($withval)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_NAME,"$withval")
+			AC_DEFINE(CONF_LOCAL_INFO_ENABLED)
+		fi
+	],
+	[ 
+		AC_MSG_RESULT([disabled])
+	])
+
+AC_MSG_CHECKING(for local contact email)
+AC_ARG_WITH( local-contact-email, 
+	[  --with-local-contact-email=ADDRESS]
+	[  define email address of local contact], 
+	[ 
+		if test "x$withval" = xyes; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test "x$withval" = xno; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test "x$withval" = x; then
+			AC_MSG_RESULT([disabled, must specify value])
+		else
+			AC_MSG_RESULT($withval)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_EMAIL,"$withval")
+			AC_DEFINE(CONF_LOCAL_INFO_ENABLED)
+		fi
+	],
+	[ 
+		AC_MSG_RESULT([disabled])
+	])
+
+AC_MSG_CHECKING(for local contact phone)
+AC_ARG_WITH( local-contact-phone, 
+	[  --with-local-contact-phone=PHONE]
+	[  define phone number of local contact], 
+	[ 
+		if test "x$withval" = xyes; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test "x$withval" = xno; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test "x$withval" = x; then
+			AC_MSG_RESULT([disabled, must specify value])
+		else
+			AC_MSG_RESULT($withval)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_PHONE,"$withval")
+			AC_DEFINE(CONF_LOCAL_INFO_ENABLED)
+		fi
+	],
+	[ 
+		AC_MSG_RESULT([disabled])
+	])
+
+AC_MSG_CHECKING(for local contact url)
+AC_ARG_WITH( local-contact-url, 
+	[  --with-local-contact-url=URL]
+	[  define url of local contact], 
+	[ 
+		if test "x$withval" = xyes; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test "x$withval" = xno; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test "x$withval" = x; then
+			AC_MSG_RESULT([disabled, must specify value])
+		else
+			AC_MSG_RESULT($withval)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_CONTACT_URL,"$withval")
+			AC_DEFINE(CONF_LOCAL_INFO_ENABLED)
+		fi
+	],
+	[ 
+		AC_MSG_RESULT([disabled])
+	])
+
+AC_MSG_CHECKING(for local site url)
+AC_ARG_WITH( local-site-url, 
+	[  --with-local-site-url=URL]
+	[  define url of local site], 
+	[ 
+		if test "x$withval" = xyes; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test "x$withval" = xno; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test "x$withval" = x; then
+			AC_MSG_RESULT([disabled, must specify value])
+		else
+			AC_MSG_RESULT($withval)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_SITE_URL,"$withval")
+			AC_DEFINE(CONF_LOCAL_INFO_ENABLED)
+		fi
+	],
+	[ 
+		AC_MSG_RESULT([disabled])
+	])
+
+AC_MSG_CHECKING(for local cgiwrap docs)
+AC_ARG_WITH( local-doc-url, 
+	[  --with-local-doc-url=URL]
+	[  define url of local cgiwrap documentation], 
+	[ 
+		if test "x$withval" = xyes; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test "x$withval" = xno; then
+			AC_MSG_RESULT([disabled, must specify value])
+		elif test "x$withval" = x; then
+			AC_MSG_RESULT([disabled, must specify value])
+		else
+			AC_MSG_RESULT($withval)
+			AC_DEFINE_UNQUOTED(CONF_LOCAL_DOC_URL,"$withval")
+			AC_DEFINE(CONF_LOCAL_INFO_ENABLED)
+		fi
+	],
+	[ 
+		AC_MSG_RESULT([disabled])
+	])
 
 
 dnl
