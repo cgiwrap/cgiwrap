@@ -1189,7 +1189,7 @@ void SetPathTranslated( char *cgiBaseDir, char *scriptPath )
 		/* if so, copy in what we determined pathinfo should be after stripping off user portion */
 		strcpy(buf, new_pi);
 
-		buf = (char *) SafeMalloc( strlen(new_pt) + 5, 
+		buf = (char *) SafeMalloc( strlen(new_pt) + strlen("PATH_TRANSLATED") + 5, 
 			"new PATH_TRANSLATED environment variable");
 		sprintf(buf, "%s=%s", "PATH_TRANSLATED", new_pt); 
 		SafePutenv(buf, "new PATH_TRANSLATED environment variable");
