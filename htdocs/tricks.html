@@ -76,3 +76,47 @@ Depending on what value you place for allow from, you can control how
 widely these debugging versions
 are available.
 </PRE>
+
+<HR>
+
+<PRE>
+
+Date: Sun, 7 Dec 1997 23:20:28 -0500 (EST)
+From: Yuji Shinozaki <yuji@cs.duke.edu>
+
+Look at the Rewrite rules.  You will need to activate mod_rewrite
+and recompile (see the Apache documentation and Configuration file:
+you will need to uncomment the follwing line and recompile.
+
+Module rewrite_module      mod_rewrite.o
+
+)
+
+For an example of the runtime configuration, in the srm.conf you could
+have: 
+
+RewriteEngine on
+RewriteRule  ^/~([^/]+)/cgi-bin/(.*)    /cgi-bin/cgiwrap/$1/$2 [PT] 
+RewriteRule  ^/~([^/]+)/cgi-bin-d/(.*)  /cgi-bin/cgiwrapd/$1/$2 [PT] 
+RewriteRule  ^/~([^/]+)/nph-bin-d/(.*)  /cgi-bin/nph-cgiwrapd/$1/$2 [PT] 
+RewriteRule  ^/~([^/]+)/nph-bin/(.*)    /cgi-bin/nph-cgiwrap/$1/$2 [PT] 
+
+Which translates http://server.addr/~user/cgi-bin/program to
+http://server.addr/cgi-bin/cgiwrap/user/program. Also (in this example) 
+http:/server.addr/~user/cgi-bin-d/program is translated to
+http://server.addr/cgi-bin/cgiwrapd/user/program, to provide debugging
+support.  And so on... 
+
+The setup of cgi-wrap will determine where the scripts actually reside.
+(and I would actually put the script in a directory NOT in the
+usual public_html tree, because then it is possible for an anonymous user
+to read the cgi scripts).
+
+I have not implemented this to support virtual domains separately, but
+it should be possible.
+
+Hope this is helpful.
+
+yuji
+</PRE>
+
