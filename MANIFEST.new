@@ -1,6 +1,7 @@
 README
+htdocs/index.html
+htdocs/changes.html
 doc/AFS
-doc/CHANGES
 doc/INSTALL
 doc/NOTES
 doc/THANKS
