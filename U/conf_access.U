@@ -1,4 +1,4 @@
-?MAKE:d_conf_access allowfile denyfile d_conf_checkhost : cat contains Setvar Myread Oldconfig 
+?MAKE:d_conf_access allowfile denyfile d_conf_checkhost : cat contains Setvar Myread Oldconfig Getfile
 ?MAKE:	-pick add $@ %<
 ?S:d_conf_access:
 ?S:	Should we check the allow and deny files for access control.
@@ -95,7 +95,8 @@ EOM
 	esac
 
 	rp="Location of allow file?"
-	. ./myread
+	fn="f~+"
+        . ./getfile
 
 	allowfile="$ans"
 
@@ -108,7 +109,8 @@ EOM
 	esac
 
 	rp="Location of deny file?"
-	. ./myread
+	fn="f~+"
+        . ./getfile
 
 	denyfile="$ans"
 

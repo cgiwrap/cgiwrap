@@ -1,4 +1,4 @@
-?MAKE:d_conf_userdirfile userdirfile : cat contains Setvar Myread Oldconfig 
+?MAKE:d_conf_userdirfile userdirfile : cat contains Setvar Myread Oldconfig Getfile
 ?MAKE:	-pick add $@ %<
 ?S:d_conf_userdirfile:
 ?S:	Should we rewrite user directories according to a config file
@@ -74,7 +74,8 @@ EOM
 	esac
 
 	rp="What file contains the list of user cgi dirs?"
-	. ./myread
+	fn="f~+"
+	. ./getfile
 
 	userdirfile="$ans"
 

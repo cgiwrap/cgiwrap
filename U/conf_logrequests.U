@@ -1,4 +1,4 @@
-?MAKE:conf_log_logfile conf_log_label d_conf_log_usefile d_conf_log_usesyslog : cat contains Setvar Myread Oldconfig 
+?MAKE:conf_log_logfile conf_log_label d_conf_log_usefile d_conf_log_usesyslog : cat contains Setvar Myread Oldconfig Getfile
 ?MAKE:	-pick add $@ %<
 ?S:conf_log_logfile:
 ?S:	Shell sym for log_file filename
@@ -141,7 +141,8 @@ EOM
 	esac
 
 	rp="What file should cgiwrap log to?"
-	. ./myread
+	fn="f~+"
+	. ./getfile
 
 	conf_log_logfile="$ans"
 ;;
