@@ -77,6 +77,27 @@ but the limits are set too low. There isn't enough memory for perl to load. Keep
 in mind that unix applications usually use alot of virtual memory, even though
 their resident size is small.
 
+<P><DT>How do I get PHP to work with cgiwrap
+<DD>
+Here is an informal how-to I wrote after I set up cgiwrap and php 
+recently.  Much thanks goes to Nathan Nuelinger for the pointing out the decisive step of compiling with --enable-discard-path.
+<P>
+Download cgiwrap and set that up.  I already had cgiwrap set up to wrap cgi scripts, but I did upgrade to the latest version.  Get this working first with some simple cgi script tests. (BTW: Options you may find helpful include --with-cgi-dir and --with-httpd-user)
+<P>
+Download the latest version of php and configure it as a cgi binary, not as a module.  Basically, if you run ./configure with no options, php will 
+be compiled as a cgi binary.  (To set it up as an apache module, which you don't want to do if you want to wrap your scripts, you have to explicitly say ./configure --with-apache.)
+<P>
+Before you compile php, however, and this is crucial, configure php with the option --enable-discard-path which allows you to move the php binary out of the web tree and into /usr/local/bin (which adds security), but more importantly it allows you to use php with cgiwrap properly.
+<P>
+To summarize, you need to run ./configure --enable-discard-path plus any other options you may desire, and place the php binary in /usr/local/bin.
+<P>
+Finally, you need the #!/usr/local/bin/php line at the very top of every php script you write.  Then call the php script with cgiwrap exactly as you would call a cgi script.  For example:
+<P>
+        http://yourdomain.com/cgi-bin/cgiwrap/<username>/<phpscript>
+<P>
+Let me know if you have any questions.
+Brian
+
 </DL>
 
 <H3><A NAME="user">User Questions</H3>
@@ -112,6 +133,9 @@ to run it under cgiwrapd.  Basically they ScriptAlias "cgiwrapDir" to
 the directory where cgiwrap is installed.
 <P>
 Chris Adams <cmadams@hiwaay.net>
+
+
+
 
 </DL>
 
