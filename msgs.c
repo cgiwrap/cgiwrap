@@ -356,7 +356,10 @@ void MSG_Error_ServerUserNotFound(void)
 
 	printf(
 "CGIWrap was configured with a server userid that does not exist\n"
-"on this server.\n");
+"on this server. The '--with-httpd-user' option should be specified\n"
+"when configuring cgiwrap. The user that should be specified is the one\n"
+"in the 'User' line of your httpd.conf file.\n"
+	);
 
 	if ( MSG_HTMLMessages )
 	{
@@ -487,9 +490,27 @@ void MSG_Error_ExecFailed(void)
 		printf("\tError Number: %d\n\n", errno);
 	}
 
-	printf("This message usually indicates there is a problem\n");
-	printf("with the script itself. The owner of the script\n");
-	printf("needs to check the #! line for correctness.\n");
+	printf(
+	"This message usually indicates there is a problem with the script\n"
+	"itself. Often this indicates either that the #! line of the script\n"
+	"is incorrect, or the script was uploaded in binary mode instead of\n"
+	"ascii mode. Check to make sure that the script does not have\n"
+	"control-M's at the end of every line. That will prevent it from\n"
+	"executing. An easy fix that takes care of this most of the time\n"
+	"is to put '#!/.../perl --' instead of '#!/.../perl' on the first\n"
+	"line of the script.\n"
+	);
+
+	if ( MSG_HTMLMessages )
+	{
+		printf("<P>\n");
+	}
+	
+	printf(
+	"If you are not the owner of this script, please forward this error\n"
+	"and the URL that caused it to the script owner. That is often the\n"
+	"component in the URL right after /cgiwrap/.\n"
+	);
 
 	MSG_Footer();
 	exit(1);
