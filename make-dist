@@ -2,7 +2,6 @@
 
 
 setenv PATH ${PATH}:/afs/umr.edu/software/cgiwrap/metaconfig/all/bin
-metaconfig -m
 makedist -c ../cgiwrap-3.6
 
 
