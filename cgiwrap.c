@@ -50,6 +50,21 @@ int DEBUG = 0;
 
 
 /***/
+/**  Set limits of process resource consumption */
+/***/
+void SetLimits(void)
+{
+	DEBUG_Msg("\nSetting Limits (CPU)\n");
+
+
+#ifdef SET_RLIMIT
+	struct rlimit rlim = RLIMIT_SETTING; /* Set CPU timeout */
+	setrlimit( RLIMIT_CPU, &rlim );
+#endif
+}
+
+
+/***/
 /**   Display an error message and exit the program */
 /***/
 void DoError (char *msg)
@@ -285,10 +300,6 @@ void main (int argc, char *argv[])
 	int cmdLen;
 	int tempLength;
 
-#ifdef SET_RLIMIT
-	struct rlimit rlim = RLIMIT_SETTING; /* Set CPU timeout */
-#endif
-
 
 /* Determine if debugging output should be done */
 #ifdef DEBUG_BY_NAME
@@ -302,10 +313,10 @@ void main (int argc, char *argv[])
 	}	
 #endif
 
+
 #ifdef FORCEDEBUG
 	DEBUG = 1;
 #endif	
-
 
 	DEBUG_Msg("HTTP/1.0 200 Ok");
 	DEBUG_Msg("Content-Type: text/plain\n\n");
@@ -316,6 +327,8 @@ void main (int argc, char *argv[])
 	dup2(1,2);
 #endif
 
+	/* Set CPU and other limits */
+	SetLimits();
 
 	/***/
 	/**   Print out the URL used to query this script */
@@ -576,15 +589,6 @@ void main (int argc, char *argv[])
 #endif
 
 
-
-	/*
-	 * Set CPU limit
-	 */
-#ifdef SET_RLIMIT
-	setrlimit( RLIMIT_CPU, &rlim );
-#endif
-
-
 	/***/
 	/**   Prepend "./" onto the script string so it can be executed without */
 	/**   the current path affecting anything */
@@ -608,7 +612,8 @@ void main (int argc, char *argv[])
 #ifdef USE_SYSTEM
 	scriptErr = system(execStr);
 #else
-	scriptErr = execl(execStr, scrStr, (char *) 0);  
+/*	scriptErr = execl(execStr, scrStr, (char *) 0);   */
+	scriptErr = execv(execStr, argv);   
 #endif
 
 

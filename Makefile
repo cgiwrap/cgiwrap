@@ -16,7 +16,7 @@ INSTALLPERMS=4750
 INSTALLOWNER=root
 INSTALLGROUP=root
 
-VERSION=2.5
+VERSION=2.6
 
 #
 # Some options suggestion by users
@@ -42,7 +42,7 @@ CCOPT= -O
 all: cgiwrap man
 
 cgiwrap.o: cgiwrap.c config.h Makefile
-	$(CC) $(CCOPT) -c cgiwrap.c
+	$(CC) $(CCOPT) -c cgiwrap.c 
 
 debug.o: debug.c config.h Makefile
 	$(CC) $(CCOPT) -c debug.c

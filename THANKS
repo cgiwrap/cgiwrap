@@ -18,6 +18,10 @@ de Sousa Carlos (ebccdes@ebc.ericsson.se):
 	Porting info for Solaris 2/SunOs 5.x w/o BSD libs
 	Found PATH_INFO/QUERY_STRING problem with use on CERN server	
 
+Alan Weiner (alweiner@clark.net):
+dlbewley@indyunix.iupui.edu:
+	Re-brought up issue of argv[] argument passing to scripts
+
 To anyone else I might have forgotton, I'm sorry. Please let me know and I
 will add you to this list.
 
