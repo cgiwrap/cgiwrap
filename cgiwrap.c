@@ -36,11 +36,6 @@ int main (int argc, char *argv[])
 	Context.multiuser_cgi_script = 0;
 	Context.interpreted_script = 0;
 
-#ifdef CONF_QUIET_ERRORS
-	/* Default to quiet errors only */
-	MSG_QuietErrors = 1;
-#endif
-
 	/* Determine if debugging output should be done */
 	if ( strlen(argv[0]) >= 1 )
 	{

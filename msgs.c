@@ -11,7 +11,13 @@ RCSID("$Id$");
  */
 int MSG_HTMLMessages = 1;   
 int MSG_Need_NPH_Header = 0;
+
+#ifdef CONF_QUIET_ERRORS
+int MSG_QuietErrors = 1;
+#else
 int MSG_QuietErrors = 0;
+#endif
+
 
 /*
  * Print out a content-type message, but only if one hasn't been
@@ -88,8 +94,16 @@ void MSG_Plain_Footer(void)
 
 void MSG_Error_General(char *message)
 {
-	MSG_Header("CGIWrap Error", message);
-	printf("%s", message);
+	if ( MSG_QuietErrors )
+	{
+		MSG_Header("CGIWrap Error", "Error executing script");
+		printf("There was an error executing the script.");
+	}
+	else
+	{
+		MSG_Header("CGIWrap Error", message);
+		printf("%s", message);
+	}
 	MSG_Footer();
 	exit(1);
 }
@@ -223,17 +237,17 @@ void MSG_Info(void)
 	      printf("%sServer Host%s: %s\n", 
 		      prefix, suffix, HTMLEncode(getenv("SERVER_HOST")));
 	}
-	if ( getenv("SERVER_PORT") )
+	if ( ! MSG_QuietErrors && getenv("SERVER_PORT") )
 	{
 	      printf("%sServer Port%s: %s\n", 
 		      prefix, suffix, HTMLEncode(getenv("SERVER_PORT")));
 	}
-	if ( getenv("SERVER_PROTOCOL") )
+	if ( ! MSG_QuietErrors && getenv("SERVER_PROTOCOL") )
 	{
 	      printf("%sServer Protocol%s: %s\n", 
 		      prefix, suffix, HTMLEncode(getenv("SERVER_PROTOCOL")));
 	}
-	if ( getenv("HTTP_HOST") )
+	if ( ! MSG_QuietErrors && getenv("HTTP_HOST") )
 	{
 	      printf("%sVirtual Host%s: %s\n", 
 		      prefix, suffix, HTMLEncode(getenv("HTTP_HOST")));
@@ -498,7 +512,7 @@ void MSG_Error_AccessControl(char *why, char *allowfile, char *denyfile)
 void MSG_Error_SystemError(char *when)
 {
 	MSG_Header("CGIWrap Error", "System Error");
-	printf("CGIWrap encountered a system error:\n");
+	printf("CGIWrap encountered a system error.\n");
 
 	if ( ! MSG_QuietErrors )
 	{
