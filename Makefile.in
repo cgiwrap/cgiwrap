@@ -36,13 +36,7 @@ dep: Makefile
 	echo '# DO NOT REMOVE THIS LINE' >> Makefile
 	$(CC) -MM -I. -I$(srcdir) $(srcdir)/*.c >> Makefile
 
-install: cgiwrap
-	@DOINSTALL@ rm -f @INSTALLDIR@/cgiwrap
-	@DOINSTALLCGIWRAPD@ rm -f @INSTALLDIR@/cgiwrapd
-	@DOINSTALLNPH@ rm -f @INSTALLDIR@/nph-cgiwrap
-	@DOINSTALLCGIWRAPD@ @DOINSTALLNPH@ rm -f @INSTALLDIR@/nph-cgiwrapd
-	@DOINSTALLPHP@ rm -f @INSTALLDIR@/php-cgiwrap
-	@DOINSTALLCGIWRAPD@ @DOINSTALLPHP@ rm -f @INSTALLDIR@/php-cgiwrapd
+install: uninstall cgiwrap
 	@DOINSTALL@ cp cgiwrap @INSTALLDIR@/cgiwrap
 	@DOINSTALL@ chown root @INSTALLDIR@/cgiwrap
 	@DOINSTALL@ chgrp @INSTALLGROUP@ @INSTALLDIR@/cgiwrap

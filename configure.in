@@ -457,15 +457,15 @@ AC_SUBST(DOINSTALLPHP)
 
 AC_MSG_CHECKING(for whether to disable cgiwrapd)
 AC_ARG_WITH( cgiwrapd,
-	[ --without-cgiwrapd]
+	[ --with-cgiwrapd]
 	[ disable installation of cgiwrapd ],
-	[
-		AC_MSG_RESULT([disabled])
-		DOINSTALLCGIWRAPD="#"
-	],
 	[
 		AC_MSG_RESULT([enabled])
 		DOINSTALLCGIWRAPD=""
+	],
+	[
+		AC_MSG_RESULT([disabled])
+		DOINSTALLCGIWRAPD="#"
 	])
 AC_SUBST(DOINSTALLCGIWRAPD)
 
