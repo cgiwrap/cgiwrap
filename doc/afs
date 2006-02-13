@@ -1,8 +1,7 @@
-
                           CGIWrap - Usage with AFS
      _________________________________________________________________
 
-   CGIwrap will work with AFS, with at least the following directory
+   CGIwrap  will  work  with  AFS,  with at least the following directory
    permissions:
 
                        Dir        User/Group   Permissions
@@ -10,14 +9,14 @@
                   ~/public_html system:anyuser      l
                   ~/public_html system:anyuser     rl
 
-   If you are running httpd authenticated as an AFS userid, you can
+   If  you  are  running  httpd  authenticated  as an AFS userid, you can
    replace system:anyuser above with that userid.
 
-   If you are using CGIWrap with AFS I'd suggest making sure to enable
-   the AFS support in the configure script (--with-afs). This
-   automatically creates a PAG for any script that is launched, that way
+   If  you  are  using CGIWrap with AFS I'd suggest making sure to enable
+   the   AFS   support   in   the  configure  script  (--with-afs).  This
+   automatically  creates a PAG for any script that is launched, that way
    if the script klogs, it won't affect the server or other scripts. When
-   using cgiwrap with AFS based accounts, you need to keep in mind that
-   scripts are run un-authenticated. This means that any files that are
-   accessed will be accessed as system:anyuser. In general, this means
+   using  cgiwrap  with AFS based accounts, you need to keep in mind that
+   scripts  are  run un-authenticated. This means that any files that are
+   accessed  will  be  accessed as system:anyuser. In general, this means
    that the script will not have write access to your directory.

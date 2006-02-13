@@ -1,9 +1,8 @@
-
                     CGIWrap - Installation Instructions
      _________________________________________________________________
 
    There are two sets of installation instructions here. The basic ones I
-   use, and a real-world example config contributed by Piotr Klaban
+   use,  and  a  real-world  example  config  contributed by Piotr Klaban
    below.
 
   Quick Installation
@@ -51,12 +50,12 @@
 
   Configuration Options
 
-   The following are options available with the 'configure' command.
-   Items in boldface are highly recommended. Defaults can be seen by
-   issuing './configure --help' or by looking at the 'config.h' file
+   The  following  are  options  available  with the 'configure' command.
+   Items  in  boldface  are  highly  recommended. Defaults can be seen by
+   issuing  './configure  --help'  or  by  looking at the 'config.h' file
    after you have run 'configure'.
 
-   At an absolute minimum, you will probably want to specify the
+   At  an  absolute  minimum,  you  will  probably  want  to  specify the
    '--with-install-dir' and '--with-httpd-user' options.
 
    --with-perl=PATH
@@ -81,33 +80,33 @@
           Specify a URL for a local copy of the cgiwrap docs
 
    --with-wall
-          Add the '-Wall' option for compilation with gcc, this is
+          Add  the  '-Wall'  option  for  compilation  with  gcc, this is
           intended primarily for development debugging.
 
    --with-install-group=GROUP
           group to install cgiwrap as
 
    --with-install-dir=PATH
-          path to installation directory - this should be the path to
+          path  to  installation  directory  - this should be the path to
           your server's cgi-bin directory
 
    --with-cgi-dir=PATH
           path relative to home dir for cgi scripts
 
    --with-multiuser-cgi-dir=PATH
-          define a central cgi script directory that is searched if the
-          script is not found in a user directory. This can be used to
-          make a single script available that will run as any user,
-          however, this can be very dangerous if you're not extremely
-          careful designing your script. Do not enable this unless you
+          define  a  central cgi script directory that is searched if the
+          script  is  not  found in a user directory. This can be used to
+          make  a  single  script  available  that  will run as any user,
+          however,  this  can  be  very dangerous if you're not extremely
+          careful  designing  your  script. Do not enable this unless you
           know what you're doing. It is not needed for normal usage.
 
    --with-httpd-user=USER
-          define what userid the web server is running as - this is
+          define  what  userid  the  web  server  is running as - this is
           required
 
    --without-check-httpd-user
-          don't check to make sure cgiwrap is being run by server userid
+          don't  check to make sure cgiwrap is being run by server userid
           - this is not recommended
 
    --without-check-owner
@@ -138,8 +137,8 @@
           require that REDIRECT_URL be set in calling environment
 
    --with-chroot=PATH
-          chroots script to PATH prior to script execution, requires
-          specific environment to be set up. See chroot docs for more
+          chroots  script  to  PATH  prior  to script execution, requires
+          specific  environment  to  be  set up. See chroot docs for more
           details.
 
    --with-minimum-uid=UID set the minimum uid of user that can use
@@ -161,7 +160,7 @@
           don't redirect stderr to stdout in scripts
 
    --without-initgroups
-          disable use of initgroups() to clear non-userid auxilliary
+          disable  use  of  initgroups()  to  clear non-userid auxilliary
           groups
 
    --without-setgroups
@@ -216,8 +215,8 @@
           limit cgiwrap usage
 
    --with-vhost-allow-dir=DIR
-          limit cgiwrap usage specific to each vhost, to restrict
-          UnixTools.ORG, you would create the access file
+          limit  cgiwrap  usage  specific  to  each  vhost,  to  restrict
+          UnixTools.ORG,    you    would    create    the   access   file
           'DIR/unixtools.org'.
 
    --with-vhost-deny-dir=DIR
@@ -233,7 +232,7 @@
   Password Protected Installation
 
    The following are pecial additional instructions for installing a copy
-   of cgiwrap that allows users to create access controlled scripts. For
+   of  cgiwrap that allows users to create access controlled scripts. For
    this to work, you will need to have a single common password file that
    will be used by all authenticated scripts.
 
@@ -262,10 +261,10 @@
 
   Supplementary Configuration
 
-   If you enabled the access file checking, you need to make sure and
+   If  you  enabled  the  access file checking, you need to make sure and
    create the necessary files.
 
-   If you enabled the user directory rewriting feature, you need to
+   If  you  enabled  the  user  directory  rewriting feature, you need to
    create the configuration file that you specified in the configure run.
      _________________________________________________________________
 

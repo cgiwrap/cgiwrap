@@ -1,13 +1,12 @@
-
                            CGIWrap - Introduction
      _________________________________________________________________
 
-   CGIWrap is a gateway program that allows general users to use CGI
-   scripts and HTML forms without compromising the security of the http
-   server. Scripts are run with the permissions of the user who owns the
-   script. In addition, several security checks are performed on the
+   CGIWrap  is  a  gateway  program  that allows general users to use CGI
+   scripts  and  HTML forms without compromising the security of the http
+   server.  Scripts are run with the permissions of the user who owns the
+   script.  In  addition,  several  security  checks are performed on the
    script, which will not be executed if any checks fail.
 
    CGIWrap is used via a URL in an HTML document. As distributed, cgiwrap
-   is configured to run user scripts which are located in the
+   is   configured   to  run  user  scripts  which  are  located  in  the
    ~/public_html/cgi-bin/ directory.
