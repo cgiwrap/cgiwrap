@@ -987,7 +987,12 @@ void SetResourceLimits(void)
 	for (i=0; cgiwrap_rlimits[i].label; i++)
 	{
 		limstruct.rlim_cur = cgiwrap_rlimits[i].value;
+
+#if defined(CONF_SOFT_RLIMIT_ONLY)
+		limstruct.rlim_max = RLIM_INFINITY;
+#else
 		limstruct.rlim_max = cgiwrap_rlimits[i].value;
+#endif
 
 		sprintf(msg, "Limiting (%s) to (%ld)\n", 
 			cgiwrap_rlimits[i].label,

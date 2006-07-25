@@ -1042,7 +1042,6 @@ CGIWRAP_SETENV(ld_library_path,LD_LIBRARY_PATH,STRING,[lib search path])
 CGIWRAP_SETENV(path,PATH,STRING,[search path])
 CGIWRAP_SETENV(tz,TZ,STRING,[time zone])
 
-
 dnl
 dnl Resource limits for those who want to use them
 dnl
@@ -1085,7 +1084,24 @@ CGIWRAP_RLIMIT(nproc,NPROC,COUNT,[processes],32,[number of processes])
 CGIWRAP_RLIMIT(nofile,NOFILE,COUNT,[files],32,[number of open files])
 CGIWRAP_RLIMIT(memlock,MEMLOCK,BYTES,[bytes],2500000,[lockable memory])
 
-
+dnl
+dnl Check for php filename, and pass to php interpreter directly
+dnl
+AC_MSG_CHECKING(for soft-rlimit-only support)
+AC_ARG_WITH( soft-rlimit-only,
+        [  --with-soft-rlimit-only]
+        [  set soft rlimits only],
+        [
+                if test "x$withval" != xno; then
+                        AC_DEFINE(CONF_SOFT_RLIMIT_ONLY, [], [will only set soft resource limits])
+                        AC_MSG_RESULT([will only set soft resource limits])
+                else
+                        AC_MSG_RESULT([will set both hard and soft resource limits])
+                fi
+        ],
+        [
+                AC_MSG_RESULT([will set both hard and soft resource limits])
+        ])
 
 
 dnl

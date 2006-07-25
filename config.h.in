@@ -138,6 +138,9 @@
 /* call setgroups */
 #undef CONF_SETGROUPS
 
+/* will only set soft resource limits */
+#undef CONF_SOFT_RLIMIT_ONLY
+
 /* check for nonprintables in script path */
 #undef CONF_STRICT_NAMES
 
