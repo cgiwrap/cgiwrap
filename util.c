@@ -1359,7 +1359,8 @@ void SetScriptName(char *userStr, char *scrStr )
 		name = getenv("PATH_INFO");
 		if ( name ) {
 			/* We need to strip PATH_INFO from REDIRECT_URL */
-			len = strlen(redurl) - strlen(name);
+            /* this code doesn't appear to be completely implemented */
+			len = strlen(redurl);
 			buf = (char*) SafeMalloc (strlen("SCRIPT_NAME=") +
 		    		len + 2,
 				"new SCRIPT_NAME environment variable");
