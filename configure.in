@@ -5,7 +5,7 @@ AC_CONFIG_AUX_DIR(.)
 AC_CANONICAL_SYSTEM
 AC_CONFIG_HEADER(config.h)
 
-VERSION="3.10"
+VERSION="3.11"
 AC_SUBST(VERSION)
 
 AC_PROG_CC
@@ -143,6 +143,45 @@ AC_ARG_WITH( env-require-user,
 	[
 		AC_MSG_RESULT([disabled])
 	])
+
+dnl     
+dnl Block SVN paths for execution
+dnl 
+AC_MSG_CHECKING(for block-svn-paths)
+AC_ARG_WITH( block-svn-paths,
+    [  --with-block-svn-paths]
+    [  prevent execution of any script in a .svn dir],
+    [
+        if test "x$withval" != xno; then
+            AC_DEFINE(CONF_BLOCK_SVN_PATHS, [], [block execution of .svn paths])
+            AC_MSG_RESULT([enabled])
+        else
+            AC_MSG_RESULT([disabled])
+        fi
+    ],
+    [
+        AC_MSG_RESULT([disabled])
+    ])
+
+dnl     
+dnl Block CVS paths for execution
+dnl 
+AC_MSG_CHECKING(for block-cvs-paths)
+AC_ARG_WITH( block-cvs-paths,
+    [  --with-block-cvs-paths]
+    [  prevent execution of any script in a CVS dir],
+    [
+        if test "x$withval" != xno; then
+            AC_DEFINE(CONF_BLOCK_CVS_PATHS, [], [block execution of CVS paths])
+            AC_MSG_RESULT([enabled])
+        else
+            AC_MSG_RESULT([disabled])
+        fi
+    ],
+    [
+        AC_MSG_RESULT([disabled])
+    ])
+
 	
 dnl
 dnl Path to php for interpreter support

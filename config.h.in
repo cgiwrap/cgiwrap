@@ -15,6 +15,12 @@
 /* pass script to asp interpreter only if nonexecutable file */
 #undef CONF_ASP_NONEXEC_ONLY
 
+/* block execution of CVS paths */
+#undef CONF_BLOCK_CVS_PATHS
+
+/* block execution of .svn paths */
+#undef CONF_BLOCK_SVN_PATHS
+
 /* cgi dir relative to user home dir */
 #undef CONF_CGIDIR
 

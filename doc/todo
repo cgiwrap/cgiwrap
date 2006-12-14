@@ -6,13 +6,13 @@
 
      * Fixing the PATH_TRANSLATED support
      * HTML version of cgiwrapd instead of text/plain
-     * More  flexible  approach to user directory mapping - rewrite file,
-       mapping dir to user instead of user to dir
+     * More flexible approach to user directory mapping - rewrite file, mapping
+       dir to user instead of user to dir
      * Limiting script execution based on load average.
      * Allow setting any environment variable from CGIwrap
      * finish the request info section of the error output
      * use SERVER_ADMIN and other http variables.
-     * if  you  disable  httpd  user  checking - you need to make sure to
-       define  the  installation group to be the group that the server is
-       running as - and be sure and restrict permissions.
+     * if you disable httpd user checking - you need to make sure to define the
+       installation group to be the group that the server is running as - and
+       be sure and restrict permissions.
      * Continue creating global context for storage of data

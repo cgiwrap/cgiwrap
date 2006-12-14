@@ -1,24 +1,23 @@
                          CGIWrap - Acknowledgements
      _________________________________________________________________
 
-   The  following are some people who have made significant contributions
-   or  suggestions to cgiwrap. If you notice someone who is missing, or I
-   forgot about you, please let me know and I'll add you to the list.
+   The following are some people who have made significant contributions or
+   suggestions to cgiwrap. If you notice someone who is missing, or I forgot
+   about you, please let me know and I'll add you to the list.
 
    Tuc/TTSG Internet Services, Inc:
-          Sponsored most of the vhosting and script authorization changes
-          in   3.8.0   release.   Changes   are  highly  useful  for  ISP
-          installations  of  cgiwrap  where  execution  is through apache
-          handlers  to make the use of cgiwrap as transparent as possible
-          to the customer.
+          Sponsored most of the vhosting and script authorization changes in
+          3.8.0 release. Changes are highly useful for ISP installations of
+          cgiwrap where execution is through apache handlers to make the use of
+          cgiwrap as transparent as possible to the customer.
 
    legalize@xmission.com:
           Patch ideas and some sample source for PATH_INFO support
 
    Jim Jagielski (jim@jagunet.com)
           Fix for ~ problem. Simplest and cleanest one I got.
-          Suggestion  and  sample  code  to  check exec bit on script and
-          return error if not set.
+          Suggestion and sample code to check exec bit on script and return
+          error if not set.
 
    Thomas Parmelan (Thomas.Parmelan@efrei.fr):
           SETGROUPS config option and code

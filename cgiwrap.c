@@ -176,6 +176,19 @@ int main (int argc, char *argv[])
 	DEBUG_Str("\tScript Relative Path: ", scrStr);
 	DEBUG_Str("\tScript Absolute Path: ", scriptPath);
 
+#if defined(CONF_BLOCK_SVN_PATHS)
+    if ( strstr(scriptPath, "/.svn/") )
+    {
+        MSG_Error_ExecutionNotPermitted(scriptPath, "Script is located in .svn directory.");
+    }
+#endif
+#if defined(CONF_BLOCK_CVS_PATHS)
+    if ( strstr(scriptPath, "/CVS/") )
+    {
+        MSG_Error_ExecutionNotPermitted(scriptPath, "Script is located in CVS directory.");
+    }
+#endif
+
 #if defined(CONF_PHP_INTERPRETER) && defined(PATH_PROG_PHP)
 	DEBUG_Msg("\tChecking for special interpreted script (php).");
 	/* don't double check if already php-cgiwrap */
