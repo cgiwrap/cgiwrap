@@ -87,6 +87,7 @@ dist:
 	touch * */*
 	cp -r * ../cgiwrap-$(VERSION)
 	cd ../cgiwrap-$(VERSION) && make distclean
+	cd ../cgiwrap-$(VERSION) && rm -rf .svn */.svn */*/.svn
 	cd ../cgiwrap-$(VERSION) && rm -rf CVS */CVS */*/CVS
 	cd ../cgiwrap-$(VERSION) && rm -rf .cvsignore */.cvsignore */*/.cvsignore
 	cd ../cgiwrap-$(VERSION) && rm -rf RCS */RCS */*/RCS
