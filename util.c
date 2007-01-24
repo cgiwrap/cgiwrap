@@ -426,7 +426,7 @@ void CheckUser(struct passwd *user)
 	int found = 0;
 
 	DEBUG_Msg("Checking user shell.");
-	while ( sh = getusershell() )
+	while ( (sh = getusershell()) )
 	{
 		if (0 == strcmp( sh, user->pw_shell ))
 		{
@@ -1013,6 +1013,12 @@ void SetSignals(void)
 #if defined(SIGXCPU) && defined(HAS_SIGSET)
 	DEBUG_Msg("Setting SIGXCPU to default behaviour\n");
 	sigset(SIGXCPU, SIG_DFL);
+#elif defined(SIGXCPU)
+    struct sigaction default_action;
+    default_action.sa_handler = SIG_DFL;
+    default_action.sa_flags = 0;
+    DEBUG_Msg("Setting SIGXCPU to default behaviour\n");
+    sigaction(SIGXCPU, &default_action, NULL);
 #endif
 }
 
