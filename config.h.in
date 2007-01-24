@@ -63,6 +63,9 @@
 /* CGIWRAP_REQUIRE_USER in env to restrict user */
 #undef CONF_ENV_REQUIRE_USER
 
+/* pass script to eRuby interpreter if suffix */
+#undef CONF_ERUBY_INTERPRETER
+
 /* user httpd executing as */
 #undef CONF_HTTPD_USER
 
@@ -362,6 +365,9 @@
 
 /* path to asp executable to use */
 #undef PATH_PROG_ASP
+
+/* path to eRuby executable to use */
+#undef PATH_PROG_ERUBY
 
 /* path to php executable to use */
 #undef PATH_PROG_PHP
