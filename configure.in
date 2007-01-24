@@ -208,6 +208,29 @@ AC_ARG_WITH( php,
 
 
 dnl
+dnl Path to eruby for interpreter support
+dnl
+AC_ARG_WITH( eruby, 
+	[  --with-eruby=PATH]
+	[  path to eRuby interpreter to use], 
+	[
+		AC_MSG_CHECKING(for eRuby interpreter)
+		if test "x$withval" != x; then
+			PATH_PROG_ERUBY="$withval"
+			AC_DEFINE_UNQUOTED(PATH_PROG_ERUBY,"$withval", [embedded ruby path])
+			AC_MSG_RESULT($withval)
+		else
+			AC_MSG_RESULT(not found)
+		fi
+	],
+	[
+		AC_PATH_PROGS(PATH_PROG_ERUBY, [eruby erb], no)
+		if test "x${PATH_PROG_ERUBY}" != "xno"; then
+			AC_DEFINE_UNQUOTED(PATH_PROG_ERUBY,"${PATH_PROG_ERUBY}", [path to eRuby executable to use])
+		fi
+	])
+
+dnl
 dnl Path to asp for interpreter support
 dnl
 AC_ARG_WITH( asp, 
@@ -684,6 +707,25 @@ AC_ARG_WITH( php-cgiwrap,
 AC_SUBST(DOINSTALLPHP)
 
 
+
+dnl
+dnl Check for rhtml filename, and pass to eruby interpreter directly
+dnl
+AC_MSG_CHECKING(for eruby-interpreter support)
+AC_ARG_WITH( eruby-interpreter, 
+	[  --with-eruby-interpreter]
+	[  pass script to eRuby interpreter if filename matches], 
+	[
+		if test "x$withval" != xno; then
+			AC_DEFINE(CONF_ERUBY_INTERPRETER, [], [pass script to eRuby interpreter if suffix])
+			AC_MSG_RESULT([enabled, rhtml will be handled specially])
+		else
+			AC_MSG_RESULT([disabled, no special handling for rhtml files])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled, no special handling for rhtml files])
+	])
 
 dnl
 dnl Check for asp filename, and pass to php interpreter directly

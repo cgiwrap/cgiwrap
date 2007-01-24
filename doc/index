@@ -1,7 +1,7 @@
-                                  CGIWrap
+                                   CGIWrap
 
-                              User CGI Access
-     _________________________________________________________________
+                               User CGI Access
+     __________________________________________________________________
 
   General Information
 
@@ -29,19 +29,19 @@
 
   Compilation, Installation, and Administration
 
-          This section is for people who are installing CGIWrap. This is for
-          server administrators and people who have root access on web server
-          machines.
+          This section is for people who are installing CGIWrap. This is
+          for server administrators and people who have root access on web
+          server machines.
 
         Installation and Configuration
         Access Control Files (allow/deny)
         Compilation Notes
         Use of CGIWrap with AFS
         Tips and Tricks
-     _________________________________________________________________
+     __________________________________________________________________
 
-   If you have any questions about CGIwrap, please direct them to the mailing
-   list (you have to subscribe first though) or to the author, Nathan Neulinger
-   <nneul@umr.edu>
+   If you have any questions about CGIwrap, please direct them to the
+   mailing list (you have to subscribe first though) or to the author,
+   Nathan Neulinger <nneul@umr.edu>
 
    [sflogo.php?group_id=8209&type=1]

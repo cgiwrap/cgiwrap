@@ -1,9 +1,10 @@
-                        CGIWrap - User Instructions
-     _________________________________________________________________
+                         CGIWrap - User Instructions
+     __________________________________________________________________
 
-   The following are instructions for setting up your account to be able to use
-   cgiwrap to execute cgi scripts. It is assumed that you are familiar with
-   writing CGI scripts and writing HTML documents for the WWW.
+   The following are instructions for setting up your account to be able
+   to use cgiwrap to execute cgi scripts. It is assumed that you are
+   familiar with writing CGI scripts and writing HTML documents for the
+   WWW.
 
    In the following instructions, the following information is assumed:
      * UserID: joe
@@ -17,23 +18,23 @@
      * mkdir public_html
      * mkdir public_html/cgi-bin
 
-   If  you are using AFS, you will need to set the AFS permissions on the
-   directories.  See Use of CGIwrap with AFS for details on the necessary
+   If you are using AFS, you will need to set the AFS permissions on the
+   directories. See Use of CGIwrap with AFS for details on the necessary
    permissions.
 
-   Install the script into the cgi-bin directory, and set the proper execution
-   permissions on the file.
+   Install the script into the cgi-bin directory, and set the proper
+   execution permissions on the file.
      * cp script.pl ~joe/public_html/cgi-bin/script.pl
      * chmod 755 ~joe/public_html/cgi-bin/script.pl
 
    The script is executed using the following URL:
      * http://www.domain.com/cgi-bin/cgiwrap/joe/script.pl
 
-   If you wish to see debugging output for your CGI, specify cgiwrapd instead
-   of cgiwrap, as in the following URL:
+   If you wish to see debugging output for your CGI, specify cgiwrapd
+   instead of cgiwrap, as in the following URL:
      * http://www.domain.com/cgi-bin/cgiwrapd/joe/script.pl
 
-   If the script is an nph- style script, you will need to run it using the
-   following URL's:
+   If the script is an nph- style script, you will need to run it using
+   the following URL's:
      * http://www.domain.com/cgi-bin/nph-cgiwrap/joe/script.pl
      * http://www.domain.com/cgi-bin/nph-cgiwrapd/joe/script.pl

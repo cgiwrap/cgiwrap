@@ -1,5 +1,5 @@
-                        CGIWrap - Compilation Notes
-     _________________________________________________________________
+                         CGIWrap - Compilation Notes
+     __________________________________________________________________
 
   CDC 4680 EP/IX 2.1.1ad
 
@@ -10,11 +10,11 @@
 
   HP-UX 9.0.x
 
-          Don't enable the setrlimit checking, it is not completely supported
-          by HPUX.
+          Don't enable the setrlimit checking, it is not completely
+          supported by HPUX.
 
   SCO Unixware 2.03
 
-          Problems with sete[ug]id. You might need to undefine these in the
-          config.sh file at the end of the Configure run. (Thanks to John
-          Romano for pointing this problem out.)
+          Problems with sete[ug]id. You might need to undefine these in
+          the config.sh file at the end of the Configure run. (Thanks to
+          John Romano for pointing this problem out.)

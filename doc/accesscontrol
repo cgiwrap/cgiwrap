@@ -1,10 +1,10 @@
                        CGIWrap - Access Control Files
-     _________________________________________________________________
+     __________________________________________________________________
 
-   CGIWrap includes faclities similar to the cron facility for controlling who
-   can access scripts. In general, I don't use this facility except to have a
-   deny  file  available  in  those  cases when I see someone abusing cgi
-   scripts/extreme CPU utilization/obvious security hole/etc.
+   CGIWrap includes faclities similar to the cron facility for controlling
+   who can access scripts. In general, I don't use this facility except to
+   have a deny file available in those cases when I see someone abusing
+   cgi scripts/extreme CPU utilization/obvious security hole/etc.
 
    Note that none of the below is effective unless you have enabled access
    control files when you configure and install CGIWrap.
@@ -18,25 +18,25 @@
      * Otherwise - Access Allowed
 
    Basically, in order for a user to be allowed to execute scripts through
-   cgiwrap: If the allow file exists, the user has to be in it. If the deny
-   file exists, the user can't be in it.
+   cgiwrap: If the allow file exists, the user has to be in it. If the
+   deny file exists, the user can't be in it.
 
   File Format
 
-   Without the host checking enabled, the format is just one userid per line.
-   Same format as the cron allow and deny files.
+   Without the host checking enabled, the format is just one userid per
+   line. Same format as the cron allow and deny files.
 
    With host checking enabled, it is (i think):
 
    userid@xxx.xxx.xxx.xxx/yyy.yyy.yyy.yyy
 
-   where x is the network and y is the mask. Userid can be * to match all users
-   at that network/mask.
+   where x is the network and y is the mask. Userid can be * to match all
+   users at that network/mask.
 
   VHost Access Control
 
-   If the vhost based access control option is enabled, cgiwrap will check a
-   per-vhost  access control file for access. The files are placed in the
+   If the vhost based access control option is enabled, cgiwrap will check
+   a per-vhost access control file for access. The files are placed in the
    vhost-allow-dir and vhost-deny-dir specified at configure time, and are
    named according to the all-lowercase value of HTTP_HOST.
 

@@ -1,5 +1,5 @@
                    CGIWrap - Comments from Administrators
-     _________________________________________________________________
+     __________________________________________________________________
 
 Nathan:
 
@@ -7,11 +7,11 @@ Nathan:
         adore cgiwrap.
 
         Prior to now, I had been using Apache suexec. To be blunt, suexec
-        is a disgusting piece of crap. 
+        is a disgusting piece of crap.
 
         ...snip...
 
-        I literally had to re-code parts of suexec to get it to work 
+        I literally had to re-code parts of suexec to get it to work
         under my server configuration.
 
         ...until I encountered cgiwrap.
@@ -29,11 +29,11 @@ Nathan:
 
         Thank you for cgiwrap.
 
--- 
+--
 | Jeremy Chadwick                                 System Administrator |
 | yoshi@parodius.com                                      ICQ #6279222 |
 |           "Where is fancy bread? In the heart, or in the head?" - WW |
-     _________________________________________________________________
+     __________________________________________________________________
 
 It is inherently impossible to provide _total_ protection, but there
 is a nifty little utility called cgiwrap that can help.  Check out
@@ -89,4 +89,5 @@ Center for Medical Informatics, Yale School of Medicine
 He was covered with clanking chains of code. "I am the
 Ghost of Hacks Past," he said to Scrooge.
 http://paella.med.yale.edu/~healy/matt_healy.html
-     _________________________________________________________________
+
+     __________________________________________________________________

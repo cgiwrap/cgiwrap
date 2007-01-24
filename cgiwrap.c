@@ -206,6 +206,18 @@ int main (int argc, char *argv[])
 		}
 	}
 #endif
+#if defined(CONF_ERUBY_INTERPRETER) && defined(PATH_PROG_ERUBY)
+	DEBUG_Msg("\tChecking for special interpreted script (eRuby).");
+	if ( ! interPath )
+	{
+
+		if ( StringEndsWith(scriptPath, ".rhtml") )
+		{
+			Context.interpreted_script = 1;
+			interPath = PATH_PROG_ERUBY;
+		}
+	}
+#endif
 #if defined(CONF_ASP_INTERPRETER) && defined(PATH_PROG_ASP)
 	DEBUG_Msg("\tChecking for special interpreted script (asp).");
 	if ( ! interPath )
