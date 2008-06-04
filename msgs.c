@@ -53,7 +53,7 @@ void MSG_ContentType(char *typestring)
 			printf("HTTP/1.0 200 Ok\n");
 		}
 
-		printf("Content-type: %s\n\n", typestring);
+		printf("Content-type: %s; charset=iso-8859-1\n\n", typestring);
 	}
 }
 
