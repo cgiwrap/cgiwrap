@@ -22,7 +22,7 @@ always a good idea to pay attention to the various unix security and CGI
 authoring news groups. If in doubt, show your scripts to someone who is more
 experienced, they might catch something you missed.
 
- -- Nathan Neulinger (nneul@umr.edu)
+ -- Nathan Neulinger (nneul@neulinger.org)
 
 
 Installation Instructions:
@@ -60,7 +60,7 @@ UNSUBSCRIBE CGIWRAP
 to  cgiwrap-users-request@lists.sourceforge.net  from the account that
 is  subscribed to the list. Please do not send unsubscribe messages to
 the  list. If you have any difficulty unsubscribing, please mail me at
-nneul@umr.edu.
+nneul@neulinger.org.
 
 DO NOT SEND UNSUBSCRIBE MESSAGES TO THE LIST!
 

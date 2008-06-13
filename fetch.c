@@ -13,7 +13,7 @@
  *  along with CGIWrap; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
- *  Copyright 2003-2005, Nathan Neulinger <nneul@umr.edu>
+ *  Copyright 2003-2005, Nathan Neulinger <nneul@neulinger.org>
  *
  */
 
