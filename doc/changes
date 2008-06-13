@@ -4,7 +4,15 @@
    to version.
      __________________________________________________________________
 
-  New in version 4.0:
+  New in version 4.1:
+
+     * Added support for specifying a character set to use for cgiwrap
+       output to address a vulnerability in how IE handles documents
+       without a charset specified. The vulnerability allowed cross site
+       scripting when cgiwrap URLs were accessed from a JA version of IE.
+         ______________________________________________________________
+
+       New in version 4.0:
 
      * Bumped version number to 4.0 to deal with screwed up release
        numbering of earlier versions.

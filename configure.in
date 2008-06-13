@@ -254,6 +254,27 @@ AC_ARG_WITH( asp,
 	])
 
 
+dnl
+dnl Charset to use for error/text responses
+dnl
+charset="iso-8859-1"
+AC_MSG_CHECKING(for charset)
+AC_ARG_WITH( charset, 
+	[  --with-charset=charset]
+	[  charset to output in content-type header for cgiwrap output], 
+	[
+		if test "x$withval" != x; then
+			charset="$withval"
+		fi
+	],
+	[
+		true
+	])
+AC_MSG_RESULT($charset)
+AC_DEFINE_UNQUOTED(HTTP_CHARSET,"$charset", [charset])
+
+
+
 
 dnl
 dnl Check needed library functions
