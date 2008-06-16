@@ -13,9 +13,9 @@
        To specify the charset to use, provide the "--with-charset=X"
        option to configure when building cgiwrap. It will default to
        iso-8859-1 if not specifically set.
-         ______________________________________________________________
+     __________________________________________________________________
 
-       New in version 4.0:
+  New in version 4.0:
 
      * Bumped version number to 4.0 to deal with screwed up release
        numbering of earlier versions.
