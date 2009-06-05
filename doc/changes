@@ -4,6 +4,12 @@
    to version.
      __________________________________________________________________
 
+  New in version 4.2:
+
+     * Updates for more php file extensions and case insensitive matching
+       so .PHP will work as well as .php. Submitted by Bartosz Swiatek .
+     __________________________________________________________________
+
   New in version 4.1:
 
      * Added support for specifying a character set to use for cgiwrap
