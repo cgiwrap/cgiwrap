@@ -246,7 +246,7 @@ int StringEndsWith(char *string, char *ending)
 	int len = strlen(string);
 	int elen = strlen(ending);
 
-	if ( len >= elen && !strncmp(string + len - elen, ending, elen) )
+	if ( len >= elen && !strncasecmp(string + len - elen, ending, elen) )
 	{
 		return 1;
 	}
