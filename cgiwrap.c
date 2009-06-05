@@ -199,6 +199,9 @@ int main (int argc, char *argv[])
 			StringEndsWith(scriptPath, ".php") ||
 			StringEndsWith(scriptPath, ".php3") ||
 			StringEndsWith(scriptPath, ".php4") ||
+			StringEndsWith(scriptPath, ".php5") ||
+			StringEndsWith(scriptPath, ".php6") ||
+			StringEndsWith(scriptPath, ".php7") ||
 			StringEndsWith(scriptPath, ".phtml") )
 		{
 			Context.interpreted_script = 1;
