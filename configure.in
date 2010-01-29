@@ -253,6 +253,24 @@ AC_ARG_WITH( asp,
 		fi
 	])
 
+dnl
+dnl Use scriptFullPath+path_info for PATH_TRANSLATED
+dnl
+AC_MSG_CHECKING(for path_translated-2)
+AC_ARG_WITH( path_translated-2,
+       [ --with-path_translated-2 ]
+       [ Uses scriptFullPath and pathInfo for PATH_TRANSLATED instead of old system. ] ,
+       [
+           if test "x$withval" != xno; then
+            AC_DEFINE(CONF_PATH_TRANSLATED_2, [], [ Use scriptFullPath and pathInfo for PATH_TRANSLATED instead of old system ])
+            AC_MSG_RESULT([enabled])
+        else
+            AC_MSG_RESULT([disabled])
+        fi
+       ],
+    [
+        AC_MSG_RESULT([disabled])
+    ])
 
 dnl
 dnl Charset to use for error/text responses

@@ -1441,6 +1441,28 @@ void SetScriptFilename (char *scriptPath)
 void SetPathTranslated( char *cgiBaseDir, char *scriptPath )
 {
 	char *buf;
+
+#ifdef CONF_PATH_TRANSLATED_2
+    int length;
+
+    DEBUG_Msg("Using scriptFullPath and pathInfo to make PATH_TRANSLATED");
+
+    if ( !Context.scriptFullPath || !getenv("PATH_TRANSLATED") )
+    {
+        /* need scriptFullPath info to make PT */
+        /* if server doesn't set PATH_TRANSLATED, we shouldn't either */
+        return;
+    }
+
+    length = strlen(Context.scriptFullPath) + strlen("PATH_TRANSLATED")
+        + ( Context.newPathInfo ?  strlen(Context.newPathInfo) : 0 ) + 5;
+    buf = (char *) SafeMalloc(length ,"new PATH_TRANSLATED environment variable");
+    snprintf(buf,length, "%s=%s%s", "PATH_TRANSLATED", 
+        Context.scriptFullPath,(Context.newPathInfo ? Context.newPathInfo : ""));
+    SafePutenv(buf, "new PATH_TRANSLATED environment variable");
+    return;
+#else
+
 	char *old_pt, *new_pt;
 	char *old_pi, *new_pi;
 	char *docroot;
@@ -1495,6 +1517,8 @@ void SetPathTranslated( char *cgiBaseDir, char *scriptPath )
 
 		return;
 	}
+#endif
+
 }
 
 

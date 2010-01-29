@@ -114,6 +114,10 @@
 /* support a shared multi-user cgi directory */
 #undef CONF_MULTIUSER_CGI_DIR
 
+/* Use scriptFullPath and pathInfo for PATH_TRANSLATED instead of old system
+   */
+#undef CONF_PATH_TRANSLATED_2
+
 /* pass script to php interpreter if suffix */
 #undef CONF_PHP_INTERPRETER
 
