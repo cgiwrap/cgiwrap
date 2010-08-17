@@ -556,6 +556,25 @@ AC_SUBST(INSTALLDIR)
 AC_SUBST(DOINSTALL)
 AC_SUBST(DOINSTALLPHP)
 
+AC_MSG_CHECKING(for whether to set setuid perms during install)
+AC_ARG_WITH( install-setuid, 
+	[  --with-install-setuid]
+	[  disable setting setuid perms during install, for use in rpmbuild and similar tools],
+	[
+		AC_MSG_RESULT([yes, requested])
+		DOINSTALLSETUID=""
+	],
+	[
+		if [ test "x$UID" != "x0" ]; then
+			AC_MSG_RESULT([not running as root, defaulting to no])
+			DOINSTALLSETUID="#"
+		else
+			AC_MSG_RESULT([yes])
+			DOINSTALLSETUID=""
+		fi
+	])
+AC_SUBST(DOINSTALLSETUID)
+
 AC_MSG_CHECKING(for whether to disable cgiwrapd)
 AC_ARG_WITH( cgiwrapd,
 	[ --with-cgiwrapd]
