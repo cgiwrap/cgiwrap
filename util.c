@@ -1032,34 +1032,34 @@ void ChangeID ( struct passwd *user)
 
 #if defined(HAS_SETGID) && defined(HAS_SETUID)
 	res = setgid( user->pw_gid );
-    if ( res ) { MSG_Error_General("Failed setgid operation!"); }
+	if ( res ) { MSG_Error_General("Failed setgid operation!"); }
 
 	res = setuid( user->pw_uid );
-    if ( res ) { MSG_Error_General("Failed setuid operation!"); }
+	if ( res ) { MSG_Error_General("Failed setuid operation!"); }
 #elif defined(HAS_SETRESGID) && defined(HAS_SETRESUID)
 	res = setresgid( user->pw_gid, user->pw_gid, user->pw_gid );
-    if ( res ) { MSG_Error_General("Failed setuid operation!"); }
+   	if ( res ) { MSG_Error_General("Failed setuid operation!"); }
 
 	res = setresuid( user->pw_uid, user->pw_uid, user->pw_uid );
-    if ( res ) { MSG_Error_General("Failed setuid operation!"); }
+   	if ( res ) { MSG_Error_General("Failed setuid operation!"); }
 #elif defined(HAS_SETREGID) && defined(HAS_SETREUID)
 	res = setregid( user->pw_gid, user->pw_gid );
-    if ( res ) { MSG_Error_General("Failed regid operation!"); }
+   	if ( res ) { MSG_Error_General("Failed regid operation!"); }
 
 	res = setreuid( user->pw_uid, user->pw_uid );
-    if ( res ) { MSG_Error_General("Failed setreuid operation!"); }
+   	if ( res ) { MSG_Error_General("Failed setreuid operation!"); }
 #elif defined(HAS_SETEGID) && defined(HAS_SETEUID) && defined(HAS_SETRGID) && defined(HAS_SETRUID)
 	res = setegid( user->pw_gid );
-    if ( res ) { MSG_Error_General("Failed setegid operation!"); }
+   	if ( res ) { MSG_Error_General("Failed setegid operation!"); }
 
 	res = setrgid( user->pw_gid );
-    if ( res ) { MSG_Error_General("Failed setrgid operation!"); }
+   	if ( res ) { MSG_Error_General("Failed setrgid operation!"); }
 
 	res = seteuid( user->pw_uid );
-    if ( res ) { MSG_Error_General("Failed seteuid operation!"); }
+   	if ( res ) { MSG_Error_General("Failed seteuid operation!"); }
 
 	res = setruid( user->pw_uid );
-    if ( res ) { MSG_Error_General("Failed setruid operation!"); }
+   	if ( res ) { MSG_Error_General("Failed setruid operation!"); }
 #else
 #error "Configuration Error, No Way to Change IDs"
 #endif
