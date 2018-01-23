@@ -15,6 +15,9 @@
 /* pass script to asp interpreter only if nonexecutable file */
 #undef CONF_ASP_NONEXEC_ONLY
 
+/* automatically set HOME */
+#undef CONF_AUTO_SETENV_HOME
+
 /* block execution of CVS paths */
 #undef CONF_BLOCK_CVS_PATHS
 

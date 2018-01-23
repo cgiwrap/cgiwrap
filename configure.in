@@ -5,7 +5,7 @@ AC_CONFIG_AUX_DIR(.)
 AC_CANONICAL_SYSTEM
 AC_CONFIG_HEADER(config.h)
 
-VERSION="4.2"
+VERSION="4.3"
 AC_SUBST(VERSION)
 
 AC_PROG_CC
@@ -1115,7 +1115,7 @@ AC_ARG_WITH( initgroups,
 AC_MSG_CHECKING(for setgroups)
 AC_ARG_WITH( setgroups,
 	[  --without-setgroups]
-	[  disable use of setgroups() to add userid's auxilliary groups],
+	[  disable use of setgroups() to add user auxilliary groups],
 	[
 		if test "x$withval" != xno; then
 			AC_DEFINE(CONF_SETGROUPS, [], [call setgroups])
@@ -1128,7 +1128,6 @@ AC_ARG_WITH( setgroups,
 		AC_DEFINE(CONF_SETGROUPS, [], [call setgroups])
 		AC_MSG_RESULT([enabled, aux groups will be set])
 	])
-
 
 dnl
 dnl Option for enabling and specifying the user dir rewrite file
@@ -1147,6 +1146,25 @@ AC_ARG_WITH( rewrite,
 	],
 	[
 		AC_MSG_RESULT([disabled, no rewrite file will be used])
+	])
+
+dnl
+dnl Option to set HOME
+dnl
+AC_MSG_CHECKING(for whether to set HOME env var automatically)
+AC_ARG_WITH( auto-setenv-home,
+	[  --with-auto-setenv-home]
+	[  set HOME environment variable automatically],
+	[
+		if test "x$withval" != xno; then
+			AC_DEFINE(CONF_AUTO_SETENV_HOME, [], [automatically set HOME])
+			AC_MSG_RESULT([enabled, HOME will be set automatically])
+		else
+			AC_MSG_RESULT([disabled, HOME will not be set automatically])
+		fi
+	],
+	[
+		AC_MSG_RESULT([disabled, HOME will not be set automatically])
 	])
 
 dnl

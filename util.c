@@ -120,7 +120,7 @@ char *SafeMalloc(size_t size, char *what)
 	{
 		char msg[500];
 		sprintf(msg, "Couldn't malloc() (%d) bytes for (%s).\n",
-			size, what);
+			(int) size, what);
 		MSG_Error_SystemError(msg);
 	}
 	return tmp;
@@ -1028,22 +1028,38 @@ void SetSignals(void)
  */
 void ChangeID ( struct passwd *user)
 {
-
+    int res;
 
 #if defined(HAS_SETGID) && defined(HAS_SETUID)
-	setgid( user->pw_gid );
-	setuid( user->pw_uid );
+	res = setgid( user->pw_gid );
+    if ( res ) { MSG_Error_General("Failed setgid operation!"); }
+
+	res = setuid( user->pw_uid );
+    if ( res ) { MSG_Error_General("Failed setuid operation!"); }
 #elif defined(HAS_SETRESGID) && defined(HAS_SETRESUID)
-	setresgid( user->pw_gid, user->pw_gid, user->pw_gid );
-	setresuid( user->pw_uid, user->pw_uid, user->pw_uid );
+	res = setresgid( user->pw_gid, user->pw_gid, user->pw_gid );
+    if ( res ) { MSG_Error_General("Failed setuid operation!"); }
+
+	res = setresuid( user->pw_uid, user->pw_uid, user->pw_uid );
+    if ( res ) { MSG_Error_General("Failed setuid operation!"); }
 #elif defined(HAS_SETREGID) && defined(HAS_SETREUID)
-	setregid( user->pw_gid, user->pw_gid );
-	setreuid( user->pw_uid, user->pw_uid );
+	res = setregid( user->pw_gid, user->pw_gid );
+    if ( res ) { MSG_Error_General("Failed regid operation!"); }
+
+	res = setreuid( user->pw_uid, user->pw_uid );
+    if ( res ) { MSG_Error_General("Failed setreuid operation!"); }
 #elif defined(HAS_SETEGID) && defined(HAS_SETEUID) && defined(HAS_SETRGID) && defined(HAS_SETRUID)
-	setegid( user->pw_gid );
-	setrgid( user->pw_gid );
-	seteuid( user->pw_uid );
-	setruid( user->pw_uid );
+	res = setegid( user->pw_gid );
+    if ( res ) { MSG_Error_General("Failed setegid operation!"); }
+
+	res = setrgid( user->pw_gid );
+    if ( res ) { MSG_Error_General("Failed setrgid operation!"); }
+
+	res = seteuid( user->pw_uid );
+    if ( res ) { MSG_Error_General("Failed seteuid operation!"); }
+
+	res = setruid( user->pw_uid );
+    if ( res ) { MSG_Error_General("Failed setruid operation!"); }
 #else
 #error "Configuration Error, No Way to Change IDs"
 #endif

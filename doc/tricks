@@ -33,12 +33,12 @@ RewriteRule ^(.+) ${lowercase:%{HTTP_HOST}}$1 [C]
 
 # do the magic
 RewriteRule ^([a-z-][-0-9]+)\.domain\.com/cgi/(.*) /cgi-bin/cgiwrap/$1/$2 [PT]
-RewriteRule ^([a-z-][-0-9]+)\.domain\.com/cgi-d/(.*) /cgi-bin/cgiwrapd/$1/$2 [P
-T]
-RewriteRule ^([a-z-][-0-9]+)\.domain\.com/nph-cgi/(.*) /cgi-bin/nph-cgiwrap/$1/
-$2 [PT]
-RewriteRule ^([a-z-][-0-9]+)\.domain\.com/nph-cgi-d/(.*) /cgi-bin/nph-cgiwrapd/
-$1/$2 [PT]
+RewriteRule ^([a-z-][-0-9]+)\.domain\.com/cgi-d/(.*) /cgi-bin/cgiwrapd/$1/$2 [PT
+]
+RewriteRule ^([a-z-][-0-9]+)\.domain\.com/nph-cgi/(.*) /cgi-bin/nph-cgiwrap/$1/$
+2 [PT]
+RewriteRule ^([a-z-][-0-9]+)\.domain\.com/nph-cgi-d/(.*) /cgi-bin/nph-cgiwrapd/$
+1/$2 [PT]
 
 <VirtualHost>
 
@@ -222,12 +222,12 @@ An alternative Action based execution tip Mr Yowler:
 
 Just a one-time contribution to your "Tips and Tricks" notes...
 
-The tip descibed by Shane DeRidder works nicely, except that he left out one im
-portant detail:  whatever path you set up, as the "Action" for "cgi-wrapper", m
-ust be defined in a "ScriptAlias" directive, so that Apache knows to run the cg
-iwrap executable,
-rather than treat it as static content.  Here is a sample from my own setup; a
-VirtualHost on a webserver that lives in a chrooted environment:
+The tip descibed by Shane DeRidder works nicely, except that he left out one imp
+ortant detail:  whatever path you set up, as the "Action" for "cgi-wrapper", mus
+t be defined in a "ScriptAlias" directive, so that Apache knows to run the cgiwr
+ap executable,
+rather than treat it as static content.  Here is a sample from my own setup; a V
+irtualHost on a webserver that lives in a chrooted environment:
 
 
   ServerAdmin admin@somedomain.com
@@ -246,47 +246,46 @@ VirtualHost on a webserver that lives in a chrooted environment:
 
 
 
-This configuration allows users within the www.somedomain.com site, run .cgi sc
-ripts, from wherever they want, within their home directories.  It's is relativ
-ely transparent, as Shane DeRidder said, execpt for two things:
+This configuration allows users within the www.somedomain.com site, run .cgi scr
+ipts, from wherever they want, within their home directories.  It's is relativel
+y transparent, as Shane DeRidder said, execpt for two things:
 
-1) Any call for a script, that results in an error within CGIwrap (such as a ca
-ll for a script that does not exist), results in an error, from the CGIwrap exe
-cutable.  That error clearly labels itself as coming from CGIwrap, identifying
-to the user, that
+1) Any call for a script, that results in an error within CGIwrap (such as a cal
+l for a script that does not exist), results in an error, from the CGIwrap execu
+table.  That error clearly labels itself as coming from CGIwrap, identifying to
+the user, that
 CGIwrappers are in place.
 
-2) Any attempt to password-protect access to the scripts, using the .htaccess m
-echanism, will fail, since the CGIwrapper is outside of the users' writable fil
-e system tree.  Ordinarily, the user's would simply .htaccess-control the direc
-tory containing th
-e script that they wrote.  With CGIwrap controlling script execution, however,
-Apache does not get an opportunity to check the .htaccess rules, for the script
- (it can only check rules for the CGIwrap executable, itself, and there aren't
-any, since it is o
-utside of the area that the users can modify), and therefore, any script that t
-he user intended to be password-protected or otherwise access-restricted, isn't
-.
+2) Any attempt to password-protect access to the scripts, using the .htaccess me
+chanism, will fail, since the CGIwrapper is outside of the users' writable file
+system tree.  Ordinarily, the user's would simply .htaccess-control the director
+y containing th
+e script that they wrote.  With CGIwrap controlling script execution, however, A
+pache does not get an opportunity to check the .htaccess rules, for the script (
+it can only check rules for the CGIwrap executable, itself, and there aren't any
+, since it is o
+utside of the area that the users can modify), and therefore, any script that th
+e user intended to be password-protected or otherwise access-restricted, isn't.
 
-I suspect that a careful application of suEXEC would resolve the latter issue,
-though the cost of doing so, would be the loss of some of the cooler resource-l
-imiting functions of CGIwrap.  As for the former issue, well...  It would be po
-ssible to change t
-he CGIwrap source code, to display errors in whatever format suits the webserve
-r administrator, but is seems as though it would be a lot more effort than it's
- worth.  In my environment, I merely want to keep CGIwrappers transparent to th
-e users, to avoid
-breaking scripts that would otherwise work - I'm not actually trying to keep th
-e wrappers a secret...  :)  In fact, I would actually like them to take advanta
-ge of the debugging information that cgiwrapd offers them...  :)
+I suspect that a careful application of suEXEC would resolve the latter issue, t
+hough the cost of doing so, would be the loss of some of the cooler resource-lim
+iting functions of CGIwrap.  As for the former issue, well...  It would be possi
+ble to change t
+he CGIwrap source code, to display errors in whatever format suits the webserver
+ administrator, but is seems as though it would be a lot more effort than it's w
+orth.  In my environment, I merely want to keep CGIwrappers transparent to the u
+sers, to avoid
+breaking scripts that would otherwise work - I'm not actually trying to keep the
+ wrappers a secret...  :)  In fact, I would actually like them to take advantage
+ of the debugging information that cgiwrapd offers them...  :)
 
-The symptom of failing to use ScriptAlias, on my system, was reflected in the A
-pache www.somedomain.com-error_log, as a "File does not exist: /serverwide/scri
-pt/path/~someuser/scriptname.cgi".
+The symptom of failing to use ScriptAlias, on my system, was reflected in the Ap
+ache www.somedomain.com-error_log, as a "File does not exist: /serverwide/script
+/path/~someuser/scriptname.cgi".
 
-Anyhow, that's my little contribution.  I am not on the mailing list (that's wh
-at I need - MORE email...  ), and I just had the one thing about the ScriptAlia
-s requirement, to add to the "Tips and Tricks" - otherwise I would have simply
-posted it to
- the mailing list.  I spent nearly a full day, tracking that one down... Don't
-I feel the idiot, now...  :)
+Anyhow, that's my little contribution.  I am not on the mailing list (that's wha
+t I need - MORE email...  ), and I just had the one thing about the ScriptAlias
+requirement, to add to the "Tips and Tricks" - otherwise I would have simply pos
+ted it to
+ the mailing list.  I spent nearly a full day, tracking that one down... Don't I
+ feel the idiot, now...  :)

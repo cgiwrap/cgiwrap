@@ -4,10 +4,18 @@
    to version.
      __________________________________________________________________
 
+  New in version 4.3:
+
+     * Add option to set HOME env var for cgi scripts automatically based
+       on executing user
+     __________________________________________________________________
+
   New in version 4.2:
 
      * Updates for more php file extensions and case insensitive matching
        so .PHP will work as well as .php. Submitted by Bartosz Swiatek .
+     * Alternative implementation of path translated by Dylan Martin ,
+       optional, use --with-path-translated-2 build option.
      __________________________________________________________________
 
   New in version 4.1:

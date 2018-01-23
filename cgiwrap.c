@@ -50,6 +50,9 @@ int main (int argc, char *argv[])
 	time_t etime;
 	time_t elap_time;
 #endif
+#ifdef CONF_AUTO_SETENV_HOME
+    char *setenv_home;
+#endif
 	
 	/* Initially not a multiuser cgi script */
 	Context.multiuser_cgi_script = 0;
@@ -253,6 +256,15 @@ int main (int argc, char *argv[])
 	{
 		SetPathTranslated( cgiBaseDir, scriptPath );
 	}
+
+    /* If we were configured to, automatically set the HOME env var */
+#if defined(CONF_AUTO_SETENV_HOME)
+	DEBUG_Msg("\nAutomatically setting HOME environment variable.");
+    setenv_home = (char*) SafeMalloc (strlen("HOME=") + strlen(user->pw_dir) + 2,
+        "new SCRIPT_NAME environment variable");
+    snprintf(setenv_home, strlen("HOME=") + strlen(user->pw_dir) + 1, "HOME=%s", user->pw_dir);
+    SafePutenv(setenv_home, "HOME environment variable");
+#endif
 
 	/* Output the modified environment variables */
 	OutputEnvironment();
